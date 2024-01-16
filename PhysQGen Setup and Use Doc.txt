@@ -1,0 +1,17 @@
+Create Github Classroom Account with a link from Ms. Edwards.
+	Use school email, click the Create Account button on the initial login screen, then go through prompts.
+	Make sure to join the team PhysQGen so you can access the project files.
+
+**Figure out VM
+
+**Install git
+
+Create a folder to contain the project on the VM.
+Type "cmd" into the search bar and hit enter. This will open a command prompt in that location.
+Then, type "git clone https://github.com/MHS-CSCE/sdp-physqgen". This will prompt you to login, I still have to figure out how to authorize you, but it'll probably work if you join my team for the project when you set up your account.
+Once you go through the authorization process, the most up to date version of the repo will be downloaded in that folder. For now, it is named sdp-physgen.
+
+TODO: Instructions & git commands for doing & submitting work
+TODO: VM stuff
+TODO: VSCode setup
+TODO: git installation
