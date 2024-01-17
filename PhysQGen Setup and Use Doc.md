@@ -4,7 +4,7 @@
 
 - [ ] TODO: figure out VM stuff
 
-==From this point in the file onwards, assume everything is done inside the VM.==
+***From this point in the file onwards, assume everything is done inside the VM.***
 
 ## Setting Up & Using Github
 
@@ -84,7 +84,7 @@ In VSCode, on the leftmost panel, there should be a grid icon, called `Extension
 1. In the top left toolbar, click `File > Open Folder...` and select the parent folder for the project, which you cloned with git in the [[PhysQGen Setup and Use#Installing / Cloning Git Repositories]] section.
 2. Go to the File menu again, and click `File > Save Workspace As...`. Feel free to save the Workspace file to the project folder, I will be including a file in the project that will stop git from including it whenever you push your changes to the folder on Github servers.
 3. If you are prompted whether to trust the workspace, then trust it. This should only pop up the first time.
-    - When you want to work on this project, open the workspace folder with VSCode, and it will save all your progress and open things exactly where you left off, assuming you saved. ==VSCode is not like Replit, you have to save manually. It's fastest to regularly use the hotkey `ctrl+S`, although `File > Save` also works.==
+    - When you want to work on this project, open the workspace folder with VSCode, and it will save all your progress and open things exactly where you left off, assuming you saved. **VSCode is not like Replit, you have to save manually. It's fastest to regularly use the hotkey `ctrl+S`, although `File > Save` also works.**
 
 ### Using VSCode
 
