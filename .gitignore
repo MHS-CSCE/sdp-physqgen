@@ -132,3 +132,4 @@ dmypy.json
 /.vscode
 *.sql
 *.db-journal
+*.code-workspace
