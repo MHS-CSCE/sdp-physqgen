@@ -1,12 +1,12 @@
 # Setting Up & Working
 
-## VM Set Up & Working
+## Virtual Machine
 
 - [ ] TODO: figure out VM stuff
 
 ***From this point in the file onwards, assume everything is done inside the VM.***
 
-## Setting Up & Using Github
+## Github
 
 ### Setting Up Github
 
@@ -52,6 +52,7 @@ This is the process of "pushing" changes you have made to the project to Github,
 In the bash terminal (see the `Git in VSCode` header below):
 
 1. Type `git add .` to add all changes you have made to the "stage". You can also subsitute relative file paths for the "." but that is rarely necessary.
+    - **If you change files after this point, you need to re-type this command or the following command wil only commit part of your work**
 2. When you are ready, type `git commit --m="commit message"` and replace "commit message" with a description of what you have changed, implemented, removed, fixed, etc.
 3. To update Github, type `git push`. Hopefully, this will automatically merge your work with the repo that is stored on Github's servers.
 
@@ -93,7 +94,7 @@ In VSCode, on the leftmost panel, there should be a grid icon, called `Extension
 - When you want to run a python file, click on it in the Explorer panel / otherwise open it in your view.
 - Then, either go to the Toolbar in the top left of the screen and select `Run > Run Without Debugging` or `Run > Start Debugging`.
 - `Run Without Debugging` will work faster, and `Start Debugging` will essentially skip you to the exact place and position of the program if it errors, including showing you the value of all variables in the Run & Debug left panel.
-- (You can also use the ctrl + f5 and f5 hotkeys respectively)
+- (You can also use the ctrl+f5 and f5 hotkeys respectively)
 
 #### Git in VSCode
 
