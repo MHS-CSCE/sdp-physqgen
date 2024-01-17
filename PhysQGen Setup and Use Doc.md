@@ -2,7 +2,7 @@
 
 ## VM Set Up & Working
 
-TODO: figure out VM stuff
+- [ ] TODO: figure out VM stuff
 
 ==From this point in the file onwards, assume everything is done inside the VM.==
 
@@ -32,21 +32,28 @@ Repo url: [https://github.com/MHS-CSCE/sdp-physqgen](https://github.com/MHS-CSCE
 
 This is the process for starting a new workspace folder, not for updating / pulling changes from Github.
 
-Create a folder to contain the project on the VM.
-Type `cmd` into the search bar and hit enter. This will open a command prompt in that location.
-Then, type `git clone https://github.com/MHS-CSCE/sdp-physqgen` into the command line and hit enter. This will prompt you to login. I still have to figure out how to authorize you, but it'll probably work if you join my team for the project when you set up your account.
-Once you go through the authorization process, the most up to date version of the repo will be downloaded in that folder. For now, it is named sdp-physgen.
+1. Create a folder to contain the project on the VM. This should probably not be on the Desktop or in Downloads, Documents is probably a good place for it.
+2. Type `cmd` into the search bar and hit enter. This will open a command prompt in that location.
+3. Then, type `git clone https://github.com/MHS-CSCE/sdp-physqgen` into the command line and hit enter. This will prompt you to login. I still have to figure out how to authorize you, but it'll probably work if you join my team for the project when you set up your account.
+4. Once you go through the authorization process, the most up to date version of the repo will be downloaded in that folder. For now, it is named `sdp-physgen`.
 
 ### Using Git
 
-- [ ] TODO: Instructions & git commands for doing & submitting work
-    should work:
-    git add .
-    git commit --m="commit message"
-    git push
+#### Updating Your Local Project Folder
 
-Maybe:
-    - [ ] TODO: prs & forks, second-opinion if we decide to go through the trouble
+This is the process of "pulling" any changes any other members have made and "pushed" to Github. You should always do this before you start working on something, so that you don't revert others' work in those same files.
+
+1. In the bash terminal (see the `Git in VSCode` header below), write `git pull` and hit enter. This should fetch any changes that have been made. Doing this (probably) overwrites any un-pushed (or maybe un-commited) changes you have made, so be aware.
+
+#### Updating the Github Repository
+
+This is the process of "pushing" changes you have made to the project to Github, so that others can "pull" them to their computers. When you are done implementing something, you should push it to Github to minimize the chance of work accidentally getting overwritten.
+
+In the bash terminal (see the `Git in VSCode` header below):
+
+1. Type `git add .` to add all changes you have made to the "stage". You can also subsitute relative file paths for the "." but that is rarely necessary.
+2. When you are ready, type `git commit --m="commit message"` and replace "commit message" with a description of what you have changed, implemented, removed, fixed, etc.
+3. To update Github, type `git push`. Hopefully, this will automatically merge your work with the repo that is stored on Github's servers.
 
 ## VSCode
 
@@ -83,10 +90,10 @@ In VSCode, on the leftmost panel, there should be a grid icon, called `Extension
 
 #### Python in VSCode
 
-When you want to run a python file, click on it in the Explorer panel / otherwise open it in your view.
-    - Then, either go to the Toolbar in the top left of the screen and select `Run > Run Without Debugging` or `Run > Start Debugging`.
-    - `Run Without Debugging` will work faster, and `Start Debugging` will essentially skip you to the exact place and position of the program if it errors, including showing you the value of all variables in the Run & Debug left panel.
-    - (You can also use the ctrl + f5 and f5 hotkeys respectively)
+- When you want to run a python file, click on it in the Explorer panel / otherwise open it in your view.
+- Then, either go to the Toolbar in the top left of the screen and select `Run > Run Without Debugging` or `Run > Start Debugging`.
+- `Run Without Debugging` will work faster, and `Start Debugging` will essentially skip you to the exact place and position of the program if it errors, including showing you the value of all variables in the Run & Debug left panel.
+- (You can also use the ctrl + f5 and f5 hotkeys respectively)
 
 #### Git in VSCode
 
