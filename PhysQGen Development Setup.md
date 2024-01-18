@@ -4,6 +4,10 @@
 
 - [ ] TODO: figure out VM stuff
 
+- Install Python 3.12
+- Install VSCode
+- Install Git
+
 ***From this point in the file onwards, assume everything is done inside the VM.***
 
 ## Github
@@ -87,14 +91,39 @@ In VSCode, on the leftmost panel, there should be a grid icon, called `Extension
 3. If you are prompted whether to trust the workspace, then trust it. This should only pop up the first time.
     - When you want to work on this project, open the workspace folder with VSCode, and it will save all your progress and open things exactly where you left off, assuming you saved. **VSCode is not like Replit, you have to save manually. It's fastest to regularly use the hotkey `ctrl+S`, although `File > Save` also works.**
 
+Once you have the project open in a VSCode workspace, make sure to complete the steps in the `Creating the Development Environment` section.
+
 ### Using VSCode
 
 #### Python in VSCode
+
+##### Creating the Development Environment
+
+The first time you open the project in you workspace, make sure python 3.12 is the version installed on your system, and run the following line in the cmd terminal in VSCode:
+
+```cmd
+python -m venv venv
+```
+
+This will create a python virtual environment in the folder. You should see that one of the git extensions grays out the name of the folder, "venv", because it is included in the gitignore file. Now, select a python file to view. In the bottom right corner, there should be a Python version specifier. This represents the Python interpreter being used. Click on this, and select the interpreter that was just created in the virtual environment. It should be clear by having "venv" in the path to it. This interpreter should be automatically selected when you open the workspace file in the future. Now, save.
+
+Check to make sure it is working by closing and re-opening VSCode using the workspace file. The cmd terminal should automatically input the command to start the virutal environemnt, and the path on the line you type should have `(venv)` at the start of it.
+
+Next, to install our custom module, run:
+
+```cmd
+pip install -e "."
+```
+
+This will assemble and install both our custom module and also any requirements we have in the `requirements.txt` file. This means that the entire project is portable, as it can be installed purely using git clone and these two commands. The `-e` in the pip command makes the installation "editable", so we don't need to reinstall our custom module every time we make changes to the source code
+
+##### Running Python Scripts in VSCode
 
 - When you want to run a python file, click on it in the Explorer panel / otherwise open it in your view.
 - Then, either go to the Toolbar in the top left of the screen and select `Run > Run Without Debugging` or `Run > Start Debugging`.
 - `Run Without Debugging` will work faster, and `Start Debugging` will essentially skip you to the exact place and position of the program if it errors, including showing you the value of all variables in the Run & Debug left panel.
 - (You can also use the ctrl+f5 and f5 hotkeys respectively)
+- This will automatically use the virtual environment interpreter, because you have it selected.
 
 #### Git in VSCode
 

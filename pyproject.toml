@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "physqgen"
+version = "0.0.0"
+authors = [
+    {name="Amelia", email="asing1@ocdsb.ca"},
+    {name="Isabelle", email="inich3@ocdsb.ca"},
+    {name="Stuart", email="sjone12@ocdsb.ca"}
+]
+description = "Physics Question Generator"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Github" = "https://github.com/MHS-CSCE/sdp-physqgen"
+
+[dependencies]
