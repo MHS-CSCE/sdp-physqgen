@@ -99,13 +99,11 @@ Once you have the project open in a VSCode workspace, make sure to complete the 
 
 ##### Creating the Development Environment
 
-The first time you open the project in you workspace, make sure python 3.12 is the version installed on your system, and run the following line in the cmd terminal in VSCode:
+The first time you open the project in you workspace, make sure python 3.12 is the version installed on your system.
 
-```cmd
-python -m venv venv
-```
+Hit `ctrl+p` in VSCode, then type in the `>environ` until the `Python: Create Environment` option comes up. Hit enter to select it. Then, select the `Venv` option with enter. This will prompt to to select a python interpreter. Select the python 3.12 interpreter. After this, a prompt will show up asking you which dependencies to install. For now, we have not coded anything and don't have any dependencies, so it is fine not to select anything, but feel free to select `requirements.txt`, which will in the future contain any requirements we have.
 
-This will create a python virtual environment in the folder. You should see that one of the git extensions grays out the name of the folder, "venv", because it is included in the gitignore file. Now, select a python file to view. In the bottom right corner, there should be a Python version specifier. This represents the Python interpreter being used. Click on this, and select the interpreter that was just created in the virtual environment. It should be clear by having "venv" in the path to it. This interpreter should be automatically selected when you open the workspace file in the future. Now, save.
+This will create a python virtual environment in the folder, and select it. You should see that one of the git extensions grays out the name of the folder, "venv", because it is included in the gitignore file. Now, select a python file to view. In the bottom right corner, there should be a Python version specifier. This represents the Python interpreter being used. Click on this, and select the interpreter that was just created in the virtual environment. It should be clear by having "venv" in the path to it. This interpreter should be automatically selected when you open the workspace file in the future. Now, save.
 
 Check to make sure it is working by closing and re-opening VSCode using the workspace file. The cmd terminal should automatically input the command to start the virutal environemnt, and the path on the line you type should have `(venv)` at the start of it.
 
