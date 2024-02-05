@@ -1,0 +1,69 @@
+html {
+    height: 100%;
+    width: 100%;
+  }
+body {
+    height: 125vh;
+    margin-top: 80px;
+    padding: 30px;
+    background-size: cover;
+    font-family: arial;
+    background-color: rgb(211, 255, 240);
+}  
+header {  
+    background-color: rgb(252, 124, 252);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 5px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 25px 0 black;
+    font-family: Impact;
+    /*font-weight: bold;*/
+}  
+header * {
+    display: inline;
+}
+header li {
+    margin: 20px;
+}
+header li a {
+    color: rgb(111, 6, 185);
+    text-decoration: none;
+}
+img {
+    /*Block level element, displays on its own line*/
+    display: block;
+    max-width: 100%;
+    /*Makes the image go in the middle*/
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.question{
+    background: pink;
+    padding:2%;
+    text-align:center;
+}
+
+.submit{
+    background: greenyellow;
+    border: 6px solid #949599;
+    padding: 2%;
+    border-radius: 6px;
+}
+
+.buttons{
+    background:plum;
+    text-align:center;
+    padding:2%;
+}
+
+/*A divider to seperate the buttons*/
+/*https://stackoverflow.com/questions/5119711/whats-the-easiest-way-to-put-space-between-2-side-by-side-buttons-in-asp-net*/
+.divider{
+    width:10%;
+    display:inline-block;
+}

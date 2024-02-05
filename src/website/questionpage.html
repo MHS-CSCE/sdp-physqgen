@@ -2,8 +2,46 @@
 <html>
     <head>
         <title>Website Title</title>
+        <link href="style.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        
+        <!--The navigation bar that displays the title of the project-->
+        <!--Tutorial: https://www.javatpoint.com/how-to-make-a-navigation-bar-in-html-->
+        <header>
+            <nav>
+                <!--<h1 style="font-family: Impact">Physics Question Generator</h1>-->
+                <ul>
+                    <li>
+                        <a href="#"> Physics</a>
+                    </li>
+                    <li>
+                        <a href="#"> Question</a>
+                    </li>
+                    <li>
+                        <a href="#"> Generator</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <!--Add image: https://learn.shayhowe.com/html-css/adding-media/-->
+        <div class="question">
+            <img src="https://blog.blueprintprep.com/wp-content/uploads/2013/05/Blog-Discrete-P1a12.png" alt="Image of phyisics question">
+            <p>This is the description for the physics question.</p>
+        </div>
+
+        <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->
+        <div class="submit">
+            <label for="answer">Answer:</label>
+            <input type="text" name="answer">
+            <input type="submit" name="submit" value="Send">
+        </div>
+
+        <!--The next and exit buttons-->
+        <div class="buttons">
+            <input type="submit" name="next" value="Next">
+            <div class="divider"></div>
+            <input type="submit" name="Exit" value="Exit">
+        </div>
     </body>
 </html>
