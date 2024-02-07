@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Website Title</title>
+       <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <!--The navigation bar that displays the title of the project-->
+        <!--Tutorial: https://www.javatpoint.com/how-to-make-a-navigation-bar-in-html-->
+        <header>
+            <nav>
+                <!--<h1 style="font-family: Impact">Physics Question Generator</h1>-->
+                <ul>
+                    <li>
+                        <a href="#"> Physics</a>
+                    </li>
+                    <li>
+                        <a href="#"> Question</a>
+                    </li>
+                    <li>
+                        <a href="#"> Generator</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <!--action:contains the URL to which information included within the form will be sent for processing by the server-->
+        <!--method: attribute is the HTTP method browsers should use to submit the form data-->
+        <form action="/login" method="post">
+            <fieldset>
+                <legend>Login</legend>
+                <!--name submit-->
+                <!-- label's "for" must match with input's "id"-->
+                <div class="Name">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name" required>
+                    <input type="submit" name="submit" value="Send">
+                </div>
+
+                <!--email submit-->
+                <div class="Email">
+                    <label for="email-address">Email</label>
+                    <input type="email" name="email-address" id="email-address" placeholder="name@domain.ca" required>
+                    <input type="submit" name="submit" value="Send">
+                </div>
+            </fieldset>
+        </form>
+    </body>
+</html>

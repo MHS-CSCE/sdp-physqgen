@@ -67,3 +67,16 @@ img {
     width:10%;
     display:inline-block;
 }
+
+form{
+    background:thistle;
+    width: 50%;
+    padding: 2%;
+    margin:2%;
+}
+
+input {
+    border-radius: 5px;
+  }
+
+/*css for form: https://learn.shayhowe.com/html-css/building-forms/*/
