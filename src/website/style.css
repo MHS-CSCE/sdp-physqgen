@@ -4,35 +4,26 @@ html {
   }
 body {
     height: 125vh;
-    margin-top: 80px;
+    margin-top: 60px;
     padding: 30px;
     background-size: cover;
     font-family: arial;
     background-color: rgb(211, 255, 240);
+    margin-left:auto;
+    margin-right:auto;
 }  
 header {  
     background-color: rgb(252, 124, 252);
     position: fixed;
     left: 0;
     right: 0;
-    top: 5px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 0 25px 0 black;
-    font-family: Impact;
-    /*font-weight: bold;*/
-}  
-header * {
-    display: inline;
+    top: 1px;
+    width:100%;
+    text-align: center;
+    /* font-family: Impact; */
+    font-size:15px;
 }
-header li {
-    margin: 20px;
-}
-header li a {
-    color: rgb(111, 6, 185);
-    text-decoration: none;
-}
+
 img {
     /*Block level element, displays on its own line*/
     display: block;
@@ -71,8 +62,19 @@ img {
 form{
     background:thistle;
     width: 50%;
+    text-align: center;
+    align-self:center;
     padding: 2%;
     margin:2%;
+    margin-left:25%;
+    /*if you are 200px or smaller become green*/
+    @media screen and (min-width: 200px) {
+        background: green;
+    }
+    /*if it is 800 px or wider become yellow*/
+    @media screen and (min-width: 800px) {
+        background: yellow;
+    }
 }
 
 input {
