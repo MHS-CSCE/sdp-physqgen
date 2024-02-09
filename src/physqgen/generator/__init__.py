@@ -1,0 +1,1 @@
+from physqgen.generator.question import KinematicsQuestion
