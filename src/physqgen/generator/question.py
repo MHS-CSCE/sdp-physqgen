@@ -45,7 +45,7 @@ class Question:
     # always leave default
     id: UUID = field(default_factory=uuid4, init=False)
 
-    def __post_init__(self, variableConfig: dict[str, tuple[float, float]]) -> None:
+    def __post_init__(self, variableConfig: dict[str, list[float, float]]) -> None:
         """Randomizes variables values."""
 
         # randomize variables
