@@ -4,7 +4,7 @@ ICS4U
 Stuart, Isabelle, Amelia
 Represent different types of questions.
 History:
-February TODO, 2024: Implement Question and KinematicsQuestion
+February 9, 2024: Implement Question and KinematicsQuestion
 """
 
 from random import random
