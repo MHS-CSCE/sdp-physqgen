@@ -7,12 +7,13 @@ History:
 February 9, 2024: Implement Question and KinematicsQuestion
 """
 
-from random import random
-from dataclasses import dataclass, field, InitVar
-from uuid import UUID, uuid4 # uuid4 doesn't include private information
+from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from math import sqrt
+from random import random
 from typing import Literal
+from uuid import UUID, uuid4  # uuid4 doesn't include private information
+
 
 @dataclass
 class Question:
@@ -39,8 +40,8 @@ class Question:
     variables: Enum = field(default_factory=Enum)
 
     # should be left default
-    # CORRECT_RANGE default was agreed upon with client at 10%
-    CORRECT_RANGE: float = 0.1
+    # correct_range default was agreed upon with client at 10%
+    correct_range: float = 0.1
 
     # always leave default
     id: UUID = field(default_factory=uuid4, init=False)
@@ -73,7 +74,7 @@ class Question:
             # create attribute in dict that has the randomizes value and an attribute name coresponding to the enum value name, in lowercase
             # TODO: check if there is better way to add attributes dynamically
             self.__dict__["_" + variable.name.lower()] = randomValue
-            # define properties for each variablei subclasses, which use this defined value
+            # define properties for each variable subclasses, which use this defined value
         
     def __str__(self) -> str:
         """Returns a string representation of the question text"""
@@ -87,8 +88,8 @@ class Question:
         return getattr(self, self.solveVariable)
 
     def check_answer(self, submitted) -> bool:
-        """Returns True if the submitted answer is within the CORRECT_RANGE variance from the question's calculated answer."""
-        return (submitted > (self.answer * (1 - self.CORRECT_RANGE))) and (submitted < (self.answer * (1 + self.CORRECT_RANGE)))
+        """Returns True if the submitted answer is within the correct_range variance from the question's calculated answer."""
+        return (submitted > (self.answer * (1 - self.correct_range))) and (submitted < (self.answer * (1 + self.correct_range)))
     
     @staticmethod
     def enumToAttribute(enumAttribute: Enum, private: bool = False) -> str:
