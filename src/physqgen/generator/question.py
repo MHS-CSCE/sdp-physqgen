@@ -316,11 +316,3 @@ class KinematicsQuestion(Question):
             return True
         else:
             return False
-
-# test
-# TODO: move tests to test file
-# TODO: use parse function and pass in a str directly
-q = KinematicsQuestion(variableConfig={"time": (1.0, 2.0), "acceleration": (1.0, 2.0), "initial_velocity": (1.0, 2.0), "final_velocity": (1.0, 2.0)}, solveVariable="displacement", text="find displacement.")
-print(q)
-
-print(f"answer: {q.answer}")
