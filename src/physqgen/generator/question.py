@@ -225,14 +225,53 @@ class KinematicsQuestion(Question):
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
         value = getattr(self, self.enumToAttribute(self.variables.INITIAL_VELOCITY, True), False)
         
-        # check if isn't set
-        # can be zero, do additional type check
-        if type(value) is bool and not value:
-            # check existance of other variables, use the formula that has all necessary values
-            pass # TODO
-
-        else:
+        # if fetches value, return it
+        if type(value) is float:
             return value
+        
+        # otherwise use equations
+        else:
+            # check if each var is defined
+            dDefined = self.variableDefined("displacement")
+            v2Defined = self.variableDefined("final_velocity")
+            tDefined = self.variableDefined("time")
+
+            # not needed
+            # aDefined = self.variableDefined("acceleration")
+
+            # assume that enough variables are defined, find the one that isn't
+            if not dDefined:
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+                
+                # v1 from v2, t, a
+                return v2 - (a*t)
+            
+            elif not v2Defined:
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+
+                # v1 from d, t, a
+                return (d / t) - (0.5 * a * t)
+
+            elif not tDefined:
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+
+                # v1 from d, v2, a
+                # TODO: make sure sqrt doesn't cause problems
+                return sqrt(v2**2 - 2*a*d)
+
+            else: # not aDefined
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+
+                # v1 from d, v2, t formula
+                return ((d*2) / t) - v2
     
     @staticmethod
     def initial_velocity_validate(value: float) -> bool:
@@ -248,14 +287,53 @@ class KinematicsQuestion(Question):
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
         value = getattr(self, self.enumToAttribute(self.variables.FINAL_VELOCITY, True), False)
         
-        # check if isn't set
-        # can be zero, do additional type check
-        if type(value) is bool and not value:
-            # check existance of other variables, use the formula that has all necessary values
-            pass # TODO
-
-        else:
+        # if fetches value, return it
+        if type(value) is float:
             return value
+        
+        # otherwise use equations
+        else:
+            # check if each var is defined
+            dDefined = self.variableDefined("displacement")
+            v1Defined = self.variableDefined("initial_velocity")
+            tDefined = self.variableDefined("time")
+
+            # not needed
+            # aDefined = self.variableDefined("acceleration")
+
+            # assume that enough variables are defined, find the one that isn't
+            if not dDefined:
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+                
+                # v2 from v1, t, a
+                return (a*t) + v1
+            
+            elif not v1Defined:
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+
+                # v2 from d, t, a
+                return (d / t) + (0.5 * a * t)
+
+            elif not tDefined:
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+
+                # v2 from d, v1, a
+                # TODO: make sure sqrt doesn't cause problems
+                return sqrt(v1**2 + 2*a*d)
+
+            else: # not aDefined
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+
+                # v2 from d, v1, t formula
+                return ((d*2) / t) - v1
     
     @staticmethod
     def final_velocity_validate(value: float) -> bool:
@@ -271,14 +349,54 @@ class KinematicsQuestion(Question):
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
         value = getattr(self, self.enumToAttribute(self.variables.TIME, True), False)
         
-        # check if isn't set
-        # cannot be zero, don't do additional check
-        if not value:
-            # check existance of other variables, use the formula that has all necessary values
-            pass # TODO
-
-        else:
+        # if fetches value, return it
+        if type(value) is float:
             return value
+        
+        # otherwise use equations
+        else:
+            # check if each var is defined
+            dDefined = self.variableDefined("displacement")
+            v1Defined = self.variableDefined("initial_velocity")
+            v2Defined = self.variableDefined("final_velocity")
+
+            # not needed
+            # aDefined = self.variableDefined("acceleration")
+
+            # assume that enough variables are defined, find the one that isn't
+            if not dDefined:
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+                
+                # t from v1, v2, a
+                # TODO: fix v1=v2 situation, gives 0/0
+                return (v2 - v1) / a
+            
+            elif not v1Defined:
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+
+                # t from d, v2, a
+                # TODO: for now, always return highest answer even if there are two correct values
+                return (v2/a) + (sqrt(v2**2 - 2*a*d)/a) # negative in between for other answer
+
+            elif not v2Defined:
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                a = self.getVariableValue(self.enumToAttribute(self.variables.ACCELERATION))
+
+                # t from d, v1, a
+                return (-v1/a) + (sqrt(v1**2 - 2*a*d)/a)
+
+            else: # not aDefined
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+
+                # t from d, v1, v2 formula
+                return (d*2)/(v1 + v2)
     
     def time_validate(self, value: float) -> bool:
         """Uses appropriate validation functions to ensure time is valid. Currently allowed any positive non-zero float value."""
@@ -292,14 +410,52 @@ class KinematicsQuestion(Question):
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
         value = getattr(self, self.enumToAttribute(self.variables.ACCELERATION, True), False)
         
-        # check if isn't set
-        # can be zero, do additional type check
-        if type(value) is bool and not value:
-            # check existance of other variables, use the formula that has all necessary values
-            pass # TODO
-
-        else:
+        # if fetches value, return it
+        if type(value) is float:
             return value
+        
+        # otherwise use equations
+        else:
+            # check if each var is defined
+            dDefined = self.variableDefined("displacement")
+            v1Defined = self.variableDefined("initial_velocity")
+            v2Defined = self.variableDefined("final_velocity")
+
+            # not needed
+            # tDefined = self.variableDefined("time")
+
+            # assume that enough variables are defined, find the one that isn't
+            if not dDefined:
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+                
+                # a from v1, v2, t
+                return 
+            
+            elif not v1Defined:
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+
+                # a from d, v2, t
+                return # TODO
+
+            elif not v2Defined:
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                t = self.getVariableValue(self.enumToAttribute(self.variables.TIME))
+
+                # a from d, v1, t
+                return ((2*d) / (t**2)) - ((2*v1) / (t))
+
+            else: # not tDefined
+                d = self.getVariableValue(self.enumToAttribute(self.variables.DISPLACEMENT))
+                v1 = self.getVariableValue(self.enumToAttribute(self.variables.INITIAL_VELOCITY))
+                v2 = self.getVariableValue(self.enumToAttribute(self.variables.FINAL_VELOCITY))
+
+                # a from d, v1, v2 formula
+                return ((2*v2) / (t)) - ((2*d) / (t**2)) 
 
     def acceleration_validate(self, value: float) -> bool:
         """Uses appropriate validation functions to ensure acceleration is valid. Currently allowed any positive float value."""
