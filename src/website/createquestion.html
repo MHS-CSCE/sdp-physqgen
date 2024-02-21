@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Website Title</title>
+        <title>Create Question</title>
         <link href="style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
@@ -14,32 +14,38 @@
         </header>
 
         <div class="createquestion">
-            <div class="createquestionbuttons">
+            <aside>
                 <!--File input-->
-                <label for="file">File</label>
-                <input type="file" name="file" id="file">
+                <div class="file">
+                    <label for="file">File</label>
+                    <input type="file" name="file" id="file">
+                </div>
 
                 <!--Question format-->
-                <label for="format">Question format</label>
-                <input type="text" name="Question format" id="format">
+                <div class="questionformat">
+                    <label for="format">Question format</label>
+                    <input type="text" name="Question format" id="format">
+                </div>
 
                 <!--Variables-->
-                <!--label's "for" = input's "id"-->
-                <label for="variables">Variables</label>
-                <input type="text" name="Variables" id="variables">
+                <div class="variables">
+                    <!--label's "for" = input's "id"-->
+                    <label for="variables">Variables</label>
+                    <input type="text" name="Variables" id="variables">
+                </div>
+            </aside>
 
-            </div>
-
-            <div class="preview">
+            <section>
                 <img src="https://blog.blueprintprep.com/wp-content/uploads/2013/05/Blog-Discrete-P1a12.png" alt="Image of phyisics question">
                 <p>Question text the description for the queston. This is the question.</p>
-            </div>
+            </section>
 
-            <!--back button-->
-            <input type="submit" name="back" value="Back">
-            <!--send button-->
-            <input type="submit" name="submit" value="Send">
-            
+            <footer>
+                <!--back button-->
+                <input type="submit" name="back" value="Back">
+                <!--send button-->
+                <input type="submit" name="submit" value="Send">
+            </footer>
         </div>
         </body>
 </html>

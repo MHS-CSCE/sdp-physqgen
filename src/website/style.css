@@ -82,3 +82,20 @@ input {
   }
 
 /*css for form: https://learn.shayhowe.com/html-css/building-forms/*/
+
+aside{
+    float: left;
+    background: green;
+    width:33%;
+}
+
+section{
+    float:right;
+    background:purple;
+    width:66%;
+}
+
+footer{
+    background:orange;
+    clear: both;
+}
