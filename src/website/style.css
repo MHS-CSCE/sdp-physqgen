@@ -2,6 +2,7 @@ html {
     height: 100%;
     width: 100%;
   }
+
 body {
     height: 125vh;
     margin-top: 60px;
@@ -11,7 +12,9 @@ body {
     background-color: rgb(211, 255, 240);
     margin-left:auto;
     margin-right:auto;
-}  
+}
+
+/*Header that displays title of project*/
 header {  
     background-color: rgb(252, 124, 252);
     position: fixed;
@@ -20,7 +23,6 @@ header {
     top: 1px;
     width:100%;
     text-align: center;
-    /* font-family: Impact; */
     font-size:15px;
 }
 
@@ -33,12 +35,14 @@ img {
     margin-right:auto;
 }
 
+/*Background of question that shows image and description of question*/
 .question{
     background: pink;
     padding:2%;
     text-align:center;
 }
 
+/*Answer submit area*/
 .submit{
     background: greenyellow;
     border: 6px solid #949599;
@@ -46,10 +50,10 @@ img {
     border-radius: 6px;
 }
 
+/*Button display area*/
 .buttons{
     background:plum;
     text-align:center;
-    padding:2%;
 }
 
 /*A divider to seperate the buttons*/
@@ -59,7 +63,13 @@ img {
     display:inline-block;
 }
 
-form{
+/*Make the "create question" form in "teacher opening page" be inline*/
+.teacheropeningbuttons{
+    display:inline-block;
+}
+
+/*Login page form*/
+.loginform{
     background:thistle;
     width: 50%;
     text-align: center;
@@ -77,25 +87,39 @@ form{
     }
 }
 
+/*Make all white input boxes be rounded*/
 input {
-    border-radius: 5px;
+    border-radius:5px;
   }
 
 /*css for form: https://learn.shayhowe.com/html-css/building-forms/*/
 
+/*Create question page left menu*/
 aside{
     float: left;
     background: green;
     width:33%;
 }
-
+/*Create question page right menu that displays image +description of question*/
 section{
     float:right;
     background:purple;
     width:66%;
 }
 
+/*Footer for bottom buttons in "create question" page*/
 footer{
     background:orange;
     clear: both;
+}
+
+/*Add padding to all divs*/
+div{
+    padding:2%
+}
+
+/*Padding/margin for left menu on "create question" page*/
+.createquestionmenu{
+    padding:8%;
+    margin: 1%;
 }
