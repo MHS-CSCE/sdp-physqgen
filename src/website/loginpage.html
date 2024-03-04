@@ -5,8 +5,6 @@
         <link href="style.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <!--The navigation bar that displays the title of the project-->
-        <!--Tutorial: https://www.javatpoint.com/how-to-make-a-navigation-bar-in-html-->
         <header>
             <nav>
                 <h1>Physics Question Generator</h1>
@@ -16,22 +14,31 @@
         <!--action:contains the URL to which information included within the form will be sent for processing by the server-->
         <!--method: attribute is the HTTP method browsers should use to submit the form data-->
         <form action="/login" method="post">
-            <fieldset>
-                <legend>Login</legend>
-                <!--name submit-->
-                <!-- label's "for" must match with input's "id"-->
-                <div class="Name">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" id="name" required>
-                </div>
+            <div class="loginform">
+                <fieldset>
+                    <legend>Login</legend>
+                    <!--Name submit-->
+                    <!-- label's "for" must match with input's "id"-->
+                    <div>
+                        <label for="name">Name</label>
+                        <input type="text" name="name" id="name" required>
+                    </div>
 
-                <!--email submit-->
-                <div class="Email">
-                    <label for="email-address">Email</label>
-                    <input type="email" name="email-address" id="email-address" placeholder="name@domain.ca" required>
-                </div>
-                <input type="submit" name="submit" value="Login">
-            </fieldset>
+                    <!--Last Name submit-->
+                    <div>
+                        <label for="lastname">Last Name</label>
+                        <input type="text" name="last-name" id="last-name" required>
+                    </div>
+
+                    <!--Email submit-->
+                    <div>
+                        <label for="email-address">Email</label>
+                        <input type="email" name="email-address" id="email-address" placeholder="name@domain.ca" required>
+                    </div>
+                    <!--Send Login Button-->
+                    <input type="submit" name="submit" value="Login">
+                </fieldset>
+            </div>
         </form>
     </body>
 </html>

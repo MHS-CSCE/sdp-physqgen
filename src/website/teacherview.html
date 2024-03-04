@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>View</title>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <!--The navigation bar that displays the title of the project-->
+        <!--Tutorial: https://www.javatpoint.com/how-to-make-a-navigation-bar-in-html-->
+        <header>
+            <nav>
+                <h1>Physics Question Generator</h1>
+            </nav>
+        </header>
+        <!--form-->
+        <!--action: tells form where its content will be sent to-->
+        <!--method: tells form how data will be sent [get: shorter, non sensitive into/ post: longer, more secure info]-->
+        <form>
+            <div class="loginform">
+                <!--<select>: wraps menu options, has name attribute-->
+                <!--<option>: indicates menu option, has value attribute-->
+                <div>
+                    <label for="configuration">Select a Configuration</label>
+                </div>
+                <div>
+                    <select name="configuration" id="configuration">
+                        <option value="configuration1" selected>configuration 1</option>
+                        <option value="configuration2" >configuration 2</option>
+                        <option value="configuration3" >configuration 3</option>
+                    </select>
+                </div>
+
+                <div>
+                    <!--view button-->
+                    <input type="submit" name="configurationsend" value="View">
+                </div>
+            </div>
+        </form>
+        <!--Return button button-->
+        <input type="submit" name="back" value="Back">
+    </body>
+</html>
