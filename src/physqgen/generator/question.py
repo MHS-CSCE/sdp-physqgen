@@ -1,11 +1,7 @@
 """
-Question Datastructures
-ICS4U
-Stuart, Isabelle, Amelia
-Represent different types of questions.
-History:
+Stuart
 February 9, 2024: Implement Question and KinematicsQuestion
-February 20, 2024: Fix KinematicsQuestion, implement rest of solving ofrmulas.
+February 20, 2024: Fix KinematicsQuestion, implement rest of solving formulas.
 """
 
 from dataclasses import InitVar, dataclass, field

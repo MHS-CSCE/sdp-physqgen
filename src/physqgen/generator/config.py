@@ -1,3 +1,7 @@
+"""
+Stuart, February 10, 2024
+"""
+
 from io import StringIO
 from json import load as loadJSON
 from physqgen import generator
