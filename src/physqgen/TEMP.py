@@ -2,7 +2,7 @@
 import sqlite3
 
 #connecting to sqlite3
-db = sqlite3.connect('example.db')
+db = sqlite3.connect('.\\data\\base.db')
 
 #creating a cursor object
 cursor = db.cursor()
