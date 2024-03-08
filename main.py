@@ -7,10 +7,7 @@ History:
 Febrary 1, 2024: Program Creation
 """
 
-#importing necessary functions/libraries
-from physqgen.flask import create_app
+from physqgen.app import app
 
-if __name__ == "__main__":
-    app = create_app()
-    
-    app.run()
+if __name__=='__main__':
+    app.run(debug = True)
