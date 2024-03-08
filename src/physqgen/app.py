@@ -18,11 +18,12 @@ def gfg():
         # getting input with firstname = FIRST_NAME in HTML form
         FIRST_NAME= request.form.get("name")
         # getting input with lastname = LAST_NAME in HTML form 
-        LAST_NAME = request.form.get("lastname") 
+        LAST_NAME = request.form.get("last-name") 
         #getting input with email = EMAIL_A in HTML form
-        EMAIL_A = request.form.get("email")
-
-        return FIRST_NAME, LAST_NAME, EMAIL_A
+        EMAIL_A = request.form.get("email-address")
+        return "Your name is "+FIRST_NAME + LAST_NAME
+    return render_template("loginpage.html")
+    
 
 if __name__=='__main__':
-    app.run()
+    app.run(host="0.0.0.0", debug=True)
