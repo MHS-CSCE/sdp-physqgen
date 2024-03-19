@@ -13,7 +13,7 @@
 
         <!--action:contains the URL to which information included within the form will be sent for processing by the server-->
         <!--method: attribute is the HTTP method browsers should use to submit the form data-->
-        <form action="\login" method="post">
+        <form action="{{ url_for("log_in")}}" method="post">
             <div class="loginform">
                 <fieldset>
                     <legend>Login</legend>
