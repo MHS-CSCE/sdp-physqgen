@@ -1,4 +1,5 @@
 from sqlite3 import connect, Connection
+from physqgen.generator import KinematicsQuestion
 
 def getDatabaseConnection() -> Connection:
     """Fetches database connection. Will create database if it does not exist."""
@@ -13,7 +14,7 @@ def addQuestionToDatabase(question_type_name: str, question_variables: list[str]
 
         # creating table for question type
         # don't care about sql injection, is internal use.
-        sql = f'''CREATE TABLE {question_type_name}(
+        sql = f'''CREATE TABLE {question_type_name.upper()}(
             QUESTION_UUID CHAR NOT NULL PRIMARY KEY,
             FIRST_NAME CHAR NOT NULL,
             LAST_NAME CHAR NOT NULL,
@@ -29,7 +30,9 @@ def addQuestionToDatabase(question_type_name: str, question_variables: list[str]
 def createDataBaseFromBlank() -> None:
     """Expects the database file not to exist."""
     # added
-    addQuestionToDatabase("KINEMATICS", ["time", "initial_velocity", "final_velocity", "displacement", "acceleration"])
+    # TODO: add attribute, regen database (maybe type()?)
+    # TODO: get enum value names
+    addQuestionToDatabase(KinematicsQuestion.questionGroupName(), [var.name for var in KinematicsQuestion.variables])
 
 
 if __name__ =="__main__":

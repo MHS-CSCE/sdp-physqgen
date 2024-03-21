@@ -139,6 +139,19 @@ class Question:
     def getVariableValue(self, variableName: str) -> float | Literal[False]:
         """Fetches the value for the passed variable name, or False if it is not set."""
         return getattr(self, variableName, False)
+    
+    def variableValues(self) -> list[float]:
+        """Returns tuple of variable values in the order they are defined in the question's enum."""
+        values = []
+        for enumValue in self.variables:
+            values.append(getattr(self, self.enumToAttribute(enumValue)))
+        
+        return values
+
+    @staticmethod
+    def questionName() -> str:
+        """Returns the name of the question type. Should be overriden by inheriting classes."""
+        return "GENERIC"
 
 @dataclass
 class KinematicsQuestion(Question):
@@ -461,3 +474,8 @@ class KinematicsQuestion(Question):
             return True
         else:
             return False
+    
+    @staticmethod
+    def questionGroupName() -> str:
+        """To be used when representing class using a str. Returns the name of the question type (Literal['Kinematics'])."""
+        return "Kinematics"
