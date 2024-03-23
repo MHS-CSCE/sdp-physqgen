@@ -3,7 +3,7 @@ from physqgen.generator import KinematicsQuestion
 
 def getDatabaseConnection() -> Connection:
     """Fetches database connection. Will create database if it does not exist."""
-    # create sqlite3 db
+    # sqlite3 db
     return connect('.\\data\\data.db')
 
 def addQuestionToDatabase(question_type_name: str, question_variables: list[str]) -> None:
