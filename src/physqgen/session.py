@@ -1,9 +1,11 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from uuid import uuid4
 from physqgen.generator.question import Question
 from physqgen.database import getDatabaseConnection
 
 @dataclass(slots=True)
 class Session:
+    uuid: str = field(default_factory=uuid4)
     first_name: str
     last_name: str
     email_a: str
