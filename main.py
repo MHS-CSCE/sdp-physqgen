@@ -6,7 +6,7 @@ Generates physics questions and displays them on a website.
 History:
 Febrary 1, 2024: Program Creation
 """
-from physqgen.application import create_app
+from physqgen.app.application import create_app
 
 app = create_app()
 
