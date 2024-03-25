@@ -10,7 +10,7 @@ from os import path
 #creating app
 def create_app():
     #setting up app
-    app = Flask(__name__, template_folder=".\\src\\website")
+    app = Flask(__name__, template_folder="website")
     #secret key to be used for session cookies, security
     app.config["SECRET_KEY"] ="Ajkjaksjksjaksjkiooooo"
 

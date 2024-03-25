@@ -7,9 +7,13 @@ from flask import Blueprint, Flask, render_template
 
 views = Blueprint('views', __name__)
 
-@views.route('/qpage')
+@views.route('/test')
 def questionpage(): 
     return "<h1> Hell world </h1>"
+
+@views.route('/index')
+def redirectpage():
+    return render_template("index.html")
 
 @views.route('/create')
 def q_create(): 
