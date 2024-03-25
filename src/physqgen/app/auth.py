@@ -8,7 +8,7 @@ from os import path
 auth = Blueprint('auth', __name__)
 
 
-@auth.route('/')
+@auth.route('/login')
 def log_in():
     return render_template("loginpage.html")
 

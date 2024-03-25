@@ -7,11 +7,7 @@ from flask import Blueprint, Flask, render_template
 
 views = Blueprint('views', __name__)
 
-@views.route('/test')
-def questionpage(): 
-    return "<h1> Hell world </h1>"
-
-@views.route('/index')
+@views.route('/')
 def redirectpage():
     return render_template("index.html")
 
