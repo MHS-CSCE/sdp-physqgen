@@ -5,6 +5,7 @@ Stuart, Isabelle, Amelia
 Generates physics questions and displays them on a website.
 History:
 Febrary 1, 2024: Program Creation
+March 8th: Altered app.run
 """
 from physqgen.app.application import create_app
 

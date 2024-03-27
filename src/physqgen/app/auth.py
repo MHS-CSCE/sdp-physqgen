@@ -24,5 +24,4 @@ def log_in():
 
         if EMAIL_A = ms jones email 
             mb send to the teacher view? 
-
-    return render_template("loginpage.html")"""
+"""
