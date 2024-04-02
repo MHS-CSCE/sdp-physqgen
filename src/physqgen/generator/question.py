@@ -4,6 +4,7 @@ February 9, 2024: Implement Question and KinematicsQuestion
 February 20, 2024: Fix KinematicsQuestion, implement rest of solving formulas.
 """
 
+from typing import Iterable
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from io import StringIO
@@ -16,7 +17,7 @@ from uuid import UUID, uuid4  # uuid4 doesn't include private information
 @dataclass
 class Question:
     """
-    Represents a question. Generated using the variableConfig parameter in init. str key is variable name in lowercase, and the tuple value is the two bounds of the range for the variable randomization.\n
+    Represents a question. Generated using the variableConfig or variableValues parameters. If variableValues is provided, id should also be. str key is variable name in lowercase, and the tuple value is the two bounds of the range for the variable randomization.\n
     Variables that are not set by the config are not created as private attributes, even if they exist in the enum.\n
     To use, create properties with name format f'{enum.value.name.lower()}' for each variable in subclass variables enum, which reference the attributes that are created from the variables enum values. They have format f'_{enum.value.name.lower()}'.\n
     Attributes:\n
@@ -28,51 +29,65 @@ class Question:
         variables (Enum): the variables, each with a corresponding generated private attribute containing their generator and defined properties including verification to access them,\n\n
         also has attributes for each value in variables, with format f'_{enum.value.name.lower()}' which have float values
     """
-    # specified per-question
-    variableConfig: InitVar[dict[str, tuple[float, float]]]
     solveVariable: str
+
+    # specified per-question
+    variableConfig: InitVar[dict[str, tuple[float, float]] | bool] = False
+    variableValues: InitVar[dict[str, float] | bool] = False
     
     # override with values
     # img: object
     text: str = ""
-    variables: Enum = field(default_factory=Enum)
+    variables = Enum("DEFAULT", names=())
 
     # should be left default
-    # correct_range default was agreed upon with client at 10%
-    correct_range: float = 0.1
+    # correctRange default was agreed upon with client at 10%
+    correctRange: float = 0.1
 
-    # always leave default
-    id: UUID = field(default_factory=uuid4, init=False)
+    id: UUID = field(default_factory=uuid4)
 
-    def __post_init__(self, variableConfig: dict[str, list[float, float]]) -> None:
+    def __post_init__(self, variableConfig: dict[str, list[float, float]] | bool, variableValues: dict[str, float] | bool) -> None:
         """Randomizes variables values."""
 
-        # randomize variables
-        for variable, range in variableConfig.items():
+        if type(variableConfig) == dict:
+            # randomize variables
+            for variable, range in variableConfig.items():
 
-            # replace str representation with enum member representation
-            variable: Enum = self.variables[variable.upper()]
+                # replace str representation with enum member representation
+                variable: Enum = self.variables[variable.upper()]
 
-            # test if bounds of range are valid for the variable. assume that if both are valid, anything in between is
-            # error if invallid
-            # TODO: log instead of erroring
+                # test if bounds of range are valid for the variable. assume that if both are valid, anything in between is
+                # error if invallid
+                # TODO: log instead of erroring
 
-            # get variables validation function
-            validationFunc = getattr(self, f"{variable.name.lower()}_validate")
-            for bound in range:
-                # test each bound
-                if not validationFunc(bound):
-                    raise ValueError(f"Bound {bound} for question {self} taken from config is invalid. Must pass validation function {validationFunc}.")
+                # get variables validation function
+                validationFunc = getattr(self, f"{variable.name.lower()}_validate")
+                for index, bound in enumerate(range):
+                    # test each bound
+                    if not validationFunc(bound):
+                        raise ValueError(f"Bound {bound} for question {self} taken from config is invalid. Must pass validation function {validationFunc}.")
+                    else:
+                        # convert valid int values
+                        range[index] = float(bound)
+                # multiple the difference between the two ends of the range by a float between 0.0 and 1.0, and add it to the base.
+                # randomizes the variable's value
+                # will work no matter order of range values, smaller first or larger first
+                randomValue = range[0] + random() * (range[1] - range[0])
 
-            # multiple the difference between the two ends of the range by a float between 0.0 and 1.0, and add it to the base.
-            # randomizes the variable's value
-            # will work no matter order of range values, smaller first or larger first
-            randomValue = range[0] + random() * (range[1] - range[0])
+                # create attribute in dict that has the randomizes value and an attribute name coresponding to the enum value name, in lowercase
+                # TODO: check if there is better way to add attributes dynamically
+                self.__dict__["_" + variable.name.lower()] = randomValue
+                # define properties for each variable subclasses, which use this defined value
+        
+        elif type(variableValues) == dict:
+            for variableName, value in variableValues.items():
+                # replace str representation with enum member representation
+                variable: Enum = self.variables[variableName.upper()]
 
-            # create attribute in dict that has the randomizes value and an attribute name coresponding to the enum value name, in lowercase
-            # TODO: check if there is better way to add attributes dynamically
-            self.__dict__["_" + variable.name.lower()] = randomValue
-            # define properties for each variable subclasses, which use this defined value
+                self.__dict__["_" + variable.name.lower()] = value
+
+        else:
+            raise TypeError(f"Both variableConfig and variableValues were not dicts holding required data. One of them must be defined in order to construction the question.")
         
     def __str__(self) -> str:
         """Returns a string representation of the question variables."""
@@ -95,8 +110,8 @@ class Question:
         return getattr(self, self.solveVariable)
 
     def check_answer(self, submitted) -> bool:
-        """Returns True if the submitted answer is within the correct_range variance from the question's calculated answer."""
-        return (submitted > (self.answer * (1 - self.correct_range))) and (submitted < (self.answer * (1 + self.correct_range)))
+        """Returns True if the submitted answer is within the correctRange variance from the question's calculated answer."""
+        return (submitted > (self.answer * (1 - self.correctRange))) and (submitted < (self.answer * (1 + self.correct_range)))
     
     @staticmethod
     def enumToAttribute(enumAttribute: Enum, private: bool = False) -> str:
@@ -112,17 +127,17 @@ class Question:
             return enumAttribute.name.lower()
     
     @staticmethod
-    def validatePositiveNonZeroAttribute(value: float) -> bool:
+    def validatePositiveNonZeroAttribute(value) -> bool:
         """Returns True if value is a positive non 0.0 float, otherwise returns False."""
-        if type(value) is float and value > 0.0:
+        if (type(value) is float or type(value) is int) and value > 0.0:
             return True
         else:
             return False
     
     @staticmethod
-    def validatePositiveAttribute(value: float) -> bool:
+    def validatePositiveAttribute(value) -> bool:
         """Returns True if value is a float that is greater than or equal to 0.0. Otherwise returns False."""
-        if type(value) is float and value >= 0.0:
+        if (type(value) is float or type(value) is int) and value >= 0.0:
             return True
         else:
             return False
@@ -148,6 +163,19 @@ class Question:
         
         return values
 
+    @classmethod
+    def fromDatabase(cls, solveVariable: str, text: str, variableValues: Iterable, correctRange: float, id: str):
+        """Constructs question from data stored in database. Converts given data to correct datatypes. variableValues must be in order of the question's Enum, which should be the order of columns in the database."""
+        solveVariable = solveVariable.upper()
+        id = UUID(id)
+        temp = {}
+        for value, variable in zip(variableValues, cls.variables):
+            temp[variable.name] = value
+        variableValues = temp
+
+        question = cls(variableValues=variableValues, solveVariable=solveVariable, text=text, correctRange=correctRange, id=id)
+        return question
+
     @staticmethod
     def questionName() -> str:
         """Returns the name of the question type. Should be overriden by inheriting classes."""
@@ -159,7 +187,7 @@ class KinematicsQuestion(Question):
 
     # set enum default
     # can create enum entirely using the call, but that would sacrifice some clarity
-    variables: Enum = Enum("KinematicsVariables", "DISPLACEMENT, INITIAL_VELOCITY, FINAL_VELOCITY, TIME, ACCELERATION")
+    variables = Enum("KinematicsVariables", "DISPLACEMENT, INITIAL_VELOCITY, FINAL_VELOCITY, TIME, ACCELERATION")
 
     # TODO: writing properties for each value
         # transfer formulas
@@ -225,7 +253,7 @@ class KinematicsQuestion(Question):
     @staticmethod
     def displacement_validate(value: float) -> bool:
         """Uses appropriate validation functions to ensure displacement is valid. Currently allowed any float value."""
-        if type(value) is float:
+        if type(value) is float or type(value) is int:
             return True
         else:
             return False
@@ -284,10 +312,10 @@ class KinematicsQuestion(Question):
                 return ((d*2) / t) - v2
     
     @staticmethod
-    def initial_velocity_validate(value: float) -> bool:
+    def initial_velocity_validate(value) -> bool:
         """Uses appropriate validation functions to ensure initial velocity is valid. Currently allowed any float value."""
         # TODO: might change to not allow being equal to final velocity, which would only happen if acceleration is 0
-        if type(value) is float:
+        if type(value) is float or type(value) is int:
             return True
         else:
             return False
@@ -346,10 +374,10 @@ class KinematicsQuestion(Question):
                 return ((d*2) / t) - v1
     
     @staticmethod
-    def final_velocity_validate(value: float) -> bool:
+    def final_velocity_validate(value) -> bool:
         """Uses appropriate validation functions to ensure final velocity is valid. Currently allowed any float value."""
         # TODO: might change to not allow being equal to initial velocity, which would only happen if acceleration is 0
-        if type(value) is float:
+        if type(value) is float or type(value) is int:
             return True
         else:
             return False
@@ -408,7 +436,7 @@ class KinematicsQuestion(Question):
                 # t from d, v1, v2 formula
                 return (d*2)/(v1 + v2)
     
-    def time_validate(self, value: float) -> bool:
+    def time_validate(self, value) -> bool:
         """Uses appropriate validation functions to ensure time is valid. Currently allowed any positive non-zero float value."""
         if self.validatePositiveNonZeroAttribute(value):
             return True
@@ -421,7 +449,7 @@ class KinematicsQuestion(Question):
         value = getattr(self, self.enumToAttribute(self.variables.ACCELERATION, True), False)
         
         # if fetches value, return it
-        if type(value) is float:
+        if type(value) is float or type(value) is int:
             return value
         
         # otherwise use equations
@@ -467,7 +495,7 @@ class KinematicsQuestion(Question):
                 # a from d, v1, v2 formula
                 return ((2*v2) / (t)) - ((2*d) / (t**2)) 
 
-    def acceleration_validate(self, value: float) -> bool:
+    def acceleration_validate(self, value) -> bool:
         """Uses appropriate validation functions to ensure acceleration is valid. Currently allowed any positive float value."""
         # TODO: might change to not allow acceleration of 0
         if self.validatePositiveAttribute(value):
@@ -476,6 +504,6 @@ class KinematicsQuestion(Question):
             return False
     
     @staticmethod
-    def questionGroupName() -> str:
+    def questionName() -> str:
         """To be used when representing class using a str. Returns the name of the question type (Literal['Kinematics'])."""
-        return "Kinematics"
+        return "KINEMATICS"

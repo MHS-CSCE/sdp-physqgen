@@ -1,1 +1,2 @@
-from physqgen.generator.question import KinematicsQuestion
+from .question import KinematicsQuestion
+from .config import parseQuestions

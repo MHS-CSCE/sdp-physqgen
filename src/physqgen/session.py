@@ -17,8 +17,9 @@ class Session:
     number_tries: int = 0
     correct: bool = False
 
-    def commitSessionToDatabase(self) -> None:
-        """Constructs SQL command to commit session data to Database. Overwrites any row with the same uuid."""
+    # TODO: move to physqgen.database, encapsulation
+    def commitSessionToDatabase(self, rollback=False) -> None:
+        """Constructs SQL command to commit session data to Database. Overwrites any row with the same uuid. Therefore, can be called multiple times, whenever data is recieved from client."""
         # TODO: look into how primary key uuid acts, if will auto-overwrite
         with getDatabaseConnection() as connection:
             cursor = connection.cursor()
@@ -27,33 +28,65 @@ class Session:
                 # we want to not overwrite existing data, adding together number of tries and only overwriting correct
                 # but first, the session would need to be able to be restarted upon visiting site again
 
+                # commented out code is the proper way, that prevents sql injection. it stopped working. TODO: fix.
+                # sql = f"""
+                # INSERT INTO ? (
+                #     QUESTION_UUID,
+                #     FIRST_NAME,
+                #     LAST_NAME,
+                #     EMAIL_A,
+                #     NUMBER_TRIES,
+                #     CORRECT,
+                #     ANSWER
+                #     {", ?"*len(question.variables)})
+                #     VALUES(?, ?, ?, ?, ?, ?, ?{", ?"*len(question.variables)})
+                # """
+
+                # insertValues = [
+                #     question.questionName(), # question table name
+                #     # enum value column names, to ensure order
+                #     *[var.name for var in question.variables],
+
+                #     # column values
+                #     question.id, # QUESTION_UUID
+                #     self.login_info.first_name,
+                #     self.login_info.last_name,
+                #     self.login_info.email_a,
+                #     self.number_tries,
+                    # question.solveVariable,
+                    # question.text,
+                    # question.correctRange,
+                #     *question.variableValues()
+                # ]
+
                 sql = f"""
-                INSERT INTO ? (
+                INSERT INTO {question.questionName()} (
                     QUESTION_UUID,
                     FIRST_NAME,
                     LAST_NAME,
                     EMAIL_A,
                     NUMBER_TRIES,
                     CORRECT,
-                    ANSWER
-                    {", ?"*len(question.variables)})
-                    VALUES(?, ?, ?, ?, ?, ?, ?{", ?"*len(question.variables)})
+                    SOLVE_VARIABLE,
+                    TEXT,
+                    CORRECT_RANGE,
+                    {",".join([var.name for var in question.variables])}
+                )
+                VALUES(
+                    "{question.id}",
+                    "{self.login_info.first_name}",
+                    "{self.login_info.last_name}",
+                    "{self.login_info.email_a}",
+                    {self.number_tries},
+                    "{question.solveVariable}",
+                    "{question.text}",
+                    {question.correctRange},
+                    {question.answer},
+                    {",".join((str(val) for val in question.variableValues()))}
+                )
                 """
 
-                insertValues = [
-                    question.questionName(), # question table name
-                    # enum value column names, to ensure order
-                    *[var.name for var in question.variables],
-
-                    # column values
-                    question.id, # QUESTION_UUID
-                    self.login_info.first_name,
-                    self.login_info.last_name,
-                    self.login_info.email_a,
-                    self.number_tries,
-                    self.correct,
-                    question.answer,
-                    *question.variableValues()
-                ]
-
-                cursor.execute(sql, insertValues)
+                cursor.execute(sql)
+            
+            if rollback:
+                cursor.connection.rollback()
