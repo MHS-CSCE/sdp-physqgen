@@ -17,6 +17,16 @@
 
         <aside>
             <div class="createquestionmenu">
+                <!--Dropdown for select question type-->
+                <div>
+                    <label for="questiontype">Question Type</label>
+                    <select name="questiontype" id="questiontype">
+                        <option value="Friday" selected>Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                      </select>
+                </div>
+                
                 <!--File input-->
                 <div>
                     <label for="file">File</label>
@@ -24,10 +34,10 @@
                 </div>
                 <div class="divider"></div>
 
-                <!--Question format-->
+                <!--Question text-->
                 <div >
-                    <label for="format">Question format</label>
-                    <input type="text" name="Question format" id="format">
+                    <label for="format">Question text</label>
+                    <input type="text" name="Question text" id="format">
                 </div>
                 <div class="divider"></div>
 
@@ -37,7 +47,17 @@
                     <label for="variables">Variables</label>
                     <input type="text" name="Variables" id="variables">
                 </div>
+                <div class="divider"></div>
 
+                <!--Tolerance-->
+                <div >
+                    <label for="tolerance">Tolerance</label>
+                    <input type="number" name="Tolerance" id="tolerance">
+                </div>
+                <div class="divider"></div>
+
+                <!--Grid of input boxes for variable making-->
+                
             </div>
         </aside>
 

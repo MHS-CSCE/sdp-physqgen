@@ -19,7 +19,11 @@ class Session:
 
     # TODO: move to physqgen.database, encapsulation
     def commitSessionToDatabase(self, rollback=False) -> None:
-        """Constructs SQL command to commit session data to Database. Overwrites any row with the same uuid. Therefore, can be called multiple times, whenever data is recieved from client."""
+        """
+        Constructs SQL command to commit session data to Database.\n
+        Overwrites any row with the same uuid. Therefore, can be called multiple times, whenever data is recieved from client.\n
+        If rollback is True, will rollback the commit. For testing purposes.
+        """
         # TODO: look into how primary key uuid acts, if will auto-overwrite
         with getDatabaseConnection() as connection:
             cursor = connection.cursor()
