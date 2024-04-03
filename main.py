@@ -8,8 +8,17 @@ Febrary 1, 2024: Program Creation
 March 8th: Altered app.run
 """
 from physqgen.app.application import create_app
-
-app = create_app()
+from os.path import join
+from json import load
 
 if __name__ == '__main__':
+    app = create_app()
+    
+    # get config on run
+    with open(join(".", "configs", "active_config.json")) as file:
+        with open(join(".", "configs", load(file)["activeConfigName"])) as configFile:
+            # parseQuestions will interpret it, generating question from it
+            app.questionConfig = configFile.read()
+            print(app.questionConfig)
+
     app.run(port=8080, host='0.0.0.0',debug='True')
