@@ -16,19 +16,19 @@ views = Blueprint('views', __name__)
 def redirectpage():
     return render_template("index.html")
 
-@views.route('/qpage')
+@views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
     return render_template("questionpage.html")
 
-@views.route('/create')
+@views.route('/create', methods=['GET', 'POST'])
 def q_create(): 
     return render_template("createquestion.html")
 
-@views.route('/tview')
+@views.route('/tview', methods=['GET', 'POST'])
 def t_view():
     return render_template("teacherview.html")
 
-@views.route('/topen')
+@views.route('/topen', methods=['GET', 'POST'])
 def t_open(): 
     return render_template("teacheropening.html")
 
