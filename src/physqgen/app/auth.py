@@ -14,8 +14,8 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def log_in():
      #getting input from the form, passing it into the session class
-    if request.method == "POST":
-        Session(
+   if request.method == "POST":
+        session["session"] = Session(
            LoginInfo(
                #setting the form input as the login info
                request.form["name"],
@@ -23,9 +23,9 @@ def log_in():
                request.form["email-address"]
             ),
            generateQuestions(app.questionConfig)
-           )
-        return Session
+        )
+        return session["session"]
 
     #rendering the site
-    return render_template("loginpage.html")
+   return render_template("loginpage.html")
     
