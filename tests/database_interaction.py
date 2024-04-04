@@ -1,5 +1,5 @@
 from physqgen.session import Session, LoginInfo
-from physqgen.generator import parseQuestions
+from physqgen.generator import generateQuestions
 from io import StringIO
 
 # test basic database interaction
@@ -10,7 +10,7 @@ if __name__ == "__main__":
             "test_last_name",
             "test@email.a"
         ),
-        questions=parseQuestions(
+        questions=generateQuestions(
             StringIO(
                 """
                 {

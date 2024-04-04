@@ -17,7 +17,7 @@ if __name__ == '__main__':
     # get config on run
     with open(join(".", "configs", "active_config.json")) as file:
         with open(join(".", "configs", load(file)["activeConfigName"])) as configFile:
-            # parseQuestions will interpret it, generating question from it
+            # use generateQuestions to interpret it, generating question from it
             app.questionConfig = configFile.read()
 
     app.run(port=8080, host='0.0.0.0',debug='True')

@@ -6,8 +6,11 @@ from io import StringIO
 from json import load as loadJSON
 from physqgen import generator
 
-def parseQuestions(configTextIO: StringIO) -> list:
-    """Parses a question config text stream for questions and returns a list of all contained question subclass objects."""
+def generateQuestions(configTextIO: StringIO) -> list:
+    """
+    Generates a set of question subclass instances with randomized values based on the passed config data.\n
+    Returns a list of those instances.
+    """
     questions: list = []
 
     dict = loadJSON(configTextIO)
