@@ -7,9 +7,10 @@ History:
 Febrary 1, 2024: Program Creation
 March 8th: Altered app.run
 """
-from physqgen.app.application import create_app
-from os.path import join
 from json import load
+from os.path import join
+
+from physqgen.app.application import create_app
 
 if __name__ == '__main__':
     app = create_app()

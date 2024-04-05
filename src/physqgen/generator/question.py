@@ -4,13 +4,12 @@ February 9, 2024: Implement Question and KinematicsQuestion
 February 20, 2024: Fix KinematicsQuestion, implement rest of solving formulas.
 """
 
-from typing import Iterable
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from io import StringIO
 from math import sqrt
 from random import random
-from typing import Literal
+from typing import Iterable, Literal
 from uuid import UUID, uuid4  # uuid4 doesn't include private information
 
 
@@ -38,6 +37,7 @@ class Question:
     # override with values
     # img: object
     text: str = ""
+    correct: bool = field(init=False, default=False)
     variables = Enum("DEFAULT", names=())
 
     # should be left default

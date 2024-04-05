@@ -1,11 +1,14 @@
 """
 """
 # importing Flask and other modules
-from main import app
-from flask import Flask, request, render_template, Blueprint, redirect, url_for, session
 from os import path
-from physqgen.session import Session, LoginInfo
+
+from flask import (Blueprint, Flask, redirect, render_template, request,
+                   session, url_for)
+
+from main import app
 from physqgen.generator.config import generateQuestions
+from physqgen.session import LoginInfo, Session
 
 #defining views for routes
 auth = Blueprint('auth', __name__)

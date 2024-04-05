@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from uuid import uuid4
-from physqgen.generator.question import Question
+
 from physqgen.database import getDatabaseConnection
+from physqgen.generator.question import Question
+
 
 @dataclass(slots=True)
 class LoginInfo:
@@ -82,10 +84,10 @@ class Session:
                     "{self.login_info.last_name}",
                     "{self.login_info.email_a}",
                     {self.number_tries},
+                    "{question.correct}",
                     "{question.solveVariable}",
                     "{question.text}",
                     {question.correctRange},
-                    {question.answer},
                     {",".join((str(val) for val in question.variableValues()))}
                 )
                 """
