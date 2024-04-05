@@ -6,7 +6,7 @@ from os import path
 from flask import (Blueprint, Flask, redirect, render_template, request,
                    session, url_for)
 
-from main import app
+from physqgen.app.application import app
 from physqgen.generator.config import generateQuestions
 from physqgen.session import LoginInfo, Session
 

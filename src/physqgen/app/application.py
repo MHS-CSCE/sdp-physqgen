@@ -17,6 +17,7 @@ from flask import Blueprint, Flask, render_template, request, url_for
 #creating app
 def create_app():
     #setting up app
+    global app
     app = Flask(__name__, template_folder="website")
     #secret key to be used for session cookies, security
     app.config["SECRET_KEY"] ="Ajkjaksjksjaksjkiooooo"
