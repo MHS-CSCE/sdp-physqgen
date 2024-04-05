@@ -10,7 +10,6 @@ from physqgen.admin.getAdminData import getRelevantQuestionData
 from physqgen.database import createDataBaseFromBlank
 
 
-# TODO: construct the MainWindow with data from getRelevantQuestionData
 class AdminView(QMainWindow):
     """
     Quick and dirty window that contains a view of the data currently stored in the database. Has a reload button to refresh data.\n
