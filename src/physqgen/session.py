@@ -16,8 +16,6 @@ class Session:
     uuid: str = field(default_factory=uuid4, init=False)
     login_info: LoginInfo
     questions: list[Question]
-    number_tries: int = 0
-    correct: bool = False
 
     # TODO: move to physqgen.database, encapsulation
     def commitSessionToDatabase(self, rollback=False) -> None:
@@ -83,7 +81,7 @@ class Session:
                     "{self.login_info.first_name}",
                     "{self.login_info.last_name}",
                     "{self.login_info.email_a}",
-                    {self.number_tries},
+                    {question.number_tries},
                     "{question.correct}",
                     "{question.solveVariable}",
                     "{question.text}",

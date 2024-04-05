@@ -4,7 +4,8 @@ from io import StringIO
 
 # test basic database interaction
 if __name__ == "__main__":
-    testConfig = """
+    testConfig = StringIO(
+        """
         {
             "questions": [
                 {
@@ -21,6 +22,7 @@ if __name__ == "__main__":
             ]
         }
         """
+    )
 
     sess = Session(
         login_info=LoginInfo(
@@ -28,7 +30,7 @@ if __name__ == "__main__":
             "test_last_name",
             "test@email.a"
         ),
-        questions=generateQuestions(StringIO(testConfig))
+        questions=generateQuestions(testConfig)
     )
 
     # test commiting session data
@@ -36,12 +38,12 @@ if __name__ == "__main__":
     
     sess2 = Session(
         LoginInfo("test2", "last2", "email2"),
-        questions=generateQuestions(StringIO(testConfig))
+        questions=generateQuestions(testConfig)
     )
     sess2.commitSessionToDatabase(rollback=True)
 
     sess3 = Session(
         LoginInfo("test3", "last3", "email3"),
-        questions=generateQuestions(StringIO(testConfig))
+        questions=generateQuestions(testConfig)
     )
     sess3.commitSessionToDatabase(rollback=True)

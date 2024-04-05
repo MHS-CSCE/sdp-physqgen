@@ -6,6 +6,7 @@ from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
 
 from physqgen.admin.getAdminData import getRelevantQuestionData
+from physqgen.app.application import app
 
 
 # TODO: construct the MainWindow with data from getRelevantQuestionData
@@ -52,10 +53,9 @@ class AdminView(QMainWindow):
         
         # create the question columns on creation. will need a reload to update.
         # determine via number of questions in active config
-        with open(join(".", "configs", "active_config.json")) as file:
-            with open(join(".", "configs", load(file)["activeConfigName"])) as configFile:
-                # use generateQuestions to interpret it, generating question from it
-                configData = load(configFile)
+        with open(app.questionConfig) as configFile:
+            # use generateQuestions to interpret it, generating question from it
+            configData = load(configFile)
         
         for index, questionConfig in enumerate(configData["questions"]):
             central.layout().addWidget(QLabel(questionConfig["question"]), 0, 2 * index + 1, alignment=Qt.AlignmentFlag.AlignTop)

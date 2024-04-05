@@ -38,6 +38,7 @@ class Question:
     # img: object
     text: str = ""
     correct: bool = field(init=False, default=False)
+    numberTries: int = field(init=False, default=0)
     variables = Enum("DEFAULT", names=())
 
     # should be left default
