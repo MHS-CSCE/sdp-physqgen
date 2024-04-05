@@ -1,4 +1,5 @@
 from json import load
+from os import remove
 from os.path import join
 
 from qtpy.QtCore import Qt
@@ -6,7 +7,7 @@ from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
 
 from physqgen.admin.getAdminData import getRelevantQuestionData
-from physqgen.app.application import app
+from physqgen.database import createDataBaseFromBlank
 
 
 # TODO: construct the MainWindow with data from getRelevantQuestionData
@@ -15,7 +16,7 @@ class AdminView(QMainWindow):
     Quick and dirty window that contains a view of the data currently stored in the database. Has a reload button to refresh data.\n
     Inherits attributes from QMainWindow.
     """
-    def __init__(self) -> None:
+    def __init__(self, app) -> None:
         """Initialize widgets with data."""
         super().__init__()
 
@@ -30,10 +31,12 @@ class AdminView(QMainWindow):
 
         self.widgets["central"] = central
         
-        toolbar = QToolBar("reloadToolbar")
+        toolbar = QToolBar("toolbar")
         toolbar.setAllowedAreas(Qt.ToolBarArea.TopToolBarArea)
         toolbar.setMovable(False)
 
+        # TODO: button to open dropdown to select active config?
+        
         self.widgets["toolbar"] = toolbar
 
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
@@ -42,6 +45,11 @@ class AdminView(QMainWindow):
         reloadButton.triggered.connect(self.reload)
 
         toolbar.addAction(reloadButton)
+
+        emptyDatabaseButton = QAction("Clear All Data", self)
+        emptyDatabaseButton.triggered.connect(self.clearDatabase)
+
+        toolbar.addAction(emptyDatabaseButton)
 
         # toplevel layout is hbox.
         # left container is for student names and emails
@@ -84,4 +92,10 @@ class AdminView(QMainWindow):
                 gridLayout.addWidget(QLabel(str(questionData[0])), index + 1, columnIndex + 1, alignment=Qt.AlignmentFlag.AlignLeft)
                 gridLayout.addWidget(QLabel(str(questionData[1])), index + 1, columnIndex + 2, alignment=Qt.AlignmentFlag.AlignLeft)
         
+        return
+    
+    def clearDatabase(self) -> None:
+        """Deletes any existing database and generates a new blank one."""
+        remove(join(".", "data", "data.db"))
+        createDataBaseFromBlank()
         return

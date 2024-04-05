@@ -36,8 +36,3 @@ def createDataBaseFromBlank() -> None:
     # added
     # TODO: add attribute, regen database (maybe type()?)
     addQuestionToDatabase(KinematicsQuestion.questionName(), [var.name for var in KinematicsQuestion.variables])
-
-
-if __name__ == "__main__":
-    # if this is run directly, it will regenerate the database from blank.
-    createDataBaseFromBlank()

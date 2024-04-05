@@ -1,0 +1,1 @@
+from .qtapp import AdminView

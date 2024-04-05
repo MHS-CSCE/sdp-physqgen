@@ -34,16 +34,18 @@ if __name__ == "__main__":
     )
 
     # test commiting session data
-    sess.commitSessionToDatabase(rollback=True)
+    sess.commitSessionToDatabase()
     
     sess2 = Session(
         LoginInfo("test2", "last2", "email2"),
         questions=generateQuestions(testConfig)
     )
-    sess2.commitSessionToDatabase(rollback=True)
+    sess2.commitSessionToDatabase()
 
     sess3 = Session(
         LoginInfo("test3", "last3", "email3"),
         questions=generateQuestions(testConfig)
     )
-    sess3.commitSessionToDatabase(rollback=True)
+    sess3.commitSessionToDatabase()
+
+    # these commits aren't rolled back, in order to test database operation. use the admin app's clear data button to remove them before committing
