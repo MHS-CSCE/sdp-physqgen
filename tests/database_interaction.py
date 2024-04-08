@@ -2,7 +2,6 @@ from physqgen.session import Session, LoginInfo
 from physqgen.generator import generateQuestions
 from os.path import join
 from json import load
-from io import StringIO
 
 # test basic database interaction
 if __name__ == "__main__":

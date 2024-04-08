@@ -1,17 +1,15 @@
-from sqlite3 import Connection, connect
+from sqlite3 import connect
+from os.path import join
 
 from physqgen.generator import KinematicsQuestion
 
-
-def getDatabaseConnection() -> Connection:
-    """Fetches database connection. Will create database if it does not exist."""
-    # sqlite3 db
-    return connect('.\\data\\data.db')
+# the path to the sqlite3 database
+DATABASEPATH = join('.', 'data', 'data.db')
 
 def addQuestionToDatabase(question_type_name: str, question_variables: list[str]) -> None:
     """Creates a table for a question type."""
     # get cursor object
-    with getDatabaseConnection() as connection:
+    with connect(DATABASEPATH) as connection:
         cursor = connection.cursor()
 
         # creating table for question type
@@ -30,6 +28,8 @@ def addQuestionToDatabase(question_type_name: str, question_variables: list[str]
         )'''
 
         cursor.execute(sql)
+    # shouldn't be necessary, but is.
+    connection.close()
     return
 
 def createDataBaseFromBlank() -> None:

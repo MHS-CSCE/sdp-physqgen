@@ -1,4 +1,6 @@
-from physqgen.database import getDatabaseConnection
+from sqlite3 import connect
+
+from physqgen.database import DATABASEPATH
 
 def addStudentData(dict: dict, parsedRow: tuple) -> None:
     """
@@ -24,7 +26,7 @@ def getRelevantQuestionData() -> dict[str, list[tuple]]:
 
     studentQuestionInfo: dict = dict()
 
-    with getDatabaseConnection() as conn:
+    with connect(DATABASEPATH) as conn:
         cursor = conn.cursor()
 
         cursor.execute(
@@ -68,5 +70,7 @@ def getRelevantQuestionData() -> dict[str, list[tuple]]:
             for data in cursor.fetchall():
                 # mutates the dict directly
                 addStudentData(studentQuestionInfo, data)
+    # shouldn't be necessary, but is.
+    conn.close()
     
     return studentQuestionInfo

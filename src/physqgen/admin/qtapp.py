@@ -1,13 +1,12 @@
 from json import load
 from os import remove
-from os.path import join
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
 
 from physqgen.admin.getAdminData import getRelevantQuestionData
-from physqgen.database import createDataBaseFromBlank
+from physqgen.database import createDataBaseFromBlank, DATABASEPATH
 
 
 class AdminView(QMainWindow):
@@ -108,7 +107,7 @@ class AdminView(QMainWindow):
     
     def clearDatabase(self) -> None:
         """Deletes any existing database and generates a new blank one."""
-        # TODO: not currently working, there is an open connection being left with the database somewhere
-        remove(join(".", "data", "data.db"))
+        # works, but only if some extra arbitrary closes are added in. They shouldn't be required because of the context managers, but they are.
+        remove(DATABASEPATH)
         createDataBaseFromBlank()
         return

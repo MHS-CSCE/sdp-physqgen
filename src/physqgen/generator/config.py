@@ -2,8 +2,6 @@
 Stuart, February 10, 2024
 """
 
-from io import TextIOWrapper
-from json import load as loadJSON
 from physqgen import generator
 
 def generateQuestions(parsedConfig: dict) -> list:
