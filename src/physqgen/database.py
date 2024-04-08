@@ -30,9 +30,11 @@ def addQuestionToDatabase(question_type_name: str, question_variables: list[str]
         )'''
 
         cursor.execute(sql)
+    return
 
 def createDataBaseFromBlank() -> None:
     """Expects the database file not to exist."""
     # added
     # TODO: add attribute, regen database (maybe type()?)
     addQuestionToDatabase(KinematicsQuestion.questionName(), [var.name for var in KinematicsQuestion.variables])
+    return

@@ -2,18 +2,18 @@
 Stuart, February 10, 2024
 """
 
-from io import StringIO
+from io import TextIOWrapper
 from json import load as loadJSON
 from physqgen import generator
 
-def generateQuestions(configTextIO: StringIO) -> list:
+def generateQuestions(parsedConfig: dict) -> list:
     """
     Generates a set of question subclass instances with randomized values based on the passed config data.\n
     Returns a list of those instances.
     """
     questions: list = []
 
-    dict = loadJSON(configTextIO)
+    dict = parsedConfig
     for question in dict["questions"]:
         # uses getattr to construct the corresponding class described in the config
         # should change to use some kind of class ID instead of the name directly at some point, to prevent in-code class name changes from breaking old config files

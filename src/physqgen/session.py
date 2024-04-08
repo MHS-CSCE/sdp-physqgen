@@ -81,7 +81,7 @@ class Session:
                     "{self.login_info.first_name}",
                     "{self.login_info.last_name}",
                     "{self.login_info.email_a}",
-                    {question.number_tries},
+                    {question.numberTries},
                     "{question.correct}",
                     "{question.solveVariable}",
                     "{question.text}",
@@ -94,3 +94,5 @@ class Session:
             
             if rollback:
                 cursor.connection.rollback()
+
+        return

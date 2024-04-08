@@ -64,8 +64,18 @@ class AdminView(QMainWindow):
             # use generateQuestions to interpret it, generating question from it
             configData = load(configFile)
         
+        self.takeAtLocation = 0
         for index, questionConfig in enumerate(configData["questions"]):
-            central.layout().addWidget(QLabel(questionConfig["question"]), 0, 2 * index + 1, alignment=Qt.AlignmentFlag.AlignTop)
+            # counter for where to start removing items
+            self.takeAtLocation += 1
+
+            questionType = questionConfig["question"]
+            central = self.widgets["central"]
+
+            central.layout().addWidget(QLabel(questionType), 0, (2 * index) + 1, alignment=Qt.AlignmentFlag.AlignTop)
+            # add number of tries and completed headers
+            central.layout().addWidget(QLabel("Submissions"), 1, (2 * index) + 1, alignment=Qt.AlignmentFlag.AlignTop)
+            central.layout().addWidget(QLabel("Completed"), 1, (2 * index) + 2, alignment=Qt.AlignmentFlag.AlignTop)
 
         self.reload()
 
@@ -74,7 +84,8 @@ class AdminView(QMainWindow):
     def reload(self) -> None:
         """Reloads the visible data."""
         # clear layouts
-        while (layoutItem := self.widgets["central"].layout().takeAt(3)) != None:
+        # 0 is student label, every group of three after is from a question in config. takeAt (0) + len(questions) * 3 + 1 (so am taking next one)
+        while (layoutItem := self.widgets["central"].layout().takeAt(self.takeAtLocation * 3 + 1)) != None:
             layoutItem.widget().deleteLater()
 
         # fetch all data
@@ -85,16 +96,19 @@ class AdminView(QMainWindow):
             data = data[1]
             gridLayout: QGridLayout = self.widgets["central"].layout()
 
-            gridLayout.addWidget(QLabel(name), index + 1, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+            gridLayout.addWidget(QLabel(name), index + 2, 0, alignment=Qt.AlignmentFlag.AlignLeft)
 
             for columnIndex, questionData in enumerate(data):
-                gridLayout.addWidget(QLabel(str(questionData[0])), index + 1, columnIndex + 1, alignment=Qt.AlignmentFlag.AlignLeft)
-                gridLayout.addWidget(QLabel(str(questionData[1])), index + 1, columnIndex + 2, alignment=Qt.AlignmentFlag.AlignLeft)
+                # 0 is number of tries
+                # 1 is correct
+                gridLayout.addWidget(QLabel(str(questionData[0])), index + 2, columnIndex * 2 + 1, alignment=Qt.AlignmentFlag.AlignLeft)
+                gridLayout.addWidget(QLabel(str(questionData[1])), index + 2, columnIndex * 2 + 2, alignment=Qt.AlignmentFlag.AlignLeft)
         
         return
     
     def clearDatabase(self) -> None:
         """Deletes any existing database and generates a new blank one."""
+        # TODO: not currently working, there is an open connection being left with the database somewhere
         remove(join(".", "data", "data.db"))
         createDataBaseFromBlank()
         return
