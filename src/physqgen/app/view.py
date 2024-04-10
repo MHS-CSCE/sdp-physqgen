@@ -12,6 +12,7 @@ from flask import Blueprint, Flask, render_template, request, session
 from physqgen.session import Session, LoginInfo
 from physqgen.generator.config import generateQuestions
 from physqgen.app.application import app
+from json import load
 
 views = Blueprint('views', __name__)
 
@@ -26,15 +27,17 @@ def qpage():
     if request.method == "POST":
          
         with open(app.questionConfig) as file:
-            session["session"] = Session(
-                LoginInfo(
-                    #setting the form input as the login info
-                    request.form["name"],
-                    request.form["last-name"],
-                    request.form["email-address"]
-                ),
-                questions=generateQuestions(file)
-            )
+            file = load(file)
+            
+        session["session"] = Session(
+            LoginInfo(
+                #setting the form input as the login info
+                request.form["name"],
+                request.form["last-name"],
+                request.form["email-address"]
+            ),
+            questions=generateQuestions(file)
+        )
         # TODO: figure out how to return question info to populate page
         # TODO: figure out where the submit on this page will go, how to check and take action based on it
         return render_template("questionpage.html")
