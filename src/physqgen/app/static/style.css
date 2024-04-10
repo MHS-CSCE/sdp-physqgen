@@ -128,3 +128,20 @@ div{
     padding:8%;
     margin: 1%;
 }
+
+._20 {
+    width: 16%;
+    float: left;
+    display: inline;
+    /* margin-left: 2%;
+    margin-right: 2%; */
+}
+
+.resizedTextbox {
+    width: 50%;
+    /*height: 20px;*/
+    /* padding: 1px; */
+    /* margin-left: 1px;
+    margin-right: 1px; */
+    
+}
