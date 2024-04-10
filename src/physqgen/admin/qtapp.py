@@ -59,16 +59,12 @@ class AdminView(QMainWindow):
         
         # create the question columns on creation. will need a reload to update.
         # determine via number of questions in active config
-        with open(app.questionConfig) as configFile:
-            # use generateQuestions to interpret it, generating question from it
-            configData = load(configFile)
-        
         self.takeAtLocation = 0
-        for index, questionConfig in enumerate(configData["questions"]):
+        for index, question in enumerate(app.questionConfig["questions"]):
             # counter for where to start removing items
             self.takeAtLocation += 1
 
-            questionType = questionConfig["question"]
+            questionType = question["question"]
             central = self.widgets["central"]
 
             central.layout().addWidget(QLabel(questionType), 0, (2 * index) + 1, alignment=Qt.AlignmentFlag.AlignTop)

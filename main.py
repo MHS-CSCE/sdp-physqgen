@@ -17,6 +17,7 @@ if __name__ == '__main__':
     
     # get config on run
     with open(join(".", "configs", "active_config.json")) as file:
-        app.questionConfig = join(".", "configs", load(file)["activeConfigName"])
+        with open(join(".", "configs", load(file)["activeConfigName"])) as configFile:
+            app.questionConfig = load(configFile)
     
     exit(app.run(port=8080, host='0.0.0.0',debug='True'))

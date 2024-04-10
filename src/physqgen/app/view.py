@@ -25,10 +25,7 @@ def qpage():
 
     #getting input from the form, passing it into the session class
     if request.method == "POST":
-         
-        with open(app.questionConfig) as file:
-            file = load(file)
-            
+
         session["session"] = Session(
             LoginInfo(
                 #setting the form input as the login info
@@ -36,7 +33,7 @@ def qpage():
                 request.form["last-name"],
                 request.form["email-address"]
             ),
-            questions=generateQuestions(file)
+            questions=generateQuestions(app.questionConfig)
         )
         # TODO: figure out how to return question info to populate page
         # TODO: figure out where the submit on this page will go, how to check and take action based on it

@@ -12,7 +12,8 @@ if __name__ == "__main__":
 
     # get config on run
     with open(join(".", "configs", "active_config.json")) as file:
-        app.questionConfig = join(".", "configs", load(file)["activeConfigName"])
+        with open(join(".", "configs", load(file)["activeConfigName"])) as configFile:
+            app.questionConfig = load(configFile)
 
     view = AdminView(app)
     view.show()
