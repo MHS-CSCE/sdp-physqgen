@@ -23,20 +23,13 @@ def redirectpage():
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
 
-    #getting input from the form, passing it into the session class
-    if request.method == "POST":
+    # TODO: make post also trigger get if is correct.
+    if request.method == "GET":
+        # TODO: get question data for session based on active question
+        # TODO: insert question data
+        return render_template("questionpage.html")
 
-        session["session"] = Session(
-            LoginInfo(
-                #setting the form input as the login info
-                request.form["name"],
-                request.form["last-name"],
-                request.form["email-address"]
-            ),
-            questions=generateQuestions(app.questionConfig)
-        )
-        # TODO: figure out how to return question info to populate page
-        # TODO: figure out where the submit on this page will go, how to check and take action based on it
+    elif request.method == "POST":
         return render_template("questionpage.html")
 
     return render_template("questionpage.html")

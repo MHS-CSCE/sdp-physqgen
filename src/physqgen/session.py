@@ -14,9 +14,13 @@ class LoginInfo:
 
 @dataclass(slots=True)
 class Session:
+    """
+    activeQuestion stores the index of the current question. Incremeneted when a question is gotten correct.
+    """
     uuid: str = field(default_factory=uuid4, init=False)
     login_info: LoginInfo
     questions: list[Question]
+    activeQuestion = int = 0
 
     def commitSessionToDatabase(self, rollback=False) -> None:
         """

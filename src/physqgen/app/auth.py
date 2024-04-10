@@ -8,6 +8,7 @@ from flask import (Blueprint, Flask, redirect, render_template, request,
 
 from physqgen.app.application import app
 from physqgen.session import LoginInfo, Session
+from physqgen.generator.config import generateQuestions
 
 #defining views for routes
 auth = Blueprint('auth', __name__)
@@ -15,6 +16,21 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def log_in():
-    #rendering the site
-    return render_template("loginpage.html")
+    #getting input from the form, passing it into the session class
+    if request.method == "POST":
+
+        session["session"] = Session(
+            LoginInfo(
+                #setting the form input as the login info
+                request.form["name"],
+                request.form["last-name"],
+                request.form["email-address"]
+            ),
+            questions=generateQuestions(app.questionConfig)
+        )
+        # TODO: set first question?
+        return redirect("/qpage", code=200)
+    else:
+        #rendering the site
+        return render_template("loginpage.html")
     
