@@ -23,9 +23,9 @@ def redirectpage():
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
     if request.method == "POST":
-        answer = request.get_data["answer"]
-        # TODO: submit answer, check if correct, alter session active question
-        return render_template("questionpage.html"), answer
+        answer = request.form["answer"]
+        # TODO: connect to verification function from Stuart
+        return render_template("questionpage.html")
 
     # TODO: redirect to login if not logged in
     # get method is included here
