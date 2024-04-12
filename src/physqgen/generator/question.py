@@ -152,9 +152,14 @@ class Question:
         except AttributeError:
             return False
     
-    def getVariableValue(self, variableName: str) -> float | Literal[False]:
-        """Fetches the value for the passed variable name, or False if it is not set."""
-        return getattr(self, variableName, False)
+    def getVariableValue(self, variable: str | Enum) -> float | Literal[False]:
+        """Fetches the value for the passed variable name, or False if it is not set. Will raise TypeError if variable is not a str or Enum."""
+        if type(variable) == str:
+            return getattr(self, False)
+        elif type(variable) == Enum:
+            return getattr(self, variable.name, False)
+        else:
+            raise TypeError("variable passed to getVariableValue was not a str or Enum")
     
     def variableValues(self) -> list[float]:
         """Returns tuple of variable values in the order they are defined in the question's enum."""
@@ -181,6 +186,14 @@ class Question:
     def questionName() -> str:
         """Returns the name of the question type. Should be overriden by inheriting classes."""
         return "GENERIC"
+    
+    def getWebsiteDisplayData(self) -> dict:
+        """Returns question data that needs to be accessible on website, that isn't stored directly. TODO: dict format."""
+        data = {}
+        # TODO: implement custom variable names, in config and in questions
+        # TODO: convert getVariableValue to use Enum, and convert calls to it
+        data["values"] = {var.name:self.getVariableValue(self.enumToAttribute(var)) for var in self.variables if var.name != self.solveVariable}
+        return
 
 @dataclass
 class KinematicsQuestion(Question):
