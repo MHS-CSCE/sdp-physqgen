@@ -23,13 +23,21 @@ def redirectpage():
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
     if request.method == "POST":
+        answer = request.get_data["answer"]
         # TODO: submit answer, check if correct, alter session active question
-        return render_template("questionpage.html")
+        return render_template("questionpage.html"), answer
 
     # TODO: redirect to login if not logged in
     # get method is included here
     return render_template("questionpage.html")
 
+
+
+
+
+
+
+#No longer used templates
 # @views.route('/create', methods=['GET', 'POST'])
 # def q_create(): 
 #     return render_template("createquestion.html")

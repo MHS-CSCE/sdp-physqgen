@@ -30,7 +30,7 @@ def log_in():
         )
         # TODO: not actually redirecting
         # https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap
-        return redirect(url_for("views.qpage"), code=200)
+        return redirect(url_for("views.qpage"), code=302)
     else:
         #rendering the site
         return render_template("loginpage.html")
