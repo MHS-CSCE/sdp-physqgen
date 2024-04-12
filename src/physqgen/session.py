@@ -20,8 +20,23 @@ class Session:
     uuid: str = field(default_factory=uuid4, init=False)
     login_info: LoginInfo
     questions: list[Question]
-    activeQuestion = int = 0
+    active_question = int = 0
 
+    active_question_data: dict
+
+    # def checkIfQuestionCorrect(self, submission: str) -> Enum:
+    #     """TODO"""
+    #     # TODO: verification
+    #     # TODO: checking, increment if correct, return whether to send new site (enum reload or keep)
+    
+    def incrementActiveQuestionData(self) -> None:
+        """Updates the question data stored in the active_question_data attribute to the current active_question."""
+        self.active_question_data = self.questions[self.active_question].getWebsiteDisplayData()
+        return
+
+    def test(self) -> None:
+        return f"TEST TEXT RETURN {self.uuid}"
+        
     def commitSessionToDatabase(self, rollback=False) -> None:
         """
         Constructs SQL command to commit session data to Database.\n

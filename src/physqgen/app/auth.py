@@ -28,8 +28,9 @@ def log_in():
             ),
             questions=generateQuestions(app.questionConfig)
         )
-        # TODO: set first question?
-        return redirect("/qpage", code=200)
+        # TODO: not actually redirecting
+        # https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap
+        return redirect(url_for("views.qpage"), code=200)
     else:
         #rendering the site
         return render_template("loginpage.html")

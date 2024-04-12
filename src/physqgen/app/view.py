@@ -22,28 +22,24 @@ def redirectpage():
 
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
-
-    # TODO: make post also trigger get if is correct.
-    if request.method == "GET":
-        # TODO: get question data for session based on active question
-        # TODO: insert question data
+    if request.method == "POST":
+        # TODO: submit answer, check if correct, alter session active question
         return render_template("questionpage.html")
 
-    elif request.method == "POST":
-        return render_template("questionpage.html")
-
+    # TODO: redirect to login if not logged in
+    # get method is included here
     return render_template("questionpage.html")
 
-@views.route('/create', methods=['GET', 'POST'])
-def q_create(): 
-    return render_template("createquestion.html")
+# @views.route('/create', methods=['GET', 'POST'])
+# def q_create(): 
+#     return render_template("createquestion.html")
 
-@views.route('/tview', methods=['GET', 'POST'])
-def t_view():
-    return render_template("teacherview.html")
+# @views.route('/tview', methods=['GET', 'POST'])
+# def t_view():
+#     return render_template("teacherview.html")
 
-@views.route('/topen', methods=['GET', 'POST'])
-def t_open(): 
-    return render_template("teacheropening.html")
+# @views.route('/topen', methods=['GET', 'POST'])
+# def t_open(): 
+#     return render_template("teacheropening.html")
 
 
