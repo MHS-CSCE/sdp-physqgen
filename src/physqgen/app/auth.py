@@ -8,7 +8,7 @@ from flask import (Blueprint, Flask, redirect, render_template, request,
 
 from physqgen.app.application import app
 from physqgen.session import LoginInfo, Session
-from physqgen.generator.config import generateQuestions
+from physqgen.generator import generateQuestions
 
 #defining views for routes
 auth = Blueprint('auth', __name__)

@@ -8,11 +8,8 @@ from physqgen.generator.config import QuestionConfig
 from physqgen.generator.variables import Variable
 
 from dataclasses import InitVar, dataclass, field
-from enum import Enum
-from io import StringIO
 from math import sqrt
-from random import random
-from typing import Iterable, Literal
+from typing import Literal
 from uuid import UUID, uuid4  # uuid4 doesn't include private information
 
 # TODO: use Variable class instead of weird enum stuff, allows storing the extra data needed. also add the new flexibility to config

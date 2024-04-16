@@ -1,6 +1,6 @@
 from sqlite3 import connect
 from os.path import join
-from collections.abc import Iterable
+from typing import Iterable
 
 from physqgen.generator import KinematicsQuestion
 

@@ -3,9 +3,7 @@ Stuart, February 10, 2024
 """
 
 from physqgen import generator
-from dataclasses import dataclass, InitVar
-
-# TODO: parsing from json into Config
+from dataclasses import dataclass
 
 @dataclass(slots=True)
 class VariableConfig:

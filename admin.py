@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QApplication
 
 from physqgen.admin import AdminView
 from physqgen.app.application import create_app
-from physqgen.generator.config import Config
+from physqgen.generator import Config
 
 if __name__ == "__main__":
     adminapp = QApplication()
