@@ -4,15 +4,15 @@ February 9, 2024: Implement Question and KinematicsQuestion
 February 20, 2024: Fix KinematicsQuestion, implement rest of solving formulas.
 """
 
-from physqgen.generator.config import QuestionConfig
-from physqgen.generator.variables import Variable
-
 from dataclasses import InitVar, dataclass, field
 from math import sqrt
 from typing import Literal
 from uuid import UUID, uuid4  # uuid4 doesn't include private information
 
-# TODO: use Variable class instead of weird enum stuff, allows storing the extra data needed. also add the new flexibility to config
+from physqgen.generator.config import QuestionConfig
+from physqgen.generator.variables import Variable
+
+
 @dataclass
 class Question:
     """
@@ -44,9 +44,11 @@ class Question:
 
     id: UUID = field(init=False, default_factory=uuid4)
 
+    # needs to be overriden in inheriting classes
+    POSSIBLE_VARIABLES = tuple()
+
     def __post_init__(self, config: QuestionConfig | None, storedData: dict | None) -> None:
         """Initializes Question."""
-        # TODO: make sure storing data works well: will need diff format, maybe separate table for variable values
         if type(config) == QuestionConfig:
             self.text = config.text
             self.correctRange = config.correctRange
@@ -120,7 +122,7 @@ class Question:
 
 @dataclass
 class KinematicsQuestion(Question):
-    """Kinematics questions, with constant acceleration. Inherits attributes from Question. Sets variables attribute to Enum("KinematicsVariables", "DISPLACEMENT, INITIAL_VELOCITY, FINAL_VELOCITY, TIME, ACCELERATION")."""
+    """Kinematics questions with constant acceleration. Inherits attributes from Question."""
 
     # variables = Enum("KinematicsVariables", "DISPLACEMENT, INITIAL_VELOCITY, FINAL_VELOCITY, TIME, ACCELERATION")
     POSSIBLE_VARIABLES = ("DISPLACEMENT", "INITIAL_VELOCITY", "FINAL_VELOCITY", "TIME", "ACCELERATION")

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from uuid import uuid4
 from sqlite3 import connect
+from uuid import uuid4
 
 from physqgen.database import DATABASEPATH
 from physqgen.generator.question import Question

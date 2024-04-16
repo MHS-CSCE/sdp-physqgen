@@ -1,7 +1,8 @@
-from physqgen.session import Session, LoginInfo
-from physqgen.generator import generateQuestions
-from os.path import join
 from json import load
+from os.path import join
+
+from physqgen.generator import generateQuestions
+from physqgen.session import LoginInfo, Session
 
 # test basic database interaction
 if __name__ == "__main__":

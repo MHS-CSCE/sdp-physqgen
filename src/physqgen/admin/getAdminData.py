@@ -2,6 +2,7 @@ from sqlite3 import connect
 
 from physqgen.database import DATABASEPATH
 
+
 def addStudentData(dict: dict, parsedRow: tuple) -> None:
     """
     Modifies passed dict to add data from passed row to a student key. Tuple added contains number of tries, and whether they got it correct.

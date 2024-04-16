@@ -1,3 +1,3 @@
+from .config import Config, generateQuestions
 from .question import KinematicsQuestion
-from .config import generateQuestions, Config
 from .variables import Variable

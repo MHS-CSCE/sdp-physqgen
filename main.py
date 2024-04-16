@@ -10,8 +10,7 @@ March 8th: Altered app.run
 from json import load
 from os.path import join
 
-from physqgen.app.application import create_app
-from physqgen.generator import Config
+from physqgen import Config, create_app
 
 if __name__ == '__main__':
     app = create_app()

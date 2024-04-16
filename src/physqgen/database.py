@@ -1,5 +1,5 @@
-from sqlite3 import connect
 from os.path import join
+from sqlite3 import connect
 from typing import Iterable
 
 from physqgen.generator import KinematicsQuestion

@@ -1,6 +1,7 @@
-from dataclasses import dataclass, field, InitVar
+from dataclasses import InitVar, dataclass, field
 from random import random
-from uuid import uuid4, UUID
+from uuid import UUID, uuid4
+
 
 @dataclass(slots=True)
 class Variable:

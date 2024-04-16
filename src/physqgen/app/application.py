@@ -8,10 +8,8 @@ Feb 23rd 2024: Program Creation
 Edited 27th Feb
 Edited 6th March
 """
-from os import path
 
-# importing Flask and other modules
-from flask import Blueprint, Flask, render_template, request, url_for
+from flask import Flask
 
 
 #creating app
@@ -25,13 +23,13 @@ def create_app():
     #secret key to be used for session cookies, security
     app.config["SECRET_KEY"] ="Ajkjaksjksjaksjkiooooo"
 
+    #registering pages
+    # TODO: are blueprints necessary anymore?
     from physqgen.app.auth import auth
     from physqgen.app.view import views
 
-    #registering pages
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
-
 
     return app
 

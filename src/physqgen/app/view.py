@@ -7,14 +7,12 @@ History:
 March 21st 2024: Program Creation
 """
 
-#importing flask and other modules
 import os
-from os import path
+
 from flask import Blueprint, Flask, render_template, request, session
-from physqgen.session import Session, LoginInfo
-from physqgen.generator import generateQuestions
+
 from physqgen.app.application import app
-from json import load
+from physqgen.session import Session
 
 views = Blueprint('views', __name__)
 

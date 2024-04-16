@@ -2,8 +2,10 @@
 Stuart, February 10, 2024
 """
 
-from physqgen import generator
 from dataclasses import dataclass
+
+from physqgen import generator
+
 
 @dataclass(slots=True)
 class VariableConfig:

@@ -1,12 +1,12 @@
-from json import load
 from os import remove
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
 
+from physqgen.generator import Config
 from physqgen.admin.getAdminData import getRelevantQuestionData
-from physqgen.database import createDataBaseFromBlank, DATABASEPATH
+from physqgen.database import DATABASEPATH, createDataBaseFromBlank
 
 
 class AdminView(QMainWindow):
@@ -14,7 +14,7 @@ class AdminView(QMainWindow):
     Quick and dirty window that contains a view of the data currently stored in the database. Has a reload button to refresh data.\n
     Inherits attributes from QMainWindow.
     """
-    def __init__(self, app) -> None:
+    def __init__(self, config: Config) -> None:
         """Initialize widgets with data."""
         super().__init__()
 
@@ -60,7 +60,7 @@ class AdminView(QMainWindow):
         # create the question columns on creation. will need a reload to update.
         # determine via number of questions in active config
         self.takeAtLocation = 0
-        for index, question in enumerate(app.questionConfig.questionConfigs):
+        for index, question in enumerate(config.questionConfigs):
             # counter for where to start removing items
             self.takeAtLocation += 1
 
