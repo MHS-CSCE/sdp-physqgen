@@ -38,8 +38,8 @@ class Session:
     
     def reloadActiveQuestionData(self) -> None:
         """Updates the question data stored in the active_question_data attribute to the current active_question. Also commits data to database."""
-        print(f"Data to add: {self.questions[self.active_question].getWebsiteDisplayData()}")
-        self.active_question_data = self.questions[self.active_question].getWebsiteDisplayData()
+        print(f"Data to add: {self.questions[self.active_question].websiteDisplayData}")
+        self.active_question_data = self.questions[self.active_question].websiteDisplayData
         self.commitSessionToDatabase()
         return
 
@@ -60,7 +60,7 @@ class Session:
                 # prevent sql injection. it stopped working. TODO: fix.
 
                 sql = f"""
-                INSERT INTO {question.questionName()} (
+                INSERT INTO {question.questionType} (
                     QUESTION_UUID,
                     FIRST_NAME,
                     LAST_NAME,
@@ -70,7 +70,7 @@ class Session:
                     SOLVE_VARIABLE,
                     TEXT,
                     CORRECT_RANGE,
-                    {",".join([var.name for var in question.variables])}
+                    {",".join(question.varNames)}
                 )
                 VALUES(
                     "{question.id}",
@@ -82,7 +82,7 @@ class Session:
                     "{question.solveVariable}",
                     "{question.text}",
                     {question.correctRange},
-                    {",".join((str(val) for val in question.variableValues()))}
+                    {",".join((str(question.getValue(name)) for name in question.varNames))}
                 )
                 """
 

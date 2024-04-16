@@ -1,12 +1,13 @@
 from sqlite3 import connect
 from os.path import join
+from collections.abc import Iterable
 
 from physqgen.generator import KinematicsQuestion
 
 # the path to the sqlite3 database
 DATABASEPATH = join('.', 'data', 'data.db')
 
-def addQuestionToDatabase(question_type_name: str, question_variables: list[str]) -> None:
+def addQuestionToDatabase(question_type_name: str, question_variables: Iterable[str]) -> None:
     """Creates a table for a question type."""
     # get cursor object
     with connect(DATABASEPATH) as connection:
@@ -34,7 +35,6 @@ def addQuestionToDatabase(question_type_name: str, question_variables: list[str]
 
 def createDataBaseFromBlank() -> None:
     """Expects the database file not to exist."""
-    # added
-    # TODO: add attribute, regen database (maybe type()?)
-    addQuestionToDatabase(KinematicsQuestion.questionName(), [var.name for var in KinematicsQuestion.variables])
+    # Existing Questions
+    addQuestionToDatabase("KinematicsQuestion", (var for var in KinematicsQuestion.POSSIBLE_VARIABLES))
     return

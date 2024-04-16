@@ -11,6 +11,7 @@ from json import load
 from os.path import join
 
 from physqgen.app.application import create_app
+from physqgen.generator.config import Config
 
 if __name__ == '__main__':
     app = create_app()
@@ -18,6 +19,6 @@ if __name__ == '__main__':
     # get config on run
     with open(join(".", "configs", "active_config.json")) as file:
         with open(join(".", "configs", load(file)["activeConfigName"])) as configFile:
-            app.questionConfig = load(configFile)
+            app.questionConfig = Config.fromFile(load(configFile))
     
     exit(app.run(port=8080, host='0.0.0.0',debug='True'))

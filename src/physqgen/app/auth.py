@@ -19,6 +19,7 @@ def log_in():
     #getting input from the form, passing it into the session class
     if request.method == "POST":
 
+        print(app.questionConfig)
         session["session"] = Session(
             LoginInfo(
                 #setting the form input as the login info
