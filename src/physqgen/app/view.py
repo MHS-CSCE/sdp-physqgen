@@ -23,13 +23,12 @@ def redirectpage():
     return render_template("index.html")
 
 
-img = os.path.join('static', 'images')
-
+img = os.path.join('static', 'Image')
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
     
     #find way to have file path match one added to the question data
-    file = os.path.join(img, 'https://blog.blueprintprep.com/wp-content/uploads/2013/05/Blog-Discrete-P1a12.png')
+    file = os.path.join(img, 'Blog-Discrete-P1a12.png')
 
     if request.method == "POST":
         answer = request.get_data["answer"]
