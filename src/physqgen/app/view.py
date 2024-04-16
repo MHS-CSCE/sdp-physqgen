@@ -22,28 +22,56 @@ def redirectpage():
 
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
+    if request.method == "POST":
+        answer = request.get_data["answer"]
+        sessionData: Session = session["session"]
+        try:
+            # if not correct, increment. store whether correct
+            # will raise value error on float(answer) if it is not a valid float
+            if not (correct := (activeQuestion := sessionData.questions[sessionData.active_question]).check_answer(float(answer))):
+                activeQuestion.numberTries += 1
+            
+            # increment to next active question and reload
+            if correct:
+                if (sessionData.active_question + 1) < len(sessionData.questions):
+                    sessionData.active_question += 1
+                    sessionData.reloadActiveQuestionData()
+                else:
+                    # user just finished last question
+                    # TODO: final redirect
+                    pass
+            
+            # commit session to database
+            sessionData.commitSessionToDatabase()
+        
+        except ValueError as e:
+            # don't count as a submission if the input is not a float value
+            correct = False
 
-    # TODO: make post also trigger get if is correct.
-    if request.method == "GET":
-        # TODO: get question data for session based on active question
-        # TODO: insert question data
-        return render_template("questionpage.html")
+        # TODO: indication of correct / false on page. may need to store in session
+        return render_template("questionpage.html"), correct
 
-    elif request.method == "POST":
-        return render_template("questionpage.html")
-
+    # TODO: redirect to login if not logged in
+    # get method is included here
     return render_template("questionpage.html")
 
-@views.route('/create', methods=['GET', 'POST'])
-def q_create(): 
-    return render_template("createquestion.html")
 
-@views.route('/tview', methods=['GET', 'POST'])
-def t_view():
-    return render_template("teacherview.html")
 
-@views.route('/topen', methods=['GET', 'POST'])
-def t_open(): 
-    return render_template("teacheropening.html")
+
+
+
+
+#No longer used templates
+# @views.route('/create', methods=['GET', 'POST'])
+# def q_create(): 
+#     return render_template("createquestion.html")
+
+# @views.route('/tview', methods=['GET', 'POST'])
+# def t_view():
+#     return render_template("teacherview.html")
+
+# @views.route('/topen', methods=['GET', 'POST'])
+# def t_open(): 
+#     return render_template("teacheropening.html")
 
 

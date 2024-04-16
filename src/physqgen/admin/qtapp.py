@@ -106,4 +106,6 @@ class AdminView(QMainWindow):
         # works, but only if some extra arbitrary closes are added in. They shouldn't be required because of the context managers, but they are.
         remove(DATABASEPATH)
         createDataBaseFromBlank()
+        # reload view to show changes
+        self.reload()
         return

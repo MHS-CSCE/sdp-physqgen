@@ -22,15 +22,18 @@
                 <!-- Divider line -->
                 <hr class="solid">
                 <img src="https://blog.blueprintprep.com/wp-content/uploads/2013/05/Blog-Discrete-P1a12.png" alt="Image of physics question">
-                <p>This is the description for the physics question.</p>
+                <!--Pulling dats from session var: https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap-->
+            <p>{{ session["session"].questions[session["session"].active_question] }} TODO: get stored active question data for variables</p>
             </div>
 
-            <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->
+        <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->
+        <form action="/qpage" method="post"> 
             <div class="submit">
                 <label for="answer">Answer:</label>
                 <input type="text" name="answer">
                 <input type="submit" name="submit" value="Send">
             </div>
+        </form>
 
             <!--The next and exit buttons-->
             <div class="buttons">
