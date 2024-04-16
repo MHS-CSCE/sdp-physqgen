@@ -9,14 +9,15 @@ body {
     padding: 30px;
     background-size: cover;
     font-family: arial;
-    background-color: rgb(211, 255, 240);
+    background-color: rgb(238, 238, 238);
     margin-left:auto;
     margin-right:auto;
 }
 
 /*Header that displays title of project*/
 header {  
-    background-color: rgb(252, 124, 252);
+    background-color: rgb(141, 67, 198);
+    color: white;
     position: fixed;
     left: 0;
     right: 0;
@@ -31,6 +32,12 @@ header {
     font-family: Poppins;
 }
 
+/* Text that says "Question Number" */
+h2 {
+    font-family: Poppins;
+    color:rgb(89,89,89)
+}
+
 img {
     /*Block level element, displays on its own line*/
     display: block;
@@ -42,23 +49,57 @@ img {
 
 /*Background of question that shows image and description of question*/
 .question{
-    background: pink;
+    background: white;
     padding:2%;
     text-align:center;
 }
 
+/* Divider line */
+hr.solid {
+    border-top: 3px solid rgb(183,183,183);
+    margin-bottom:20px
+  }
+
 /*Answer submit area*/
 .submit{
-    background: greenyellow;
-    border: 6px solid #949599;
+    background: white;
     padding: 2%;
-    border-radius: 6px;
+    padding-left:10%
+    /* text-align: center; */
 }
+
+input[type="text"]{
+    font-size:25px;
+}
+input[type="submit"]{
+    font-size:17px;
+    width:75px;
+    height:35px;
+    font-family: Poppins;
+    color:black;
+    background-color: white;
+}
+
+label{
+    font-size:17px;
+    font-family: Poppins;
+}
+
+.purplebutton{
+    background-color: purple;
+
+}
+
 
 /*Button display area*/
 .buttons{
-    background:plum;
+    background:white;
     text-align:center;
+}
+
+.questioncontainer{
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
 /*A divider to seperate the buttons*/

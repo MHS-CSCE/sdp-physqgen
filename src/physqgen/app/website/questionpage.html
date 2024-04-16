@@ -3,6 +3,9 @@
     <head>
         <title>Question Page</title>
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Poppins:400,700,900');
+        </style>
     </head>
     <body>
         <!--The navigation bar that displays the title of the project-->
@@ -12,25 +15,29 @@
                 <h1>Physics Question Generator</h1>
             </nav>
         </header>
+        
+        <div class="questioncontainer">
+            <div class="question">
+                <h2>Question #</h1>
+                <!-- Divider line -->
+                <hr class="solid">
+                <img src="https://blog.blueprintprep.com/wp-content/uploads/2013/05/Blog-Discrete-P1a12.png" alt="Image of physics question">
+                <p>This is the description for the physics question.</p>
+            </div>
 
-        <!--Add image: https://learn.shayhowe.com/html-css/adding-media/-->
-        <div class="question">
-            <img src="https://blog.blueprintprep.com/wp-content/uploads/2013/05/Blog-Discrete-P1a12.png" alt="Image of phyisics question">
-            <p>This is the description for the physics question.</p>
-        </div>
+            <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->
+            <div class="submit">
+                <label for="answer">Answer:</label>
+                <input type="text" name="answer">
+                <input type="submit" name="submit" value="Send">
+            </div>
 
-        <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->
-        <div class="submit">
-            <label for="answer">Answer:</label>
-            <input type="text" name="answer">
-            <input type="submit" name="submit" value="Send">
-        </div>
-
-        <!--The next and exit buttons-->
-        <div class="buttons">
-            <input type="submit" name="next" value="Next">
-            <div class="divider"></div>
-            <input type="submit" name="Exit" value="Exit">
+            <!--The next and exit buttons-->
+            <div class="buttons">
+                <input type="submit" name="Exit" value="Exit">
+                <div class="divider"></div>
+                <input type="submit" name="next" value="Next" class="purplebutton">
+            </div>
         </div>
     </body>
 </html>
