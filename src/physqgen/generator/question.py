@@ -193,6 +193,7 @@ class KinematicsQuestion(Question):
 
     # supply getattrs with default False, check if returns a False value to see if the value was not set by config
 
+    # TODO: fix value of 0.0 for any defined variable except acceleration breaking the how-to-solve check.
     @property
     def displacement(self) -> float:
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
