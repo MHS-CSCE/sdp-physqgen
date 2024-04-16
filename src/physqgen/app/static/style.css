@@ -71,6 +71,9 @@ hr.solid {
 input[type="text"]{
     font-size:25px;
 }
+input[type="email"]{
+    font-size:25px;
+}
 input[type="submit"]{
     font-size:17px;
     width:75px;
@@ -83,18 +86,25 @@ input[type="submit"]{
 label{
     font-size:17px;
     font-family: Poppins;
+    color:black;
 }
 
-.purplebutton{
-    background-color: purple;
-
+form{
+    width:100%;
 }
 
+input, textarea{
+    width:60%;
+}
 
 /*Button display area*/
 .buttons{
     background:white;
     text-align:center;
+}
+
+.purplebutton{
+    background-color: purple;
 }
 
 .questioncontainer{
@@ -116,20 +126,20 @@ label{
 
 /*Login page form*/
 .loginform{
-    background:thistle;
     width: 50%;
     text-align: center;
     align-self:center;
     padding: 2%;
     margin:2%;
     margin-left:25%;
+    border-radius: 10px;
     /*if you are 200px or smaller become green*/
     @media screen and (min-width: 200px) {
-        background: green;
+        background: wheat;
     }
     /*if it is 800 px or wider become yellow*/
     @media screen and (min-width: 800px) {
-        background: yellow;
+        background: white;
     }
 }
 
