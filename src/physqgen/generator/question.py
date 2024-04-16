@@ -180,7 +180,10 @@ class Question:
         data = {}
         # TODO: implement custom variable names, in config and in questions
         # the check removes both the solve value and the unrelated value
-        data["values"] = {var.name:self.getPrivateAttribute(var) for var in self.variables if not type(self.getPrivateAttribute(var)) == bool}
+        data["values"] = ",\n".join(
+            # TODO: consult about number of decimals
+            [f"{var.name} = {self.getPrivateAttribute(var):.3f}" for var in  self.variables if not type(self.getPrivateAttribute(var)) == bool]
+        )
         data["text"] = self.text
         data["correctRange"] = self.correctRange
         return data
