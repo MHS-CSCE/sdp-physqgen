@@ -23,7 +23,7 @@
                 <hr class="solid">
                 <img src="https://blog.blueprintprep.com/wp-content/uploads/2013/05/Blog-Discrete-P1a12.png" alt="Image of physics question">
                 <!--Pulling dats from session var: https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap-->
-            <p>{{ session["session"].questions[session["session"].active_question] }} TODO: get stored active question data for variables</p>
+            <p>{{ session["session"].active_question_data["text"] }}</p>
             </div>
 
         <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->

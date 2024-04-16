@@ -26,6 +26,8 @@ class Session:
 
     def __post_init__(self) -> None:
         """Load in active question data. Will be first question."""
+        print("Running post_init.")
+
         self.reloadActiveQuestionData()
         return
 
@@ -36,6 +38,7 @@ class Session:
     
     def reloadActiveQuestionData(self) -> None:
         """Updates the question data stored in the active_question_data attribute to the current active_question. Also commits data to database."""
+        print(f"Data to add: {self.questions[self.active_question].getWebsiteDisplayData()}")
         self.active_question_data = self.questions[self.active_question].getWebsiteDisplayData()
         self.commitSessionToDatabase()
         return
