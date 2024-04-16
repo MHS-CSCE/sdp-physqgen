@@ -20,14 +20,29 @@ views = Blueprint('views', __name__)
 
 @views.route('/')
 def redirectpage():
+    """
+    Opening page to redirect the user to the login page.
+
+    Returns:
+       (HTML template)
+
+    """
     return render_template("index.html")
 
 
+#for image display purposes
 img = os.path.join('static', 'Image')
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
-    
-    #find way to have file path match one added to the question data
+    """
+    Renders question page, processes the question data and sends it to the front end. 
+
+    Returns:
+    (HTML template)
+    (bool)
+    (image file)
+    """
+    #find way to have file path match one attached to the question data
     file = os.path.join(img, 'Blog-Discrete-P1a12.png')
 
     if request.method == "POST":
@@ -57,14 +72,12 @@ def qpage():
             correct = False
 
         # TODO: indication of correct / false on page. may need to store in session
-
-        # add this in return 'image=file'
+        
         return render_template("questionpage.html", correct, image=file)
 
     # TODO: redirect to login if not logged in
     # get method is included here
 
-    # add this in return 'image=file'
     return render_template("questionpage.html", image=file)
 
 
