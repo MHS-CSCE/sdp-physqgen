@@ -8,6 +8,8 @@ March 21st 2024: Program Creation
 """
 
 #importing flask and other modules
+import os
+from os import path
 from flask import Blueprint, Flask, render_template, request, session
 from physqgen.session import Session, LoginInfo
 from physqgen.generator.config import generateQuestions
@@ -20,8 +22,15 @@ views = Blueprint('views', __name__)
 def redirectpage():
     return render_template("index.html")
 
+
+#img = os.path.join('static', 'Image')
+
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
+    
+    #find way to have file path match one added to the question data
+    #file = os.path.join(img, 'GP.png')
+
     if request.method == "POST":
         answer = request.get_data["answer"]
         sessionData: Session = session["session"]
@@ -49,10 +58,14 @@ def qpage():
             correct = False
 
         # TODO: indication of correct / false on page. may need to store in session
-        return render_template("questionpage.html"), correct
+
+        # add this in return 'image=file'
+        return render_template("questionpage.html", correct)
 
     # TODO: redirect to login if not logged in
     # get method is included here
+
+    # add this in return 'image=file'
     return render_template("questionpage.html")
 
 
