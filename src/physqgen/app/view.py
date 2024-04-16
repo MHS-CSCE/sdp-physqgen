@@ -23,13 +23,13 @@ def redirectpage():
     return render_template("index.html")
 
 
-#img = os.path.join('static', 'Image')
+img = os.path.join('static', 'images')
 
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
     
     #find way to have file path match one added to the question data
-    #file = os.path.join(img, 'GP.png')
+    file = os.path.join(img, 'https://blog.blueprintprep.com/wp-content/uploads/2013/05/Blog-Discrete-P1a12.png')
 
     if request.method == "POST":
         answer = request.get_data["answer"]
@@ -60,13 +60,13 @@ def qpage():
         # TODO: indication of correct / false on page. may need to store in session
 
         # add this in return 'image=file'
-        return render_template("questionpage.html", correct)
+        return render_template("questionpage.html", correct, image=file)
 
     # TODO: redirect to login if not logged in
     # get method is included here
 
     # add this in return 'image=file'
-    return render_template("questionpage.html")
+    return render_template("questionpage.html", image=file)
 
 
 
