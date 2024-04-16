@@ -16,6 +16,12 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def log_in():
+    """
+    Allows the user to login to the site, stores their information for the database, and redirects them to the questionpage.
+
+    Returns:
+        (HTML template)
+    """
     #getting input from the form, passing it into the session class
     if request.method == "POST":
 

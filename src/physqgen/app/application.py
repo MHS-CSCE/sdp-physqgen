@@ -16,6 +16,9 @@ from flask import Blueprint, Flask, render_template, request, url_for
 
 #creating app
 def create_app():
+    """
+    Creates base Flask app/server to render the HTML for the user.
+    """
     #setting up app
     global app
     app = Flask(__name__, template_folder="website")
