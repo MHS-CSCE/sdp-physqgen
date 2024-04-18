@@ -1,7 +1,7 @@
 html {
     height: 100%;
     width: 100%;
-  }
+}
 
 body {
     height: 125vh;
@@ -47,33 +47,56 @@ img {
     margin-right:auto;
 }
 
-/*Background of question that shows image and description of question*/
-.question{
-    background: white;
-    padding:2%;
-    text-align:center;
-}
-
 /* Divider line */
 hr.solid {
     border-top: 3px solid rgb(183,183,183);
     margin-bottom:20px
   }
 
+/*Create question page right menu that displays image +description of question*/
+section{
+    float:right;
+    background-color: white;
+}
+
+.questioncontainer{
+    padding-left: 10%;
+    padding-right: 10%;
+    border-radius: 10px;
+}
+
+/*Background of question that shows image and description of question*/
+.question{
+    background: white;
+    padding:2%;
+    text-align:center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
 /*Answer submit area*/
 .submit{
     background: white;
     padding: 2%;
     padding-left:10%
-    /* text-align: center; */
+}
+
+/*Button display area*/
+.buttons{
+    background:white;
+    text-align:center;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 input[type="text"]{
     font-size:25px;
 }
+
 input[type="email"]{
     font-size:25px;
 }
+
 input[type="submit"]{
     font-size:17px;
     width:75px;
@@ -81,6 +104,17 @@ input[type="submit"]{
     font-family: Poppins;
     color:black;
     background-color: white;
+}
+
+input[value="Login"]{
+    background-color: rgb(141, 67, 198);
+    color:white;
+    border:none;
+}
+input[value="Send"]{
+    background-color: rgb(141, 67, 198);
+    color:white;
+    border:none;
 }
 
 label{
@@ -101,23 +135,7 @@ input, textarea{
     width:60%;
 }
 
-/*Button display area*/
-.buttons{
-    background:white;
-    text-align:center;
-}
-
-.purplebutton{
-    background-color: purple;
-}
-
-.questioncontainer{
-    padding-left: 10%;
-    padding-right: 10%;
-}
-
 /*A divider to seperate the buttons*/
-/*https://stackoverflow.com/questions/5119711/whats-the-easiest-way-to-put-space-between-2-side-by-side-buttons-in-asp-net*/
 .divider{
     width:10%;
     display:inline-block;
@@ -150,21 +168,13 @@ input, textarea{
 /*Make all white input boxes be rounded*/
 input {
     border-radius:5px;
-  }
-
-/*css for form: https://learn.shayhowe.com/html-css/building-forms/*/
+}
 
 /*Create question page left menu*/
 aside{
     float: left;
     background: green;
     width:33%;
-}
-/*Create question page right menu that displays image +description of question*/
-section{
-    float:right;
-    background:purple;
-    width:66%;
 }
 
 /*Footer for bottom buttons in "create question" page*/
@@ -182,21 +192,15 @@ div{
 .createquestionmenu{
     padding:8%;
     margin: 1%;
+    /* float:left; */
 }
 
 ._20 {
     width: 16%;
     float: left;
     display: inline;
-    /* margin-left: 2%;
-    margin-right: 2%; */
 }
 
 .resizedTextbox {
     width: 50%;
-    /*height: 20px;*/
-    /* padding: 1px; */
-    /* margin-left: 1px;
-    margin-right: 1px; */
-    
 }

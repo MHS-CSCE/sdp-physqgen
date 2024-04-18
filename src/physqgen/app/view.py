@@ -79,22 +79,17 @@ def qpage():
     return render_template("questionpage.html", image=file)
 
 
-
-
-
-
-
 #No longer used templates
-# @views.route('/create', methods=['GET', 'POST'])
-# def q_create(): 
-#     return render_template("createquestion.html")
+@views.route('/create', methods=['GET', 'POST'])
+def q_create(): 
+    return render_template("createquestion.html")
 
-# @views.route('/tview', methods=['GET', 'POST'])
-# def t_view():
-#     return render_template("teacherview.html")
+@views.route('/tview', methods=['GET', 'POST'])
+def t_view():
+    return render_template("teacherview.html")
 
-# @views.route('/topen', methods=['GET', 'POST'])
-# def t_open(): 
-#     return render_template("teacheropening.html")
+@views.route('/topen', methods=['GET', 'POST'])
+def t_open(): 
+    return render_template("teacheropening.html")
 
 

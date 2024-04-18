@@ -23,24 +23,24 @@
                 <hr class="solid">
                 <img src="{{image}}" alt="Image of physics question">
                 <!--Pulling dats from session var: https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap-->
-            <p class="black">{{ session["session"].active_question_data["text"] }}</p>
-            <p class="black">{{ session["session"].active_question_data["values"] }}</p>
+                <p class="black">{{ session["session"].active_question_data["text"] }}</p>
+                <p class="black">{{ session["session"].active_question_data["values"] }}</p>
             </div>
 
-        <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->
-        <form action="/qpage" method="post"> 
-            <div class="submit">
-                <label for="answer">Answer:</label>
-                <input type="text" name="answer">
-                <input type="submit" name="submit" value="Send">
-            </div>
-        </form>
+            <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->
+            <form action="/qpage" method="post"> 
+                <div class="submit">
+                    <label for="answer">Answer:</label>
+                    <input type="text" name="answer">
+                    <input type="submit" name="submit" value="Send">
+                </div>
+            </form>
 
             <!--The next and exit buttons-->
             <div class="buttons">
                 <input type="submit" name="Exit" value="Exit">
-                <div class="divider"></div>
-                <input type="submit" name="next" value="Next" class="purplebutton">
+                <!-- <div class="divider"></div>
+                <input type="submit" name="next" value="Next" class="purplebutton"> -->
             </div>
         </div>
     </body>
