@@ -44,7 +44,7 @@ def qpage():
     file = os.path.join(img, 'Blog-Discrete-P1a12.png')
 
     if request.method == "POST":
-        answer = request.get_data["answer"]
+        answer = request.get_data("answer")
         sessionData: Session = session["session"]
         try:
             # if not correct, increment. store whether correct
