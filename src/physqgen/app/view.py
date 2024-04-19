@@ -7,9 +7,10 @@ History:
 March 21st 2024: Program Creation
 """
 
-import os
+from os.path import join
 
-from flask import Blueprint, render_template, request, session, redirect, url_for
+from flask import (Blueprint, redirect, render_template, request, session,
+                   url_for)
 
 from physqgen.session import Session
 
@@ -28,7 +29,7 @@ def redirectpage():
 
 
 #for image display purposes
-img = os.path.join('static', 'Image')
+IMG_FOLDER_PATH = join('static', 'images')
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage():
     """
@@ -39,8 +40,6 @@ def qpage():
     (bool)
     (image file)
     """
-    #find way to have file path match one attached to the question data
-    file = os.path.join(img, 'Blog-Discrete-P1a12.png')
 
     if request.method == "POST":
         answer: str = request.get_data("answer", as_text=True)
@@ -82,6 +81,9 @@ def qpage():
 
     # TODO: redirect to login if not logged in
 
+    # fetch image filename for active question
+    file = join(IMG_FOLDER_PATH, session["session"]["questions"][session["session"]["active_question"]]["img"])
+    
     # get method is included in the no-if path
     return render_template("questionpage.html", image=file)
 

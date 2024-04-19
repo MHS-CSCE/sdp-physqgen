@@ -40,7 +40,7 @@ class Question:
     config: InitVar[QuestionConfig | None] = None
     storedData: InitVar[dict | None] = None
     
-    # img: object
+    img: str = field(init=False)
     text: str = field(init=False)
     correct: bool = field(init=False)
     numberTries: int = field(init=False)
@@ -59,6 +59,7 @@ class Question:
             self.questionType = config.questionType
             self.correct = False
             self.numberTries = 0
+            self.img = config.img
 
             self.variables = []
             for varConfig in config.variableConfigs:
@@ -75,6 +76,7 @@ class Question:
             self.numberTries = storedData["NUMBER_TRIES"]
             self.solveVariable = storedData["SOLVE_VARIABLE"]
             self.questionType = storedData["questionType"]
+            self.img =  storedData["IMAGE_PATH"]
 
             self.variables: list[Variable] = []
             # data may need to reference a separate table of variable data

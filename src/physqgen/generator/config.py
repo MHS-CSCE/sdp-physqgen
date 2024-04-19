@@ -6,6 +6,10 @@ from dataclasses import dataclass
 
 from physqgen import generator
 
+from shutil import copy as shcopy
+from os.path import join, exists
+from os import listdir
+
 
 @dataclass(slots=True)
 class VariableConfig:
@@ -20,6 +24,7 @@ class QuestionConfig:
     solveVariableType: str
     questionType: str
     text: str
+    img: str
     # correctRange default was agreed upon with client at 10%
     correctRange: float = 0.1
 
@@ -35,11 +40,10 @@ class Config:
             vConfigs = []
             for varType, data in question["variableConfig"].items():
                 vConfigs.append(VariableConfig(varType, data["range"], data["units"], data["displayName"]))
-            qConfigs.append(QuestionConfig(vConfigs, question["solveVariable"], question["question"], question["text"], question["correctRange"]))
+            qConfigs.append(QuestionConfig(vConfigs, question["solveVariable"], question["question"], question["text"], question["image"], question["correctRange"]))
         
         return cls(qConfigs)
 
-# TODO: may need to put in separate file as it imports the full module
 def generateQuestions(config: Config) -> list:
     """
     Generates a set of question subclass instances with randomized values based on the passed config data.\n
@@ -53,3 +57,10 @@ def generateQuestions(config: Config) -> list:
         questions.append(getattr(generator, questionConfig.questionType)(config=questionConfig))
 
     return questions
+
+def copyQuestionImagesToServerFolder() -> None:
+    """Copies files from ./configs/images to ./src/physqgen/app/static/images. This will make image files available to ber displayed on the server, if they are referenced in any configs."""
+    # for the pathname-matching quick solution: https://stackoverflow.com/questions/11903037/copy-all-jpg-file-in-a-directory-to-another-directory-in-python
+    for originalFileName in listdir(sourcePath := join(".", "configs", "images")):
+        if not exists(movedFilePath := join(".", "src", "physqgen", "app", "static", "images", originalFileName)):
+            shcopy(join(sourcePath, originalFileName), movedFilePath)

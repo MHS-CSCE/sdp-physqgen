@@ -84,6 +84,7 @@ class Session:
                     CORRECT,
                     SOLVE_VARIABLE,
                     TEXT,
+                    IMAGE_PATH,
                     CORRECT_RANGE,
                     {",".join(question.varNames).upper()}
                 )
@@ -96,6 +97,7 @@ class Session:
                     "{question.correct}",
                     "{question.solveVariable}",
                     "{question.text}",
+                    "{question.img}",
                     {question.correctRange},
                     "{"\", \"".join((str(question.getValue(name, id=True)) for name in question.varNames))}"
                 )

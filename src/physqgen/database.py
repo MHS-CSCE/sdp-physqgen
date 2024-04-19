@@ -22,6 +22,7 @@ def createQuestionDatabaseTable(question_type_name: str, question_variables: Ite
             CORRECT BOOL NOT NULL,
             SOLVE_VARIABLE CHAR NOT NULL,
             TEXT CHAR NOT NULL,
+            IMAGE_PATH CHAR NOT NULL,
             CORRECT_RANGE FLOAT NOT NULL,
             {" CHAR,".join([variable.upper() for variable in question_variables]) + " CHAR"}
         )'''

@@ -11,6 +11,7 @@ from json import load
 from os.path import join
 
 from physqgen import Config, create_app
+from physqgen.generator.config import copyQuestionImagesToServerFolder
 
 # restarting the server will change the values for variables, but things should still work
 if __name__ == '__main__':
@@ -20,5 +21,7 @@ if __name__ == '__main__':
     with open(join(".", "configs", "active_config.json")) as file:
         with open(join(".", "configs", load(file)["activeConfigName"])) as configFile:
             app.questionConfig = Config.fromFile(load(configFile))
+    
+    copyQuestionImagesToServerFolder()
     
     exit(app.run(port=8080, host='0.0.0.0',debug='True'))
