@@ -48,29 +48,31 @@ def getRelevantQuestionData() -> dict[str, list[tuple]]:
             tableList[index] = stringTuple[0]
 
         for table in tableList:
-            # table is a tuple with a single string
-            # extracted when inputting
+            # don't try and fetch from variables table
+            if table != "VARIABLES":
+                # table is a tuple with a single string
+                # extracted when inputting
 
-            # table names cannot be parametrized, so have to use a formatted string
-            # table names are from database anyways, so shouldn't be any real risk of sql injection
+                # table names cannot be parametrized, so have to use a formatted string
+                # table names are from database anyways, so shouldn't be any real risk of sql injection
 
-            # assignCursorRowFactoryQuestionType(cursor, table)
-            cursor.execute(
-                f"""
-                SELECT
-                    FIRST_NAME,
-                    LAST_NAME,
-                    EMAIL_A,
-                    NUMBER_TRIES,
-                    CORRECT
-                FROM
-                    {table}
-                """
-            )
+                # assignCursorRowFactoryQuestionType(cursor, table)
+                cursor.execute(
+                    f"""
+                    SELECT
+                        FIRST_NAME,
+                        LAST_NAME,
+                        EMAIL_A,
+                        NUMBER_TRIES,
+                        CORRECT
+                    FROM
+                        {table}
+                    """
+                )
 
-            for data in cursor.fetchall():
-                # mutates the dict directly
-                addStudentData(studentQuestionInfo, data)
+                for data in cursor.fetchall():
+                    # mutates the dict directly
+                    addStudentData(studentQuestionInfo, data)
     # shouldn't be necessary, but is.
     conn.close()
     

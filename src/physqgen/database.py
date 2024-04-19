@@ -1,13 +1,11 @@
-from os.path import join
 from sqlite3 import connect
 from typing import Iterable
 
 from physqgen.generator import KinematicsQuestion
+from physqgen.constants import DATABASEPATH
 
-# the path to the sqlite3 database
-DATABASEPATH = join('.', 'data', 'data.db')
 
-def addQuestionToDatabase(question_type_name: str, question_variables: Iterable[str]) -> None:
+def createQuestionDatabaseTable(question_type_name: str, question_variables: Iterable[str]) -> None:
     """Creates a table for a question type."""
     # get cursor object
     with connect(DATABASEPATH) as connection:
@@ -25,7 +23,7 @@ def addQuestionToDatabase(question_type_name: str, question_variables: Iterable[
             SOLVE_VARIABLE CHAR NOT NULL,
             TEXT CHAR NOT NULL,
             CORRECT_RANGE FLOAT NOT NULL,
-            {" FLOAT,".join([variable.upper() for variable in question_variables]) + " FLOAT"}
+            {" CHAR,".join([variable.upper() for variable in question_variables]) + " CHAR"}
         )'''
 
         cursor.execute(sql)
@@ -33,8 +31,28 @@ def addQuestionToDatabase(question_type_name: str, question_variables: Iterable[
     connection.close()
     return
 
+def createVariableTable() -> None:
+    """Creates the table used to store all variable data"""
+
+    with connect(DATABASEPATH) as conn:
+        cursor = conn.cursor()
+
+        sql = '''CREATE TABLE VARIABLES(
+            VARIABLE_UUID CHAR NOT NULL PRIMARY KEY,
+            NAME CHAR NOT NULL,
+            VALUE FLOAT NOT NULL,
+            DISPLAY_NAME CHAR NOT NULL,
+            UNITS CHAR NOT NULL
+        )'''
+
+        cursor.execute(sql)
+    # just in case
+    conn.close()
+    return
+
 def createDataBaseFromBlank() -> None:
     """Expects the database file not to exist."""
     # Existing Questions
-    addQuestionToDatabase("KinematicsQuestion", (var for var in KinematicsQuestion.POSSIBLE_VARIABLES))
+    createQuestionDatabaseTable("KinematicsQuestion", (var for var in KinematicsQuestion.POSSIBLE_VARIABLES))
+    createVariableTable()
     return

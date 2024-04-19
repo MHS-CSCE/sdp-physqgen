@@ -9,9 +9,8 @@ March 21st 2024: Program Creation
 
 import os
 
-from flask import Blueprint, Flask, render_template, request, session
+from flask import Blueprint, render_template, request, session, redirect, url_for
 
-from physqgen.app.application import app
 from physqgen.session import Session
 
 views = Blueprint('views', __name__)
@@ -44,41 +43,49 @@ def qpage():
     file = os.path.join(img, 'Blog-Discrete-P1a12.png')
 
     if request.method == "POST":
-        answer = request.get_data("answer")
-        sessionData: Session = session["session"]
+        answer: str = request.get_data("answer", as_text=True)
+        # remove the extra characters
+        # is currently formatted: "answer={actual value}&submit=Send"
+        answer = answer[len("answer="):-1*len("&submit=Send")]
+
+        sessionObject = Session.recreateSession(session["session"])
         try:
+            activeQuestion = sessionObject.questions[sessionObject.active_question]
+
             # if not correct, increment. store whether correct
             # will raise value error on float(answer) if it is not a valid float
-            if not (correct := (activeQuestion := sessionData.questions[sessionData.active_question]).check_answer(float(answer))):
-                activeQuestion.numberTries += 1
+            activeQuestion.correct = activeQuestion.check_answer(float(answer))
             
-            # increment to next active question and reload
-            if correct:
-                if (sessionData.active_question + 1) < len(sessionData.questions):
-                    sessionData.active_question += 1
-                    sessionData.reloadActiveQuestionData()
-                else:
-                    # user just finished last question
-                    # TODO: final redirect
-                    pass
-            
-            # commit session to database
-            sessionData.commitSessionToDatabase()
-        
-        except ValueError as e:
-            # don't count as a submission if the input is not a float value
-            correct = False
+            # after assignment to only increment if is a valid float
+            activeQuestion.numberTries += 1
 
-        # TODO: indication of correct / false on page. may need to store in session
+            print(f"Immediately after increment: {activeQuestion}")
+
+            # increment to next active question and reload
+            if activeQuestion.correct and (sessionObject.active_question + 1) < len(sessionObject.questions):
+                    sessionObject.incrementActiveQuestionData()
+            else:
+                # user just finished last question or submitted incorrect answer
+                sessionObject.updateSessionDataInDatabase()
+                # TODO: final redirect
+                pass
         
-        return render_template("questionpage.html", correct, image=file)
+        except ValueError:
+            # don't count as a submission if the input is not a float value
+            # TODO: catch the error and notify user somehow
+            pass
+
+        # pass data back, so page updates and etc.
+        session["session"] = sessionObject
+
+        return redirect(url_for("views.qpage"), code=302)
 
     # TODO: redirect to login if not logged in
-    # get method is included here
 
+    # get method is included in the no-if path
     return render_template("questionpage.html", image=file)
 
-
+# TODO: session end page &redirect from last question
 
 
 

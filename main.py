@@ -12,6 +12,7 @@ from os.path import join
 
 from physqgen import Config, create_app
 
+# restarting the server will change the values for variables, but things should still work
 if __name__ == '__main__':
     app = create_app()
     

@@ -8,9 +8,12 @@ from dataclasses import InitVar, dataclass, field
 from math import sqrt
 from typing import Literal
 from uuid import UUID, uuid4  # uuid4 doesn't include private information
+from sqlite3 import connect
 
 from physqgen.generator.config import QuestionConfig
 from physqgen.generator.variables import Variable
+from physqgen.constants import DATABASEPATH
+from physqgen import generator
 
 
 @dataclass
@@ -62,21 +65,28 @@ class Question:
                 self.variables.append(Variable(varConfig.range, varConfig.variableType, varConfig.units, varConfig.displayName))
 
         elif type(storedData) == dict:
-            # TODO: extract to classmethod
+            # TODO: extract fully to the classmethod?
             # is False, use storedData
             # overwrites generated data
-            self.text = storedData["text"]
-            self.correctRange = storedData["text"]
-            self.id = storedData["id"]
-            self.correct = storedData["correct"]
-            self.numberTries = storedData["numberTries"]
+            self.text = storedData["TEXT"]
+            self.correctRange = storedData["CORRECT_RANGE"]
+            self.id = UUID(storedData["QUESTION_UUID"])
+            self.correct = storedData["CORRECT"]
+            self.numberTries = storedData["NUMBER_TRIES"]
+            self.solveVariable = storedData["SOLVE_VARIABLE"]
+            self.questionType = storedData["questionType"]
 
             self.variables: list[Variable] = []
             # data may need to reference a separate table of variable data
             for varData in storedData["variableData"]:
-                self.variables.append(Variable.fromStored(varData["name"], varData["value"], varData["units"], varData["displayName"]))
+                self.variables.append(Variable.fromStored(varData["NAME"], varData["VALUE"], varData["UNITS"], varData["DISPLAY_NAME"], UUID(varData["VARIABLE_UUID"])))
         else:
             raise TypeError(f"Both variableConfig and variableValues were not dicts holding required data. One of them must be defined in order to construction the question.")
+
+    @classmethod
+    def fromUUID(cls, qType: str, questionID: str):
+        """Fetches the question data for the given question UUID from the database."""
+        return cls(storedData=Question.fetchQuestionData(qType, questionID))
 
     @property
     def answer(self) -> float:
@@ -88,15 +98,27 @@ class Question:
             return ans
         raise RuntimeError(f"Fetching answer for question {self} failed.")
 
-    def check_answer(self, submitted) -> bool:
+    def check_answer(self, submitted: float) -> bool:
         """Returns True if the submitted answer is within the correctRange variance from the question's calculated answer."""
-        return (submitted > (self.answer * (1 - self.correctRange))) and (submitted < (self.answer * (1 + self.correctRange)))
+        firstBound = self.answer*(1-self.correctRange)
+        secondBound = self.answer*(1+self.correctRange)
+        # needs two checks, one for if the answer is negative and one if positive
+        if self.answer < 0:
+            return bool(submitted < firstBound and submitted > secondBound)
+        else:
+            return bool(submitted > firstBound and submitted < secondBound)
     
-    def getValue(self, name: str) -> float | Literal[False]:
-        """Returns the value for passed variable name, or False if there is no set variable in the current question with that name."""
+    def getValue(self, name: str, id: bool = False) -> float | Literal[False]:
+        """
+        Returns the value for passed variable name, or False if there is no set variable in the current question with that name.\n
+        If id is True, fetches the variable's UUID instead.
+        """
         for var in self.variables:
             if var.name == name:
-                return var.value
+                if id:
+                    return var.varID
+                else:
+                    return var.value
         return False
 
     @property
@@ -119,6 +141,67 @@ class Question:
         for var in self.variables:
             varNames.append(var.name)
         return varNames
+
+    @staticmethod
+    def fetchQuestionData(qType: str, uuid: str) -> dict:
+        """
+        Returns a dictionary of stored data to be used to construct a question subclass object.\n
+        """
+        # TODO: sql injection
+        with connect(DATABASEPATH) as conn:
+            cursor = conn.cursor()
+
+            sql = f'''SELECT * FROM {qType.upper()} WHERE QUESTION_UUID=?'''
+            cursor.execute(sql, [str(uuid)])
+            questionData = cursor.fetchone()
+            
+            # 9+ => variable UUIDs, in order of database, which is order in the class's POSSIBLE_VARIABLES tuple class variable
+            namedData = {
+                "QUESTION_UUID": questionData[0],
+                "FIRST_NAME": questionData[1],
+                "LAST_NAME": questionData[2],
+                "EMAIL_A": questionData[3],
+                "NUMBER_TRIES": questionData[4],
+                "CORRECT": questionData[5],
+                "SOLVE_VARIABLE": questionData[6],
+                "TEXT": questionData[7],
+                "CORRECT_RANGE": questionData[8],
+                # add variable extracted dicts
+                "variableData": [],
+                #add questionType
+                "questionType": qType
+            }
+            # get the constructor object for the appropriate question subclass object
+            questionClass = getattr(generator, qType)
+
+            for index in range(len(questionClass.POSSIBLE_VARIABLES)):
+                skip = False # whether fetching uuid returned False, which means that variable did not have a set value and should be skipped for construction
+                # fetch UUIDs, using index + number of previous indexes to start when the var columns start
+                varID = questionData[index + 9]
+                # check for None, if var is not defined for this question
+                if varID is None:
+                    skip = True
+
+                if not skip:
+                    # fetch variable data given uuid
+                    varFetchSQL = f'''SELECT * FROM VARIABLES WHERE VARIABLE_UUID="{varID}"'''
+
+                    cursor.execute(varFetchSQL)
+                    variableData = cursor.fetchone()
+
+                    namedData["variableData"].append(
+                        {
+                            "VARIABLE_UUID": variableData[0],
+                            "NAME": variableData[1],
+                            "VALUE": variableData[2],
+                            "DISPLAY_NAME": variableData[3],
+                            "UNITS": variableData[4]
+                        }
+                    )
+
+        # just in case
+        conn.close()
+        return namedData
 
 @dataclass
 class KinematicsQuestion(Question):

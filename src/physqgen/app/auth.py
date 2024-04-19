@@ -22,7 +22,7 @@ def log_in():
     #getting input from the form, passing it into the session class
     if request.method == "POST":
 
-        print(app.questionConfig)
+        # TODO: detect an existing session and continue it instead
         session["session"] = Session(
             LoginInfo(
                 #setting the form input as the login info
@@ -30,9 +30,11 @@ def log_in():
                 request.form["last-name"],
                 request.form["email-address"]
             ),
-            questions=generateQuestions(app.questionConfig)
+            questions=generateQuestions(app.questionConfig),
+            initial=True
         )
-        # TODO: not actually redirecting
+        # creation of Session automatically enters data into database
+
         # https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap
         return redirect(url_for("views.qpage"), code=302)
     else:
