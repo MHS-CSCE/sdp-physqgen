@@ -174,7 +174,6 @@ class Question:
                 #add questionType
                 "questionType": qType
             }
-            print(namedData)
 
             # get the constructor object for the appropriate question subclass object
             questionClass = getattr(generator, qType)
@@ -194,8 +193,6 @@ class Question:
                     cursor.execute(varFetchSQL)
                     variableData = cursor.fetchone()
 
-                    # DEBUG
-                    print(f"varID: {varID}\nsql query: {varFetchSQL}\nfetched: {variableData}\ncursor: {cursor}\ncursor.fetchall(): {cursor.fetchall()}")
                     namedData["variableData"].append(
                         {
                             "VARIABLE_UUID": variableData[0],
