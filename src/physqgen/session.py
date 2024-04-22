@@ -59,8 +59,6 @@ class Session:
         self.updateSessionDataInDatabase()
         self.active_question += 1
         self.active_question_data = self.questions[self.active_question].websiteDisplayData
-        # DEBUG
-        print(f"Active question after incrementing: {self.questions[self.active_question]}")
         self.updateSessionDataInDatabase()
         return
         
@@ -139,13 +137,11 @@ class Session:
     def updateSessionDataInDatabase(self) -> None:
         """Updates rows in the appropriate database tables for the Session's active question."""
         with connect(DATABASEPATH) as connection:
-            print(self.questions[self.active_question])
             activeQuestion = self.questions[self.active_question]
 
             cursor = connection.cursor()
             # TODO: prevent sql injection
 
-            print(f"Question number tries: {activeQuestion.numberTries}")
             sql = f"""
             UPDATE {activeQuestion.questionType}
             SET
