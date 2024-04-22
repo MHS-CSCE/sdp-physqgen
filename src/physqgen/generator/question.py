@@ -147,7 +147,7 @@ class Question:
     @staticmethod
     def fetchQuestionData(qType: str, uuid: str) -> dict:
         """
-        Returns a dictionary of stored data to be used to construct a question subclass object.\n
+        Returns a dictionary of stored data to be used to construct a question subclass object.
         """
         # TODO: sql injection
         with connect(DATABASEPATH) as conn:
@@ -167,19 +167,22 @@ class Question:
                 "CORRECT": questionData[5],
                 "SOLVE_VARIABLE": questionData[6],
                 "TEXT": questionData[7],
-                "CORRECT_RANGE": questionData[8],
+                "IMAGE_PATH": questionData[8],
+                "CORRECT_RANGE": questionData[9],
                 # add variable extracted dicts
                 "variableData": [],
                 #add questionType
                 "questionType": qType
             }
+            print(namedData)
+
             # get the constructor object for the appropriate question subclass object
             questionClass = getattr(generator, qType)
 
             for index in range(len(questionClass.POSSIBLE_VARIABLES)):
                 skip = False # whether fetching uuid returned False, which means that variable did not have a set value and should be skipped for construction
                 # fetch UUIDs, using index + number of previous indexes to start when the var columns start
-                varID = questionData[index + 9]
+                varID = questionData[index + 10]
                 # check for None, if var is not defined for this question
                 if varID is None:
                     skip = True
@@ -191,6 +194,8 @@ class Question:
                     cursor.execute(varFetchSQL)
                     variableData = cursor.fetchone()
 
+                    # DEBUG
+                    print(f"varID: {varID}\nsql query: {varFetchSQL}\nfetched: {variableData}\ncursor: {cursor}\ncursor.fetchall(): {cursor.fetchall()}")
                     namedData["variableData"].append(
                         {
                             "VARIABLE_UUID": variableData[0],
