@@ -12,6 +12,7 @@ from os.path import join
 from flask import (Blueprint, redirect, render_template, request, session,
                    url_for)
 
+from physqgen.app.constants import DATABASEPATH
 from physqgen.session import Session
 
 views = Blueprint('views', __name__)
@@ -47,7 +48,7 @@ def qpage():
         # is currently formatted: "answer={actual value}&submit=Send"
         answer = answer[len("answer="):-1*len("&submit=Send")]
 
-        sessionObject = Session.recreateSession(session["session"])
+        sessionObject = Session.recreateSession(DATABASEPATH, session["session"])
         try:
             activeQuestion = sessionObject.questions[sessionObject.active_question]
 
@@ -59,12 +60,14 @@ def qpage():
             activeQuestion.numberTries += 1
 
             # increment to next active question and reload
-            if activeQuestion.correct and (sessionObject.active_question + 1) < len(sessionObject.questions):
+            if (notLastQuestion := ((sessionObject.active_question + 1) < len(sessionObject.questions))) and activeQuestion.correct:
                 sessionObject.incrementActiveQuestionData()
-            else:
-                # user just finished last question or submitted incorrect answer
+            elif notLastQuestion:
+                # incorrect answer
                 sessionObject.updateSessionDataInDatabase()
-                print("Redirect to exit page")
+            else:
+                # user just finished last question
+                sessionObject.updateSessionDataInDatabase()
                 return redirect(url_for("views.exit"), code=302)
         
         except ValueError:

@@ -1,14 +1,10 @@
 from sqlite3 import connect
 from typing import Iterable
 
-from physqgen.generator import KinematicsQuestion
-from physqgen.constants import DATABASEPATH
-
-
-def createQuestionDatabaseTable(question_type_name: str, question_variables: Iterable[str]) -> None:
+def createQuestionDatabaseTable(databasePath: str, question_type_name: str, question_variables: Iterable[str]) -> None:
     """Creates a table for a question type."""
     # get cursor object
-    with connect(DATABASEPATH) as connection:
+    with connect(databasePath) as connection:
         cursor = connection.cursor()
 
         # creating table for question type
@@ -32,10 +28,10 @@ def createQuestionDatabaseTable(question_type_name: str, question_variables: Ite
     connection.close()
     return
 
-def createVariableTable() -> None:
+def createVariableTable(databasePath: str) -> None:
     """Creates the table used to store all variable data"""
 
-    with connect(DATABASEPATH) as conn:
+    with connect(databasePath) as conn:
         cursor = conn.cursor()
 
         sql = '''CREATE TABLE VARIABLES(
@@ -51,9 +47,3 @@ def createVariableTable() -> None:
     conn.close()
     return
 
-def createDataBaseFromBlank() -> None:
-    """Expects the database file not to exist."""
-    # Existing Questions
-    createQuestionDatabaseTable("KinematicsQuestion", (var for var in KinematicsQuestion.POSSIBLE_VARIABLES))
-    createVariableTable()
-    return

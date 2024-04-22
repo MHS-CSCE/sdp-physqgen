@@ -6,14 +6,13 @@ February 20, 2024: Fix KinematicsQuestion, implement rest of solving formulas.
 
 from dataclasses import InitVar, dataclass, field
 from math import sqrt
+from sqlite3 import connect
 from typing import Literal
 from uuid import UUID, uuid4  # uuid4 doesn't include private information
-from sqlite3 import connect
 
+from physqgen import generator
 from physqgen.generator.config import QuestionConfig
 from physqgen.generator.variables import Variable
-from physqgen.constants import DATABASEPATH
-from physqgen import generator
 
 
 @dataclass
@@ -86,9 +85,9 @@ class Question:
             raise TypeError(f"Both variableConfig and variableValues were not dicts holding required data. One of them must be defined in order to construction the question.")
 
     @classmethod
-    def fromUUID(cls, qType: str, questionID: str):
+    def fromUUID(cls, databasePath: str, qType: str, questionID: str):
         """Fetches the question data for the given question UUID from the database."""
-        return cls(storedData=Question.fetchQuestionData(qType, questionID))
+        return cls(storedData=Question.fetchQuestionData(databasePath, qType, questionID))
 
     @property
     def answer(self) -> float:
@@ -145,12 +144,12 @@ class Question:
         return varNames
 
     @staticmethod
-    def fetchQuestionData(qType: str, uuid: str) -> dict:
+    def fetchQuestionData(databasePath: str, qType: str, uuid: str) -> dict:
         """
         Returns a dictionary of stored data to be used to construct a question subclass object.
         """
         # TODO: sql injection
-        with connect(DATABASEPATH) as conn:
+        with connect(databasePath) as conn:
             cursor = conn.cursor()
 
             sql = f'''SELECT * FROM {qType.upper()} WHERE QUESTION_UUID=?'''

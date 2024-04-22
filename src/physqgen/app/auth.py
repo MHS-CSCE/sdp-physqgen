@@ -1,10 +1,9 @@
 from flask import (Blueprint, redirect, render_template, request, session,
                    url_for)
 
-from physqgen.app.app import app
+from physqgen.app import DATABASEPATH, appConfig
 from physqgen.generator import generateQuestions
 from physqgen.session import LoginInfo, Session
-
 
 #defining views for routes
 auth = Blueprint('auth', __name__)
@@ -22,13 +21,14 @@ def log_in():
 
         # TODO: detect an existing session and continue it instead
         session["session"] = Session(
+            DATABASEPATH,
             LoginInfo(
                 #setting the form input as the login info
                 request.form["name"],
                 request.form["last-name"],
                 request.form["email-address"]
             ),
-            questions=generateQuestions(app.questionConfig),
+            questions=generateQuestions(appConfig),
             initial=True
         )
         # creation of Session automatically enters data into database

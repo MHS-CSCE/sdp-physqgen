@@ -4,9 +4,10 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
 
-from physqgen.generator import Config
+from physqgen.admin.constants import DATABASEPATH
+from physqgen.admin.create_database import createDataBaseFromBlank
 from physqgen.admin.getAdminData import getRelevantQuestionData
-from physqgen.database import DATABASEPATH, createDataBaseFromBlank
+from physqgen.generator import Config
 
 
 class AdminView(QMainWindow):

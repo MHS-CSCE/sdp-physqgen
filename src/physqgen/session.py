@@ -1,9 +1,8 @@
-from dataclasses import dataclass, field, InitVar
+from dataclasses import InitVar, dataclass, field
 from sqlite3 import connect
-from uuid import uuid4, UUID
+from uuid import UUID, uuid4
 
 from physqgen import generator
-from physqgen.database import DATABASEPATH
 from physqgen.generator.question import Question
 
 
@@ -18,6 +17,7 @@ class Session:
     """
     activeQuestion stores the index of the current question. Incremeneted when a question is gotten correct.
     """
+    databasePath: str
     uuid: str = field(default_factory=uuid4, init=False)
     login_info: LoginInfo
     questions: list[Question]
@@ -36,16 +36,17 @@ class Session:
         return
     
     @classmethod
-    def recreateSession(cls, data: dict):
+    def recreateSession(cls, databasePath: str, data: dict):
         """Creates a Session from the data stored in the Flask session cookie"""
         obj = cls(
+            databasePath,
             LoginInfo(
                 data["login_info"]["first_name"],
                 data["login_info"]["last_name"],
                 data["login_info"]["email_a"]
             ),
             questions=[
-                getattr(generator, q["questionType"]).fromUUID(q["questionType"], q["id"]) for q in data["questions"]
+                getattr(generator, q["questionType"]).fromUUID(databasePath , q["questionType"], q["id"]) for q in data["questions"]
             ],
             active_question=data["active_question"]
         )
@@ -67,7 +68,7 @@ class Session:
         Creates rows in the appropriate database tables for the questions and variables for this Session.\n
         If rollback is True, will rollback the commit. For testing purposes.
         """
-        with connect(DATABASEPATH) as connection:
+        with connect(self.databasePath) as connection:
             cursor = connection.cursor()
             for question in self.questions:
 
@@ -136,7 +137,7 @@ class Session:
     
     def updateSessionDataInDatabase(self) -> None:
         """Updates rows in the appropriate database tables for the Session's active question."""
-        with connect(DATABASEPATH) as connection:
+        with connect(self.databasePath) as connection:
             activeQuestion = self.questions[self.active_question]
 
             cursor = connection.cursor()
