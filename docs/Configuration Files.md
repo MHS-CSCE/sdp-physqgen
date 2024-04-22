@@ -9,9 +9,7 @@ The `"variableConfig"` key maps to a structure containing the names for however 
 For example:
 
 ```json
-{
     ...
-
     "variableConfig": {
         "acceleration": {
             "range": [1, 9.81],
@@ -30,7 +28,6 @@ For example:
         }
     }
     ...
-}
 ```
 
 Variable names are determined by the question type.
