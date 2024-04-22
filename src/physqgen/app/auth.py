@@ -1,15 +1,13 @@
-from os import path
+from flask import (Blueprint, redirect, render_template, request, session,
+                   url_for)
 
-from flask import (Blueprint, redirect, render_template, request,
-                   session, url_for)
-
-from physqgen.app.application import app
+from physqgen.app.app import app
 from physqgen.generator import generateQuestions
 from physqgen.session import LoginInfo, Session
 
+
 #defining views for routes
 auth = Blueprint('auth', __name__)
-
 
 @auth.route('/login', methods=['GET', 'POST'])
 def log_in():
