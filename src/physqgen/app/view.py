@@ -60,15 +60,16 @@ def qpage():
             activeQuestion.numberTries += 1
 
             # increment to next active question and reload
-            if (notLastQuestion := ((sessionObject.active_question + 1) < len(sessionObject.questions))) and activeQuestion.correct:
+            if ((sessionObject.active_question + 1) < len(sessionObject.questions)) and activeQuestion.correct:
                 sessionObject.incrementActiveQuestionData()
-            elif notLastQuestion:
-                # incorrect answer
-                sessionObject.updateSessionDataInDatabase()
-            else:
-                # user just finished last question
+            # correct & last question
+            elif activeQuestion.correct:
+                print(session)
                 sessionObject.updateSessionDataInDatabase()
                 return redirect(url_for("views.exit"), code=302)
+            else:
+                # incorrect answer
+                sessionObject.updateSessionDataInDatabase()
         
         except ValueError:
             # don't count as a submission if the input is not a float value

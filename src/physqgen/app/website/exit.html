@@ -19,6 +19,8 @@
 
         <div class="loginform">
             <label>Stats</label>
+            <p class="black">Student: {{ session["session"].login_info["first_name"] }} {{ session["session"].login_info["last_name"] }} ({{ session["session"].login_info["email_a"] }})</p>
+            <p class="black">Questions Completed: {{ session["session"].active_question + 1 }}</p>
         </div>
     </body>
 </html>
