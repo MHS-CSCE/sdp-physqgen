@@ -4,7 +4,7 @@ TODO: introduction
 
 ## Installation
 
-1. Install [Git]() and [Python 3.12.x]().
+1. Install [Git](https://git-scm.com/downloads) and [Python 3.12.x](https://www.python.org/downloads/).
 2. Choose a folder to store the program in. The installation will create a subfolder in this folder, where everything related to the software will go.
 3. Open a command prompt in the folder. On Windows, this can be done by clicking in the region next to the path in a file explorer window, entering `cmd`, and hitting \<Enter>.
     - Enter the following: `git clone https://github.com/MHS-CSCE/sdp-physqgen.git`, and hit enter.
