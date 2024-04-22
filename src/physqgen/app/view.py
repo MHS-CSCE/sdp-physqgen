@@ -87,6 +87,17 @@ def qpage():
     # get method is included in the no-if path
     return render_template("questionpage.html", image=file)
 
+# TODO: session end page &redirect from last question
+
+@views.route('/exit', methods = ['GET,POST'])
+def exit():
+    """
+    Last page of the generator, used as a transition page to tell the user to exit.
+    """
+    return render_template("exit.html")
+
+
+
 #No longer used templates
 # @views.route('/create', methods=['GET', 'POST'])
 # def q_create(): 
