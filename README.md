@@ -1,5 +1,7 @@
 # Physics Question Generator
 
+TODO: introduction
+
 ## Installation
 
 TODO: clone git repo, create python venv (named .venv), initialize it, run `pip install .`.
@@ -21,3 +23,7 @@ See the [configuration file docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/
 ## Hacking
 
 See [`PhysQGen Development Setup.md`](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/PhysQGen%20Development%20Setup.md) for info on setting up to contribute. TODO: fix any problems, check back here. will need to make sure installation works correctly
+
+## Sources
+
+TODO
