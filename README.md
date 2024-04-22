@@ -14,6 +14,10 @@ Run `flask run -h "0.0.0.0"` in `src/physqgen/app` in order to start the server.
 
 Run `python admin.py` in the root folder of the project in order to launch the app used to view information about question submission and completion. Beware, closing the command prompt will close this window. This command prompt is also monopolized by the app, you cannot use this same prompt to run the server.
 
+### Configuration
+
+See the [configuration file docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Configuration%20Files.md) for information on the structure of the configuration files.
+
 ## Hacking
 
 See [`PhysQGen Development Setup.md`](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/PhysQGen%20Development%20Setup.md) for info on setting up to contribute. TODO: fix any problems, check back here. will need to make sure installation works correctly
