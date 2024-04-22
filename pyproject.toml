@@ -22,4 +22,5 @@ classifiers = [
 [project.urls]
 "Github" = "https://github.com/MHS-CSCE/sdp-physqgen"
 
-[dependencies]
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
