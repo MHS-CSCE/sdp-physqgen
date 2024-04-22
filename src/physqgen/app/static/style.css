@@ -53,12 +53,7 @@ hr.solid {
     margin-bottom:20px
   }
 
-/*Create question page right menu that displays image +description of question*/
-section{
-    float:right;
-    background-color: white;
-}
-
+/*add padding to question on quesiton page*/
 .questioncontainer{
     padding-left: 10%;
     padding-right: 10%;
@@ -67,11 +62,11 @@ section{
 
 /*Background of question that shows image and description of question*/
 .question{
-    background: white;
+    /* background: blue; */
     padding:2%;
     text-align:center;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border: 2px solid rgb(183,183,183);
+
 }
 
 /*Answer submit area*/
@@ -117,6 +112,14 @@ input[value="Send"]{
     border:none;
 }
 
+input[value="Create question"]{
+    width:fit-content;
+}
+
+input[value="Draw answers"]{
+    width:fit-content;
+}
+
 label{
     font-size:17px;
     font-family: Poppins;
@@ -155,9 +158,10 @@ input, textarea{
     margin:2%;
     margin-left:25%;
     border-radius: 10px;
-    /*if you are 200px or smaller become green*/
+    background:white;
+    /*if you are 200px or smaller become a different color*/
     @media screen and (min-width: 200px) {
-        background: wheat;
+        background: white;
     }
     /*if it is 800 px or wider become yellow*/
     @media screen and (min-width: 800px) {
@@ -173,13 +177,17 @@ input {
 /*Create question page left menu*/
 aside{
     float: left;
-    background: green;
+    background: white;
     width:33%;
+}
+/*Create question page right menu that displays image +description of question*/
+section{
+    float:right;
+    width:66%;
 }
 
 /*Footer for bottom buttons in "create question" page*/
 footer{
-    background:orange;
     clear: both;
 }
 
@@ -193,6 +201,9 @@ div{
     padding:8%;
     margin: 1%;
     /* float:left; */
+    /* background-color:green; */
+    border: 2px solid rgb(183,183,183);
+
 }
 
 ._20 {
@@ -203,4 +214,19 @@ div{
 
 .resizedTextbox {
     width: 50%;
+}
+
+::-moz-selection { /* Code for Firefox */
+    color: black;
+    background: rgb(232, 207, 252);
+  }
+  
+::selection {
+    color: black;
+    background: rgb(232, 207, 252);
+  }
+
+.whitecontainer{
+    background:white;
+    border-radius: 10px;
 }
