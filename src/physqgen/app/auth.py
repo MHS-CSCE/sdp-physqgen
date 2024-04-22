@@ -1,6 +1,6 @@
 from os import path
 
-from flask import (Blueprint, Flask, redirect, render_template, request,
+from flask import (Blueprint, redirect, render_template, request,
                    session, url_for)
 
 from physqgen.app.application import app
