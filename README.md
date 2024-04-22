@@ -6,7 +6,7 @@ TODO: introduction
 
 1. Install [Git]() and [Python 3.12.x]().
 2. Choose a folder to store the program in. The installation will create a subfolder in this folder, where everything related to the software will go.
-3. Open a command prompt in the folder. On Windows, this can be done by clicking in the region next to the path in a file explorer window, and entering `cmd`, and hitting \<Enter>.
+3. Open a command prompt in the folder. On Windows, this can be done by clicking in the region next to the path in a file explorer window, entering `cmd`, and hitting \<Enter>.
     - Enter the following: `git clone https://github.com/MHS-CSCE/sdp-physqgen.git`, and hit enter.
 4. Create a python virtual environment in the folder. This can be done with the following command: `python -m venv .venv`
 5. Initialize the virtual environment with: `.venv\\Scripts\\activate`.
