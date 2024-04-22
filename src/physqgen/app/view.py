@@ -60,7 +60,7 @@ def qpage():
 
             # increment to next active question and reload
             if activeQuestion.correct and (sessionObject.active_question + 1) < len(sessionObject.questions):
-                    sessionObject.incrementActiveQuestionData()
+                sessionObject.incrementActiveQuestionData()
             else:
                 # user just finished last question or submitted incorrect answer
                 sessionObject.updateSessionDataInDatabase()
