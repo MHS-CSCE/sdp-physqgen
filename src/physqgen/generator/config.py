@@ -58,9 +58,9 @@ def generateQuestions(config: Config) -> list:
 
     return questions
 
-def copyQuestionImagesToServerFolder() -> None:
+def copyQuestionImagesToServerFolder(imageFolderPath: str, movedImagesPath: str) -> None:
     """Copies files from ./configs/images to ./src/physqgen/app/static/images. This will make image files available to ber displayed on the server, if they are referenced in any configs."""
     # for the pathname-matching quick solution: https://stackoverflow.com/questions/11903037/copy-all-jpg-file-in-a-directory-to-another-directory-in-python
-    for originalFileName in listdir(sourcePath := join(".", "configs", "images")):
-        if not exists(movedFilePath := join(".", "src", "physqgen", "app", "static", "images", originalFileName)):
+    for originalFileName in listdir(sourcePath := join(imageFolderPath)):
+        if not exists(movedFilePath := join(movedImagesPath, originalFileName)):
             shcopy(join(sourcePath, originalFileName), movedFilePath)

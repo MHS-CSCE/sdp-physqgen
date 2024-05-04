@@ -12,6 +12,7 @@ Edited 6th March
 from flask import Flask
 
 from physqgen.generator.config import copyQuestionImagesToServerFolder
+from os.path import join
 
 
 #creating app
@@ -37,6 +38,6 @@ if __name__ == '__main__':
     # run with `flask run -h "0.0.0.0" -p 1250`. -h must be 0.0.0.0, -p is the port to use and can be changed.
     # registers the config and associated global variable when imported
     import physqgen.app.register_config
-    copyQuestionImagesToServerFolder()
+    copyQuestionImagesToServerFolder(join("..", "..", "..", "configs", "images"), join(".", "static", "images"))
     app = create_app()
     app.run(port=8080, host='0.0.0.0')
