@@ -22,12 +22,16 @@ class Session:
     login_info: LoginInfo
     questions: list[Question]
     active_question: int = 0
+    questions_correct: int = 0
 
     active_question_data: dict = field(init=False)
     initial: InitVar[bool] = False
 
     def __post_init__(self, initial: bool) -> None:
-        """Load in active question data. Will be first question."""
+        """Load in active question data wanted in cookies for website."""
+        # add one to index if current question is correct. this happens when submitting the final question
+        self.questions_correct = self.active_question + int(bool(self.questions[self.active_question].correct))
+        print(self.questions_correct)
         self.active_question_data = self.questions[self.active_question].websiteDisplayData
         if initial:
             self.commitSessionToDatabase()

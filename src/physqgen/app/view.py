@@ -94,16 +94,3 @@ def exit():
     Last page of the generator, used as a transition page to tell the user to exit.
     """
     return render_template("exit.html")
-
-#No longer used templates
-@views.route('/create', methods=['GET', 'POST'])
-def q_create(): 
-    return render_template("createquestion.html")
-
-@views.route('/tview', methods=['GET', 'POST'])
-def t_view():
-    return render_template("teacherview.html")
-
-@views.route('/topen', methods=['GET', 'POST'])
-def t_open(): 
-    return render_template("teacheropening.html")
