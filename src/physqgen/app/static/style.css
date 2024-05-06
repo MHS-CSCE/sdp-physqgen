@@ -65,8 +65,7 @@ hr.solid {
     /* background: blue; */
     padding:2%;
     text-align:center;
-    border: 2px solid rgb(183,183,183);
-
+    background:white;
 }
 
 /*Answer submit area*/
