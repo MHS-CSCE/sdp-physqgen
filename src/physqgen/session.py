@@ -31,7 +31,6 @@ class Session:
         """Load in active question data wanted in cookies for website."""
         # add one to index if current question is correct. this happens when submitting the final question
         self.questions_correct = self.active_question + int(bool(self.questions[self.active_question].correct))
-        print(self.questions_correct)
         self.active_question_data = self.questions[self.active_question].websiteDisplayData
         if initial:
             self.commitSessionToDatabase()
