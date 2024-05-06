@@ -64,7 +64,6 @@ def qpage():
                 sessionObject.incrementActiveQuestionData()
             # correct & last question
             elif activeQuestion.correct:
-                print(session)
                 sessionObject.updateSessionDataInDatabase()
                 return redirect(url_for("views.exit"), code=302)
             else:
