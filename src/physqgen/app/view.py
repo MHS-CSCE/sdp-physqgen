@@ -80,7 +80,11 @@ def qpage():
 
         return redirect(url_for("views.qpage"), code=302)
 
-    # TODO: redirect to login if not logged in
+    # redirect to login if not logged in
+    try:
+        session["session"]
+    except KeyError:
+        return redirect(url_for("auth.log_in"), code=302)
 
     # fetch image filename for active question
     file = join(IMG_FOLDER_PATH, session["session"]["questions"][session["session"]["active_question"]]["img"])
@@ -93,5 +97,16 @@ def exit():
     """
     Last page of the generator, used as a transition page to tell the user to exit.
     """
+    try:
+        session["session"]
+    except KeyError:
+        return redirect(url_for("auth.log_in"), code=302)
+    
+    # load session, updates the counter for number of questions correct
     session["session"] = Session.recreateSession(DATABASEPATH, session["session"])
+    
+    # check if have gotten all questions correct, redirect to question page if not so
+    if session["session"].questions_correct != len(session["session"].questions):
+        return redirect(url_for("views.qpage"), code=302)
+
     return render_template("exit.html")
