@@ -93,4 +93,5 @@ def exit():
     """
     Last page of the generator, used as a transition page to tell the user to exit.
     """
+    session["session"] = Session.recreateSession(DATABASEPATH, session["session"])
     return render_template("exit.html")
