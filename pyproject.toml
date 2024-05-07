@@ -32,7 +32,7 @@ dependencies = [
     "PySide6_Essentials==6.6.3.1",
     "QtPy==2.4.1",
     "shiboken6==6.6.3.1",
-    "Werkzeug==3.0.1",
+    "Werkzeug==3.0.3",
     "wfastcgi==3.0.0"
 ]
 

@@ -1,38 +1,57 @@
 # Physics Question Generator
 
-TODO: introduction
+This program is intended to allow a teacher to easily host a website to students on the same wifi network. This website gives the students a series of questions, which can be configured directly by the teacher, with different randomized values for each variable. This is intended to allow students to focus more on the question solving process than on the specific answers they get.
+
+The installation and running process is relatively simple. Configuration of questions is currently done by creating and editing `.json` format files, with a document below explaining process.
+
+Information about what and how students complete questions is stored, and can be viewed easily using the Admin app.
 
 ## Installation
 
 1. Install [Git](https://git-scm.com/downloads) and [Python 3.12.x](https://www.python.org/downloads/).
-2. Choose a folder to store the program in. The installation will create a subfolder in this folder, where everything related to the software will go.
+2. Choose a folder to store the program in. The following steps will create a subfolder in this folder, where everything related to the software will go.
 3. Open a terminal in the selected folder. On Windows, this can be done by clicking in the blank region next to the path in a file explorer window, replacing the text with `cmd`, and hitting \<Enter>.
     - Use this terminal to enter all of the following commands.
 4. In the terminal, enter the following: `git clone -b local https://github.com/MHS-CSCE/sdp-physqgen.git`, and hit enter.
 5. Create a python virtual environment in the folder. This can be done with the following command: `python -m venv .venv`
 6. Initialize the virtual environment with: `.venv\\Scripts\\activate`.
     - IMPORTANT: This also has to be done whenever you run the server or admin app.
-7. Install the project with: `pip install .`, with the virtual environment active.
+7. Install the project dependencies with: `pip install .`. The virtual environment should still be active.
 
-## How to Use
+## Running and Accessing the Website and Admin app
 
 In order to run the following commands, you will need to have a terminal open with the Python virtual environment enabled.
 
-On Windows, this can be done by clicking on the blank space next to the file path (it should highlight the whole path like text), and replacing it with `cmd`, then hitting enter. This should open a command prompt in that folder. To enable the virtual enviornment, run `.venv\\Scripts\\activate` to enable the virtual environment.
+On Windows, this can be done by clicking on the blank space next to the file path (it should highlight the whole path like text), replacing it with `cmd`, then hitting enter. This should open a command prompt in the correct location to run the following commands. To enable the virtual enviornment, run `.venv\\Scripts\\activate`.
 
-Run `python app.py` in `src/physqgen/app` in order to start the server. This will output two urls into the terminal. Technically speaking, a student should be able to input the ip address starting with either `192` or `10`, including the port (the number after the `:`), as a url into their search bar, and they should be able to access the site as long as they are on the same network. This is not consistent, and we are unsure why. should To navigate to this folder in the terminal, use the command `cd src\\physqgen\\app`. This will monopolize the command prompt, you cannot use the same window to run the admin app.
+### Website
 
-Run `python admin.py` in the root folder of the project in order to launch the app used to view information about question submission and completion. Beware, closing the command prompt will close this window. This command prompt is also monopolized by the app, you cannot use this same prompt to run the server.
+- Run `python main.py` in order to start the server.
+- This will output two urls into the terminal, which will be mostly composed of digits, as well as some information lines. Students should enter the url that is NOT `http://127.0.0.1:8080` into the search bar of their browsers, which will allow them to access the site as long as they are on the same wifi network.
+- This will monopolize the command prompt, you cannot use the same window to run the admin app.
+- The additional information includes a warning that can be ignored, as well as the shortcut for closing the server, `ctrl+c`.
+- Students will only be able to access the site if they are on the same wifi network.
+
+### Admin App
+
+- Run `python admin.py` in order to launch the app used to view information about student question submission and completion.
+- Beware, closing the command prompt will close this window.
+- This command prompt is also monopolized by the app, you cannot use this same prompt to run the server.
+- The app can be closed using the "x" button.
 
 ### Configuration
 
 See the [configuration file docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Configuration%20Files.md) for information on the structure of the configuration files.
 
-## Hacking
+## Development
 
-See [`PhysQGen Development Setup.md`](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/PhysQGen%20Development%20Setup.md) for info on setting up to contribute. TODO: fix any problems, check back here. will need to make sure installation works correctly
+See [`PhysQGen Development Setup.md`](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/PhysQGen%20Development%20Setup.md) for info on setting up to contribute.
+
+This program only contains a very limited selection of question types as of right now, which is an avenue for improvement.
 
 ## Sources
+
+The following soures are split into different categories depending on what they were used for.
 
 ### Learn Concepts
 
