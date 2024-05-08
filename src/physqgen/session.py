@@ -114,10 +114,12 @@ class Session:
                         VARIABLE_UUID,
                         NAME,
                         VALUE,
+                        UNITS,
                         DISPLAY_NAME,
-                        UNITS
+                        DECIMAL_PLACES
                     )
                     VALUES (
+                        ?,
                         ?,
                         ?,
                         ?,
@@ -128,7 +130,7 @@ class Session:
 
                     cursor.execute(
                         variableSQL,
-                        [str(variable.varID), variable.name, variable.value, variable.displayName, variable.units]
+                        [str(variable.varID), variable.name, variable.value, variable.units, variable.displayName, variable.decimalPlaces]
                     )
                 
                 if rollback:
