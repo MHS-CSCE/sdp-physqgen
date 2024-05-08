@@ -187,6 +187,7 @@ class Question:
 
                 if not skip:
                     # fetch variable data given uuid
+                    # TODO: sql injection isn't an issue, but mau as well fix it
                     varFetchSQL = f'''SELECT * FROM VARIABLES WHERE VARIABLE_UUID="{varID}"'''
 
                     cursor.execute(varFetchSQL)
