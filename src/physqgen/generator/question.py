@@ -406,13 +406,13 @@ class KinematicsQuestion(Question):
             # aDefined = self.getValue("acceleration")
 
             # assume that enough variables are defined, find the one that isn't
-            if not dDefined:
+            # also check that acceleration isn't 0. if so, cannot find time from just acceleration and velocity values, so move on to following ones
+            if not dDefined and not all((v1 == v2), (a == 0)):
                 v1 = self.getValue("initial_velocity")
                 v2 = self.getValue("final_velocity")
                 a = self.getValue("acceleration")
                 
                 # t from v1, v2, a
-                # TODO: fix v1=v2 situation, gives 0/0
                 return (v2 - v1) / a
             
             elif not v1Defined:
@@ -421,8 +421,8 @@ class KinematicsQuestion(Question):
                 a = self.getValue("acceleration")
 
                 # t from d, v2, a
-                # TODO: for now, always return highest answer even if there are two correct values
-                return (v2/a) + (sqrt(v2**2 - 2*a*d)/a) # negative in between for other answer
+                # TODO: for now, always returns highest answer even if there are two correct values. figure out how to make this more accurate
+                return (v2/a) + (sqrt(v2**2 - 2*a*d)/a) # would be subtraction in the middle to get the other answer
 
             elif not v2Defined:
                 d = self.getValue("displacement")
