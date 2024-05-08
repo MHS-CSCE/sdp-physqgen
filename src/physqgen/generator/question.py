@@ -219,7 +219,7 @@ class KinematicsQuestion(Question):
         self.variables.append(Variable.fromStored(name=self.solveVariable, value=value, units="", displayName="", varID=uuid4()))
         return
 
-    # TODO: restrict variables that could /0 in solvers, or where a sqrt could result in a negative answer but code outputs positive, etc.
+    # TODO: restrict variables/add skips in solvers for variables that could /0, or where a sqrt could result in a negative answer but code outputs positive
 
     def solve(self) -> float:
         """Solve for the value of the solveVariable, based on the given variables."""
