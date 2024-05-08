@@ -214,7 +214,7 @@ class KinematicsQuestion(Question):
     POSSIBLE_VARIABLES = ("DISPLACEMENT", "INITIAL_VELOCITY", "FINAL_VELOCITY", "TIME", "ACCELERATION")
 
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs )
+        super().__init__(*args, **kwargs)
         value = self.solve()
         self.variables.append(Variable.fromStored(name=self.solveVariable, value=value, units="", displayName="", varID=uuid4()))
         return
