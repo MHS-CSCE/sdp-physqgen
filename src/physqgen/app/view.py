@@ -78,7 +78,7 @@ def qpage():
         return redirect(url_for("auth.log_in"), code=302)
 
     # fetch image filename for active question
-    file = join(IMG_FOLDER_PATH, session["session"]["questions"][session["session"]["active_question"]]["img"])
+    file = join(IMG_FOLDER_PATH, session["session"]["questions"][session["session"]["active_question"]]["imageName"])
     
     # get method is included in the no-if path
     return render_template("questionpage.html", image=file)
