@@ -9,6 +9,7 @@ class Variable:
     name: str
     units: str
     displayName: str
+    # default is actual set in the VariableConfig dataclass
     decimalPlaces: int = 3
     value: float = field(init=False)
     varID: UUID = field(init=False, default_factory=uuid4)

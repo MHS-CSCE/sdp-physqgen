@@ -13,7 +13,7 @@ class VariableConfig:
     range: list[float | int]
     units: str
     displayName: str
-    decimalPlaces: int
+    decimalPlaces: int = 3
 
 @dataclass(slots=True)
 class QuestionConfig:
