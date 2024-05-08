@@ -11,19 +11,17 @@ Edited 6th March
 
 from flask import Flask
 
-from physqgen.generator.config import copyQuestionImagesToServerFolder
-from os.path import join
-
 
 #creating app
 def create_app():
     """Creates base Flask app/server to render the HTML for the user."""
-    #setting up app
+    # create app
     app = Flask(__name__, template_folder="website")
-    #secret key to be used for session cookies, security
+    # secret key to be used for session cookies, security
     app.config["SECRET_KEY"] ="Ajkjaksjksjaksjkiooooo"
 
-    #registering pages
+    # registering pages
+    # must be imported in this function or will cause circular import error
     from physqgen.app.auth import auth
     from physqgen.app.view import views
 
