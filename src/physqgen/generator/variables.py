@@ -9,6 +9,7 @@ class Variable:
     name: str
     units: str
     displayName: str
+    decimalPlaces: int = 3
     value: float = field(init=False)
     varID: UUID = field(init=False, default_factory=uuid4)
 
@@ -19,10 +20,10 @@ class Variable:
         return
     
     @classmethod
-    def fromStored(cls, name: str, value: float, units: str, displayName: str, varID: UUID):
+    def fromStored(cls, name: str, value: float, units: str, displayName: str, decimalPlaces: int, varID: UUID):
         """Create a Variable from stored data instead of randomizing."""
         # create with a stand-in range
-        var = cls(range=[1.0, 1.0], name=name, units=units, displayName=displayName)
+        var = cls(range=[1.0, 1.0], name=name, units=units, displayName=displayName, decimalPlaces=decimalPlaces)
         var.varID = varID
         var.value = value
         return var

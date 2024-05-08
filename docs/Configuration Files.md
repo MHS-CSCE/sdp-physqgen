@@ -4,7 +4,12 @@ A question config file is a JSON file containing the configuration data for a se
 
 The `"question"` key is the case sensitive name for the type of question. (Ex: `"KinematicsQuestion"`.)
 
-The `"variableConfig"` key (the name of the section) contains another section. This section contains key-value pairs for each variable that should be randomized for the question. The value in those pairs is also a structure, with a few keys. `"range"` contains the minimum and maximum value the variable can take on, both numbers (whether with decimals or not). `"units"` are appended to the end of the displayed value for the variable. `"displayName"` is the name the value will be paired with when displayed. This is meant to help it match the text you included for the question. See the example configuration for an example.
+The `"variableConfig"` key (the name of the section) contains another section. This section contains key-value pairs for each variable that should be randomized for the question. The value in those pairs is also a structure, with a few keys.
+
+- `"range"` contains the minimum and maximum value the variable can take on, both numbers (whether with decimals or not).
+- `"units"` are appended to the end of the displayed value for the variable.
+- `"displayName"` is the name the value will be paired with when displayed. This is meant to help it match the text you included for the question. See the example configuration for an example.
+- `"decimalPlaces"` is the numbe of decimal places to include when displaying the value of each variable to a student. Can be omitted, in which case the default is 3.
 
 For example:
 
@@ -19,12 +24,14 @@ For example:
         "initial_velocity": {
             "range": [0.1, 97.3],
             "units": "m/s",
-            "displayName": "s"
+            "displayName": "s",
+            "decimalPlaces": 1
         },
         "time": {
             "range": [1.3, 1.3],
             "units": "s",
-            "displayName": "t"
+            "displayName": "t",
+            "decimalPlaces": 1
         }
     }
     ...

@@ -13,6 +13,7 @@ class VariableConfig:
     range: list[float | int]
     units: str
     displayName: str
+    decimalPlaces: int
 
 @dataclass(slots=True)
 class QuestionConfig:
@@ -29,14 +30,15 @@ class Config:
     questionConfigs: list[QuestionConfig]
 
     @classmethod
-    def fromFile(cls, dict):
+    def fromFile(cls, dict: dict[str, list[dict]]):
         """Creates a config from a loaded json-formatted config file."""
         qConfigs = []
         for question in dict["questions"]:
             vConfigs = []
-            for varType, data in question["variableConfig"].items():
-                vConfigs.append(VariableConfig(varType, data["range"], data["units"], data["displayName"]))
-            qConfigs.append(QuestionConfig(vConfigs, question["solveVariable"], question["question"], question["text"], question["image"], question["correctRange"]))
+            # use pop to remore the value that doesn't need to go to questionconfig constructor
+            for varType, data in question.pop("variableConfig").items():
+                vConfigs.append(VariableConfig(varType, **data))
+            qConfigs.append(QuestionConfig(vConfigs,**question))
         
         return cls(qConfigs)
 

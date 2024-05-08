@@ -38,8 +38,9 @@ def createVariableTable(databasePath: str) -> None:
             VARIABLE_UUID CHAR NOT NULL PRIMARY KEY,
             NAME CHAR NOT NULL,
             VALUE FLOAT NOT NULL,
+            UNITS CHAR NOT NULL,
             DISPLAY_NAME CHAR NOT NULL,
-            UNITS CHAR NOT NULL
+            DECIMAL_PLACES NOT NULL
         )'''
 
         cursor.execute(sql)
