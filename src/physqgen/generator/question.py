@@ -156,7 +156,7 @@ class Question:
             cursor.execute(sql, [str(uuid)])
             questionData = cursor.fetchone()
             
-            # 9+ => variable UUIDs, in order of database, which is order in the class's POSSIBLE_VARIABLES tuple class variable
+            # 10+ => variable UUIDs, in order of database, which is order in the class's POSSIBLE_VARIABLES tuple class variable
             namedData = {
                 "QUESTION_UUID": questionData[0],
                 "FIRST_NAME": questionData[1],
