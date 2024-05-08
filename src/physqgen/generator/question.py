@@ -1,9 +1,3 @@
-"""
-Stuart
-February 9, 2024: Implement Question and KinematicsQuestion
-February 20, 2024: Fix KinematicsQuestion, implement rest of solving formulas.
-"""
-
 from dataclasses import InitVar, dataclass, field
 from math import sqrt
 from sqlite3 import connect
@@ -65,8 +59,6 @@ class Question:
                 self.variables.append(Variable(varConfig.range, varConfig.variableType, varConfig.units, varConfig.displayName))
 
         elif type(storedData) == dict:
-            # TODO: extract fully to the classmethod?
-            # is False, use storedData
             # overwrites generated data
             self.text = storedData["TEXT"]
             self.correctRange = storedData["CORRECT_RANGE"]
