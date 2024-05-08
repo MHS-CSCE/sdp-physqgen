@@ -207,7 +207,7 @@ class KinematicsQuestion(Question):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         value = self.solve()
-        self.variables.append(Variable.fromStored(name=self.solveVariable, value=value, units="", displayName="", varID=uuid4()))
+        self.variables.append(Variable.fromStored(name=self.solveVariable, value=value, varID=uuid4()))
         return
 
     # TODO: restrict variables/add skips in solvers for variables that could /0, or where a sqrt could result in a negative answer but code outputs positive

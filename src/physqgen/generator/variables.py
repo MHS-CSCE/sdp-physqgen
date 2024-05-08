@@ -7,8 +7,9 @@ from uuid import UUID, uuid4
 class Variable:
     range: InitVar[list[float | int]]
     name: str
-    units: str
-    displayName: str
+    # these defaults are used when loading answers from database
+    units: str = ""
+    displayName: str = ""
     # default is actual set in the VariableConfig dataclass
     decimalPlaces: int = 3
     value: float = field(init=False)
@@ -21,10 +22,10 @@ class Variable:
         return
     
     @classmethod
-    def fromStored(cls, name: str, value: float, units: str, displayName: str, decimalPlaces: int, varID: UUID):
+    def fromStored(cls, varID: UUID, value: float, **kwargs):
         """Create a Variable from stored data instead of randomizing."""
         # create with a stand-in range
-        var = cls(range=[1.0, 1.0], name=name, units=units, displayName=displayName, decimalPlaces=decimalPlaces)
+        var = cls(range=[1.0, 1.0], **kwargs)
         var.varID = varID
         var.value = value
         return var

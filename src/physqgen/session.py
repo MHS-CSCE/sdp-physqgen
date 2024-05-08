@@ -99,7 +99,7 @@ class Session:
                     "{question.correct}",
                     "{question.solveVariable}",
                     "{question.text}",
-                    "{question.img}",
+                    "{question.imageName}",
                     {question.correctRange},
                     "{"\", \"".join((str(question.getValue(name, id=True)) for name in question.varNames))}"
                 )
