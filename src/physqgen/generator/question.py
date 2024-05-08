@@ -127,7 +127,6 @@ class Question:
         """Returns question data that needs to be accessible on website, that isn't stored directly."""
         data = {}
         # the check removes both the solve value and the unrelated value
-        # TODO: figure out how to assemble, maybe try for multiple lines
         data["values"] = ", ".join(
             # TODO: consult about number of decimals, maybe make it configurable
             [f"{var.displayName} = {var.value:.3f}{var.units}" for var in self.variables if var.name != self.solveVariable]
@@ -148,10 +147,10 @@ class Question:
         """
         Returns a dictionary of stored data to be used to construct a question subclass object.
         """
-        # TODO: sql injection
         with connect(databasePath) as conn:
             cursor = conn.cursor()
 
+            # TODO: reformat databases to protect against sql injection, have single Question table instead of multiple
             sql = f'''SELECT * FROM {qType.upper()} WHERE QUESTION_UUID=?'''
             cursor.execute(sql, [str(uuid)])
             questionData = cursor.fetchone()
