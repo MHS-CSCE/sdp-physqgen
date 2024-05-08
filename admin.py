@@ -1,3 +1,7 @@
+"""
+Last Modified: May 8, 2024
+"""
+
 from qtpy.QtWidgets import QApplication
 
 # registers the config on import

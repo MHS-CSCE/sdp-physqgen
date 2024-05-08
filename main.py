@@ -1,3 +1,7 @@
+"""
+Last Modified: May 8, 2024
+"""
+
 from physqgen.app.app import create_app
 from physqgen.generator.config import copyQuestionImagesToServerFolder
 from os.path import join

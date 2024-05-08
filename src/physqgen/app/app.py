@@ -1,14 +1,3 @@
-"""
-Physics Question Generator
-ICS4U
-Stuart, Isabelle, Amelia
-Generates physics questions and displays them on a website.
-History:
-Feb 23rd 2024: Program Creation
-Edited 27th Feb
-Edited 6th March
-"""
-
 from flask import Flask
 
 

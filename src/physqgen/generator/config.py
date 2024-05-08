@@ -1,7 +1,3 @@
-"""
-Stuart, February 10, 2024
-"""
-
 from dataclasses import dataclass
 
 from physqgen import generator
