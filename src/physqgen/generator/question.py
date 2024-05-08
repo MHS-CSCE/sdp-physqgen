@@ -56,7 +56,7 @@ class Question:
 
             self.variables = []
             for varConfig in config.variableConfigs:
-                self.variables.append(Variable(varConfig.range, varConfig.variableType, varConfig.units, varConfig.displayName))
+                self.variables.append(Variable(range=varConfig.range, name=varConfig.variableType, units=varConfig.units, displayName=varConfig.displayName, decimalPlaces=varConfig.decimalPlaces))
 
         elif type(storedData) == dict:
             # overwrites generated data
@@ -67,12 +67,12 @@ class Question:
             self.numberTries = storedData["NUMBER_TRIES"]
             self.solveVariable = storedData["SOLVE_VARIABLE"]
             self.questionType = storedData["questionType"]
-            self.img =  storedData["IMAGE_PATH"]
+            self.imageName =  storedData["IMAGE_PATH"]
 
             self.variables: list[Variable] = []
             # data may need to reference a separate table of variable data
             for varData in storedData["variableData"]:
-                self.variables.append(Variable.fromStored(varData["NAME"], varData["VALUE"], varData["UNITS"], varData["DISPLAY_NAME"], UUID(varData["VARIABLE_UUID"])))
+                self.variables.append(Variable.fromStored(name=varData["NAME"], value=varData["VALUE"], units=varData["UNITS"], displayName=varData["DISPLAY_NAME"], varID=UUID(varData["VARIABLE_UUID"]), decimalPlaces=varData["DECIMAL_PLACES"]))
         else:
             raise TypeError(f"Both variableConfig and variableValues were not dicts holding required data. One of them must be defined in order to construction the question.")
 
@@ -177,7 +177,7 @@ class Question:
 
                 if not skip:
                     # fetch variable data given uuid
-                    # TODO: sql injection isn't an issue, but mau as well fix it
+                    # TODO: sql injection isn't an issue, but may as well fix it
                     varFetchSQL = f'''SELECT * FROM VARIABLES WHERE VARIABLE_UUID="{varID}"'''
 
                     cursor.execute(varFetchSQL)
@@ -188,8 +188,9 @@ class Question:
                             "VARIABLE_UUID": variableData[0],
                             "NAME": variableData[1],
                             "VALUE": variableData[2],
-                            "DISPLAY_NAME": variableData[3],
-                            "UNITS": variableData[4]
+                            "UNITS": variableData[3],
+                            "DISPLAY_NAME": variableData[4],
+                            "DECIMAL_PLACES": variableData[5]
                         }
                     )
 

@@ -20,7 +20,6 @@ def log_in():
     #getting input from the form, passing it into the session class
     if request.method == "POST":
 
-        # TODO: detect an existing session and continue it instead
         session["session"] = Session(
             DATABASEPATH,
             LoginInfo(

@@ -38,7 +38,7 @@ class Config:
             # use pop to remore the value that doesn't need to go to questionconfig constructor
             for varType, data in question.pop("variableConfig").items():
                 vConfigs.append(VariableConfig(varType, **data))
-            qConfigs.append(QuestionConfig(vConfigs,**question))
+            qConfigs.append(QuestionConfig(vConfigs, **question))
         
         return cls(qConfigs)
 
