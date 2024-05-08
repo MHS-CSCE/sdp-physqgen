@@ -94,3 +94,13 @@ The following soures are split into different categories depending on what they 
 ### Other
 
 - [Example Configuration Image: blueprint](https://blog.blueprintprep.com/mcat/free-mcat-practice-question-physics/)
+
+## Contact Information
+
+These emails will not exist after July of 2024.
+
+| Email | Name |
+|---|---|
+| asing1@ocdsb.ca | Amelia |
+| inich3@ocdsb.ca | Isabelle |
+| sjone12@ocdsb.ca | Stuart |
