@@ -220,8 +220,6 @@ class KinematicsQuestion(Question):
         return
 
     # TODO: restrict variables that could /0 in solvers, or where a sqrt could result in a negative answer but code outputs positive, etc.
-    # TODO: fix value of 0.0 for any defined variable except acceleration breaking the how-to-solve check.
-    # TODO: re-add verification, where necessary.
 
     def solve(self) -> float:
         """Solve for the value of the solveVariable, based on the given variables."""
@@ -279,14 +277,6 @@ class KinematicsQuestion(Question):
                 # d from v1, v2, t formula
                 return ((v1 + v2) / 2) * t                                       
     
-    # @staticmethod
-    # def displacement_validate(value: float) -> bool:
-    #     """Uses appropriate validation functions to ensure displacement is valid. Currently allowed any float value."""
-    #     if type(value) is float or type(value) is int:
-    #         return True
-    #     else:
-    #         return False
-
     @property
     def initial_velocity(self) -> float:
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
@@ -341,15 +331,6 @@ class KinematicsQuestion(Question):
                 # v1 from d, v2, t formula
                 return ((d*2) / t) - v2
     
-    # @staticmethod
-    # def initial_velocity_validate(value) -> bool:
-    #     """Uses appropriate validation functions to ensure initial velocity is valid. Currently allowed any float value."""
-    #     # TODO: might change to not allow being equal to final velocity, which would only happen if acceleration is 0
-    #     if type(value) is float or type(value) is int:
-    #         return True
-    #     else:
-    #         return False
-
     @property
     def final_velocity(self) -> float:
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
@@ -404,15 +385,6 @@ class KinematicsQuestion(Question):
                 # v2 from d, v1, t formula
                 return ((d*2) / t) - v1
     
-    # @staticmethod
-    # def final_velocity_validate(value) -> bool:
-    #     """Uses appropriate validation functions to ensure final velocity is valid. Currently allowed any float value."""
-    #     # TODO: might change to not allow being equal to initial velocity, which would only happen if acceleration is 0
-    #     if type(value) is float or type(value) is int:
-    #         return True
-    #     else:
-    #         return False
-
     @property
     def time(self) -> float:
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
@@ -468,13 +440,6 @@ class KinematicsQuestion(Question):
                 # t from d, v1, v2 formula
                 return (d*2)/(v1 + v2)
     
-    # def time_validate(self, value) -> bool:
-    #     """Uses appropriate validation functions to ensure time is valid. Currently allowed any positive non-zero float value."""
-    #     if self.validatePositiveNonZeroAttribute(value):
-    #         return True
-    #     else:
-    #         return False
-
     @property
     def acceleration(self) -> float:
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
@@ -527,11 +492,3 @@ class KinematicsQuestion(Question):
 
                 # a from d, v1, v2 formula
                 return ((2*v2) / (t)) - ((2*d) / (t**2)) 
-
-    # def acceleration_validate(self, value) -> bool:
-    #     """Uses appropriate validation functions to ensure acceleration is valid. Currently allowed any positive float value."""
-    #     # TODO: might change to not allow acceleration of 0
-    #     if self.validatePositiveAttribute(value):
-    #         return True
-    #     else:
-    #         return False
