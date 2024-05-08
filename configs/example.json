@@ -1,8 +1,7 @@
 {
     "questions": [
         {
-            "correctRange": 0.1,
-            "question": "KinematicsQuestion",
+            "questionType": "KinematicsQuestion",
             "variableConfig": {
                 "displacement": {
                     "range": [0, 0],
@@ -22,11 +21,11 @@
             },
             "solveVariable": "initial_velocity",
             "text": "Test KinematicsQuestion solve for initial_velocity.",
-            "image": "example.png"
+            "imageName": "example.png"
         },
         {
-            "correctRange": 0.1,
-            "question": "KinematicsQuestion",
+            "correctRange": 0.08,
+            "questionType": "KinematicsQuestion",
             "variableConfig": {
                 "acceleration": {
                     "range": [1, 9.81],
@@ -48,7 +47,7 @@
             },
             "solveVariable": "final_velocity",
             "text": "Test KinematicsQuestion solve for final_velocity.",
-            "image": "example.png"
+            "imageName": "example.png"
         }
     ]
 }

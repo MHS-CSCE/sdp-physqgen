@@ -33,7 +33,7 @@ class Question:
     config: InitVar[QuestionConfig | None] = None
     storedData: InitVar[dict | None] = None
     
-    img: str = field(init=False)
+    imageName: str = field(init=False)
     text: str = field(init=False)
     correct: bool = field(init=False)
     numberTries: int = field(init=False)
@@ -48,11 +48,11 @@ class Question:
         if type(config) == QuestionConfig:
             self.text = config.text
             self.correctRange = config.correctRange
-            self.solveVariable = config.solveVariableType
+            self.solveVariable = config.solveVariable
             self.questionType = config.questionType
             self.correct = False
             self.numberTries = 0
-            self.img = config.img
+            self.imageName = config.imageName
 
             self.variables = []
             for varConfig in config.variableConfigs:

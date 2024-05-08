@@ -18,10 +18,10 @@ class VariableConfig:
 @dataclass(slots=True)
 class QuestionConfig:
     variableConfigs: list[VariableConfig]
-    solveVariableType: str
+    solveVariable: str
     questionType: str
     text: str
-    img: str
+    imageName: str
     # correctRange default was agreed upon with client at 10%
     correctRange: float = 0.1
 
