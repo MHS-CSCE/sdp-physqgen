@@ -28,7 +28,7 @@ def log_in():
                 request.form["last-name"],
                 request.form["email-address"]
             ),
-            questions=generateQuestions(appConfig),
+            questions=appConfig.generateQuestions(),
             initial=True
         )
         # creation of Session automatically enters data into database

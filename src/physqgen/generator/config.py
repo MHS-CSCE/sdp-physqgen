@@ -42,19 +42,19 @@ class Config:
         
         return cls(qConfigs)
 
-def generateQuestions(config: Config) -> list:
-    """
-    Generates a set of question subclass instances with randomized values based on the passed config data.\n
-    Returns a list of those instances.
-    """
-    questions: list = []
+    def generateQuestions(self) -> list:
+        """
+        Generates a set of question subclass instances with randomized Variable values.\n
+        Returns the list of question subclass instances.
+        """
+        questions: list = []
 
-    for questionConfig in config.questionConfigs:
-        # should change to use some kind of class ID instead of the name directly at some point, to prevent in-code class name changes from breaking old config files
-        # creates the class coresponding with the questionType, with the values from the config, and passes the QuestionConfig on.
-        questions.append(getattr(generator, questionConfig.questionType)(config=questionConfig))
+        for questionConfig in self.questionConfigs:
+            # should change to use some kind of class ID instead of the name directly at some point, to prevent in-code class name changes from breaking old config files
+            # creates the class coresponding with the questionType, with the values from the config, and passes the QuestionConfig on.
+            questions.append(getattr(generator, questionConfig.questionType)(config=questionConfig))
 
-    return questions
+        return questions
 
 def copyQuestionImagesToServerFolder(imageFolderPath: str, movedImagesPath: str) -> None:
     """Copies files from ./configs/images to ./src/physqgen/app/static/images. This will make image files available to ber displayed on the server, if they are referenced in any configs."""
