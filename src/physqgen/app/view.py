@@ -1,7 +1,7 @@
 from os.path import join
 
 from flask import (Blueprint, redirect, render_template, request, session,
-                   url_for)
+                   url_for, Response)
 
 from physqgen.app.constants import DATABASEPATH
 from physqgen.session import Session
@@ -9,13 +9,10 @@ from physqgen.session import Session
 views = Blueprint('views', __name__)
 
 @views.route('/')
-def redirectpage():
+def redirectpage() -> str:
     """
-    Opening page to redirect the user to the login page.
-
-    Returns:
-       (HTML template)
-
+    Opening page to redirect the user to the login page.\n
+    Returns an HTML template.
     """
     return render_template("index.html")
 
@@ -23,14 +20,10 @@ def redirectpage():
 #for image display purposes
 IMG_FOLDER_PATH = join('static', 'images')
 @views.route('/qpage', methods=['GET', 'POST'])
-def qpage():
+def qpage() -> str | Response:
     """
-    Renders question page, processes the question data and sends it to the front end. 
-
-    Returns:
-    (HTML template)
-    (bool)
-    (image file)
+    Renders question page, processes the question data and sends it to the front end.\n
+    Returns an HTML template or a Response.
     """
 
     if request.method == "POST":
@@ -84,9 +77,10 @@ def qpage():
     return render_template("questionpage.html", image=file)
 
 @views.route('/exit', methods = ['GET', 'POST'])
-def exit():
+def exit() -> str:
     """
-    Last page of the generator, used as a transition page to tell the user to exit.
+    Last page of the generator, used as a transition page to tell the user to exit.\n
+    Returns an HTML template.
     """
     try:
         session["session"]
