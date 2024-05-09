@@ -69,6 +69,10 @@ def qpage() -> str | Response:
         session["session"]
     except KeyError:
         return redirect(url_for("auth.log_in"), code=302)
+    
+    # redirect to exit page if have already completed all questions
+    if len(session["session"].questions) == session["session"].questions_correct:
+        return redirect(url_for("views.exit"), code=302)
 
     # fetch image filename for active question
     file = join(IMG_FOLDER_PATH, session["session"]["questions"][session["session"]["active_question"]]["imageName"])
