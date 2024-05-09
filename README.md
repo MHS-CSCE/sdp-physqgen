@@ -104,6 +104,6 @@ These emails will not exist after July of 2024.
 
 | Email | Name |
 |---|---|
-| asing1@ocdsb.ca | Amelia |
-| inich3@ocdsb.ca | Isabelle |
-| sjone12@ocdsb.ca | Stuart |
+| `asing1@ocdsb.ca` | Amelia |
+| `inich3@ocdsb.ca` | Isabelle |
+| `sjone12@ocdsb.ca` | Stuart |
