@@ -31,6 +31,7 @@ def getRelevantQuestionData() -> dict[str, list[tuple]]:
         cursor = conn.cursor()
 
         cursor.execute(
+            # TODO: remove this once database reformat is fixed
             # taken from https://www.sqlitetutorial.net/sqlite-show-tables/
             """
             SELECT 

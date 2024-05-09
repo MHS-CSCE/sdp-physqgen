@@ -72,6 +72,7 @@ The following soures are split into different categories depending on what they 
 |[GeekPython](https://geekpython.in/render-images-from-flask)|Learn how to alter the folder structure to allow Flask to find images needed for front end|
 |[DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3)|Learn about HTML blueprints and how to utilise them|
 |[pymbook.readthedocs.io](https://pymbook.readthedocs.io/en/latest/flask.html#:~:text=Flask%20is%20a%20web%20framework,application%20or%20a%20commercial%20website.)|Understanding Flask and how it functions|
+|[DEV](https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap)|Learn about Flask sessions|
 
 ### Code Use
 
@@ -90,10 +91,12 @@ The following soures are split into different categories depending on what they 
 |[testdriven.io](https://testdriven.io/blog/flask-sessions/)|Taking HTML form data and sending to back end|
 |[stackoverflow](https://stackoverflow.com/questions/22259847/application-not-picking-up-css-file-flask-python)|Used to alter folder structure to allow Flask to find the CSS file|
 |[SENTRY](https://sentry.io/answers/redirect-to-a-url-in-flask/#:~:text=Redirection%20in%20Flask%20can%20be,same%20application%20and%20external%20websites)|Allowing for redirection from question page to exit page|
+|[stackoverflow](https://stackoverflow.com/questions/11903037/copy-all-jpg-file-in-a-directory-to-another-directory-in-python)|Learn of shutil module|
 
 ### Other
 
 - [Example Configuration Image: blueprint](https://blog.blueprintprep.com/mcat/free-mcat-practice-question-physics/)
+- Fonts are sourced from `fonts.googleapis.com`
 
 ## Contact Information
 
