@@ -6,7 +6,8 @@
                 "displacement": {
                     "range": [0, 0],
                     "units": "m",
-                    "displayName": "d"
+                    "displayName": "d",
+                    "decimalPlaces": 0
                 },
                 "time": {
                     "range": [1, 2],
