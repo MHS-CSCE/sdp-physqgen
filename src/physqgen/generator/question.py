@@ -120,7 +120,7 @@ class Question:
         data = {}
         # the check removes both the solve value and the unrelated value
         data["values"] = ", ".join(
-            [f"{var.displayName} = {var.value:.{var.decimalPlaces}f}{var.units}" for var in self.variables if var.name != self.solveVariable]
+            [str(var) for var in self.variables if var.name != self.solveVariable]
         )
         data["text"] = self.text
         data["correctRange"] = self.correctRange

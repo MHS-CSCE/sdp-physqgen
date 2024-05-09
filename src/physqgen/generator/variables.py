@@ -21,6 +21,11 @@ class Variable:
         self.value = range[0] + random() * (range[1] - range[0])
         return
     
+    def __str__(self) -> str:
+        """Assembles the variable as it should be displayed to a student, with its value to the correct decimal places, units, and correct display variable name."""
+        
+        return f"{self.displayName} = {self.value:.{self.decimalPlaces}f}{self.units}"
+    
     @classmethod
     def fromStored(cls, varID: UUID, value: float, **kwargs):
         """Create a Variable from stored data instead of randomizing."""
