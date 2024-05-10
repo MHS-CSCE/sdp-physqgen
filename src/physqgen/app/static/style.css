@@ -128,8 +128,13 @@ label{
     color:black;
 }
 
-.black{
+p{
     color:black;
+    font-size: 17px;
+}
+
+legend{
+    color: black;
 }
 
 form{

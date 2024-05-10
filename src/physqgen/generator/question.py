@@ -140,6 +140,8 @@ class Question:
         )
         data["text"] = self.text
         data["correctRange"] = self.correctRange
+        data["numberTries"] = self.numberTries
+        data["imageName"] = self.imageName
         return data
 
     @property

@@ -23,8 +23,8 @@
                 <hr class="solid">
                 <img src="{{image}}" alt="Image of physics question">
                 <!--Pulling dats from session var: https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap-->
-                <p class="black">{{ session["session"].active_question_data["text"] }}</p>
-                <p class="black">{{ session["session"].active_question_data["values"] }}</p>
+                <p >{{ session["session"].active_question_data["text"] }}</p>
+                <p >{{ session["session"].active_question_data["values"] }}</p>
             </div>
 
             <!--Input for answer: https://learn.shayhowe.com/html-css/building-forms/-->
@@ -33,6 +33,7 @@
                     <label for="answer">Answer:</label>
                     <input type="text" name="answer">
                     <input type="submit" name="submit" value="Send">
+                    <p >{{ "" if session["session"].active_question_data["numberTries"] > 0 else "Incorrect Submission" }}</p>
                 </div>
             </form>
 

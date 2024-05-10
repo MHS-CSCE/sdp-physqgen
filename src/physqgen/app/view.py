@@ -77,7 +77,7 @@ def qpage() -> str | Response:
             return redirect(url_for("views.exit"), code=302)
 
     # fetch image filename for active question
-    file = join(IMG_FOLDER_PATH, sessionData["questions"][sessionData["active_question"]]["imageName"])
+    file = join(IMG_FOLDER_PATH, sessionData["active_question_data"]["imageName"])
     
     return render_template("questionpage.html", image=file)
 
