@@ -69,7 +69,7 @@ def qpage() -> str | Response:
     else:
         # GET request
         # redirect to exit page if have already completed all questions
-        if len(sessionData["questions"]) == sessionData["questions_correct"]:
+        if sessionData["all_questions_correct"]:
             return redirect(url_for("views.exit"), code=302)
 
     # fetch image filename for active question
@@ -99,7 +99,7 @@ def exit() -> str | Response:
         return redirect(url_for("auth.log_in"), code=302)
     
     # check if have gotten all questions correct, redirect to question page if not
-    if sessionObject.questions_correct != len(sessionObject.questions):
+    if not sessionObject.allQuestionsCorrect:
         return redirect(url_for("views.qpage"), code=302)
 
     return render_template("exit.html")
