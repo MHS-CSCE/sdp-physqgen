@@ -13,10 +13,11 @@ Information about what and how students complete questions is stored, and can be
 3. Open a terminal in the selected folder. On Windows, this can be done by clicking in the blank region next to the path in a file explorer window, replacing the text with `cmd`, and hitting \<Enter>.
     - Use this terminal to enter all of the following commands.
 4. In the terminal, enter the following: `git clone https://github.com/MHS-CSCE/sdp-physqgen.git`, and hit enter.
-5. Create a python virtual environment in the folder. This can be done with the following command: `python -m venv .venv`
-6. Initialize the virtual environment with: `.venv\\Scripts\\activate`.
+5. Enter the command `cd sdp-physqgen` to move into the newly created project folder.
+6. Create a python virtual environment in the folder. This can be done with the following command: `python -m venv .venv`
+7. Initialize the virtual environment with: `.venv\\Scripts\\activate`.
     - IMPORTANT: This also has to be done whenever you run the server or admin app.
-7. Install the project dependencies with: `pip install .`. The virtual environment should still be active.
+8. Install the project dependencies with: `pip install .`. The virtual environment should still be active.
 
 ## Running and Accessing the Website and Admin app
 
