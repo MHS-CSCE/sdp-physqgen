@@ -12,74 +12,90 @@ from physqgen.generator.variables import Variable
 @dataclass
 class Question:
     """
-    Represents a question. Generated using the variableConfig or variableValues parameters. If variableValues is provided, id should also be. str key is variable name in lowercase, and the tuple value is the two bounds of the range for the variable randomization.\n
-    Variables that are not set by the config are not created as private attributes, even if they exist in the enum.\n
-    To use, create properties with name format f'{enum.value.name.lower()}' for each variable in subclass variables enum, which reference the attributes that are created from the variables enum values. They have format f'_{enum.value.name.lower()}'.\n
+    Base class for all question implementations. Can be generated from a configution, which creates a question with random Variables, or from stored data.\n
+    Subclasses should implement snake case properties for each POSSIBLE_VARIABLE, which pull the value if it is set or solve for it if not. See KinematicsQuestion for an example.\n
     Attributes:\n
-        id (str): UUID for the question,\n
-        text (str): body text of the question,\n
-        img (object): not implemented,\n
-        correctRange (float): a float representing the allowed percentage variance from the calculated answer when determining whether an answer is correct,\n
-        solveVariable (str): string representation of the variable enum value that will be fetched by the .answer property in lowercase,\n
-        variables (Enum): the variables, each with a corresponding generated private attribute containing their generator and defined properties including verification to access them,\n\n
-        also has attributes for each value in variables, with format f'_{enum.value.name.lower()}' which have float values
-    """ # TODO: fix docstring for refactor to more classes
-    solveVariable: str = field(init=False)
-    variables: list[Variable] = field(init=False)
-    questionType: str = field(init=False)
-    correctRange: float = field(init=False)
+        solveVariable (str): value of the name property of the Variable to treat as the answer,\n
+        variables (list[Variable]): relevant variables for the question, may not include Variables for every name in POSSIBLE_VARIABLES if they are not relevant,\n
+        questionType (str): class name of the question subclass, for ease of access,\n
+        correctRange (float): allowed factor variance from the calculated answer when determining whether a submission is correct,\n
+        imageName (str): filename of the image to display,\n
+        text (str): displayed text,\n
+        correct (bool): whether the question has been completed,\n
+        numberTries (int): number of submissions checked,\n
+        id (UUID): question uuid,\n
+        POSSIBLE_VARIABLES (tuple): class variable containing the uppercase names of every possible variable for the question subclass. Needs to be overriden in inheriting classes.
+    """
+    solveVariable: str
+    variables: list[Variable]
+    questionType: str
+    correctRange: float
 
-    # specified per-question
-    config: InitVar[QuestionConfig | None] = None
-    storedData: InitVar[dict | None] = None
-    
-    imageName: str = field(init=False)
-    text: str = field(init=False)
-    correct: bool = field(init=False)
-    numberTries: int = field(init=False)
+    imageName: str
+    text: str
+    correct: bool
+    numberTries: int
 
-    id: UUID = field(init=False, default_factory=uuid4)
+    id: UUID = field(default_factory=uuid4)
 
     # needs to be overriden in inheriting classes
     POSSIBLE_VARIABLES = tuple()
 
-    def __post_init__(self, config: QuestionConfig | None, storedData: dict | None) -> None:
-        """Initializes Question."""
-        if type(config) == QuestionConfig:
-            self.text = config.text
-            self.correctRange = config.correctRange
-            self.solveVariable = config.solveVariable
-            self.questionType = config.questionType
-            self.correct = False
-            self.numberTries = 0
-            self.imageName = config.imageName
+    def __post_init__(self) -> None:
+        # use fromStored() to create a Variable with a predefined value, this is the answer
+        self.variables.append(Variable.fromStored(name=self.solveVariable, value=getattr(self, self.solveVariable), varID=uuid4()))
+        return
 
-            self.variables = []
-            for varConfig in config.variableConfigs:
-                self.variables.append(varConfig.getRandomVariable())
+    @classmethod
+    def fromStoredData(cls, questionData: dict):
+        """Creates an instance of cls from the passed data."""
+        storedVars: list[Variable] = []
+        for varData in questionData["variableData"]:
+            storedVars.append(
+                Variable.fromStored(
+                    name=varData["NAME"],
+                    value=varData["VALUE"],
+                    units=varData["UNITS"],
+                    displayName=varData["DISPLAY_NAME"],
+                    varID=UUID(varData["VARIABLE_UUID"]),
+                    decimalPlaces=varData["DECIMAL_PLACES"]
+                )
+            )
+        
+        return cls(
+            solveVariable=questionData["SOLVE_VARIABLE"],
+            variables=storedVars,
+            questionType=questionData["questionType"],
+            correctRange=questionData["CORRECT_RANGE"],
+            imageName=questionData["IMAGE_PATH"],
+            text=questionData["TEXT"],
+            correct=questionData["CORRECT"],
+            numberTries=questionData["NUMBER_TRIES"],
+            id=UUID(questionData["QUESTION_UUID"])
+        )
+    
+    @classmethod
+    def fromConfiguration(cls, questionConfig: QuestionConfig):
+        """Creates an randomized instance of cls from the passed configuration."""
+        randomVars: list[Variable] = []
+        for varConfig in questionConfig.variableConfigs:
+            randomVars.append(varConfig.getRandomVariable())
 
-        elif type(storedData) == dict:
-            # overwrites generated data
-            self.text = storedData["TEXT"]
-            self.correctRange = storedData["CORRECT_RANGE"]
-            self.id = UUID(storedData["QUESTION_UUID"])
-            self.correct = storedData["CORRECT"]
-            self.numberTries = storedData["NUMBER_TRIES"]
-            self.solveVariable = storedData["SOLVE_VARIABLE"]
-            self.questionType = storedData["questionType"]
-            self.imageName =  storedData["IMAGE_PATH"]
-
-            self.variables: list[Variable] = []
-            # data may need to reference a separate table of variable data
-            for varData in storedData["variableData"]:
-                self.variables.append(Variable.fromStored(name=varData["NAME"], value=varData["VALUE"], units=varData["UNITS"], displayName=varData["DISPLAY_NAME"], varID=UUID(varData["VARIABLE_UUID"]), decimalPlaces=varData["DECIMAL_PLACES"]))
-        else:
-            raise TypeError(f"Both variableConfig and variableValues were not dicts holding required data. One of them must be defined in order to construction the question.")
+        return cls(
+            solveVariable=questionConfig.solveVariable,
+            variables=randomVars,
+            questionType=questionConfig.questionType,
+            correctRange=questionConfig.correctRange,
+            imageName=questionConfig.imageName,
+            text=questionConfig.text,
+            correct=False,
+            numberTries=0
+        )
 
     @classmethod
     def fromUUID(cls, databasePath: str, qType: str, questionID: str):
-        """Fetches the question data for the given question UUID from the database."""
-        return cls(storedData=Question.fetchQuestionData(databasePath, qType, questionID))
+        """Creates an instance of cls from the question data in the database for the given question UUID."""
+        return cls.fromStoredData(Question.fetchQuestionData(databasePath, qType, questionID))
 
     @property
     def answer(self) -> float:
@@ -92,7 +108,7 @@ class Question:
         raise RuntimeError(f"Fetching answer for question {self} failed.")
 
     def check_answer(self, submitted: float) -> bool:
-        """Returns True if the submitted answer is within the correctRange variance from the question's calculated answer."""
+        """Returns whether or not the submitted answer is within the correctRange factor variance (0.1=10%) from the question's calculated answer."""
         firstBound = self.answer*(1-self.correctRange)
         secondBound = self.answer*(1+self.correctRange)
         # needs two checks, one for if the answer is negative and one if positive
@@ -116,9 +132,9 @@ class Question:
 
     @property
     def websiteDisplayData(self) -> dict:
-        """Returns question data that needs to be accessible on website, that isn't stored directly."""
+        """Returns question data that needs to be accessible on website, that isn't stored directly. This allows it to be stored in Flask session."""
         data = {}
-        # the check removes both the solve value and the unrelated value
+        # the check removes both the solve value and variables that are not defined for this specific question
         data["values"] = ", ".join(
             [str(var) for var in self.variables if var.name != self.solveVariable]
         )
@@ -128,6 +144,7 @@ class Question:
 
     @property
     def varNames(self) -> list[str]:
+        """Returns a list of the names of the variables that are actually defined for the question."""
         varNames = []
         for var in self.variables:
             varNames.append(var.name)
@@ -200,24 +217,19 @@ class Question:
 
 @dataclass
 class KinematicsQuestion(Question):
-    """Kinematics questions with constant acceleration. Inherits attributes from Question."""
+    """
+    Kinematics questions with constant acceleration. Inherits all attributes from Question.\n
+    Implements properties for displacement, initial_velocity, final_velocity, time, and acceleration.\n
+    Overrides POSSIBLE_VARIABLES with uppercase variants of the above properties.
+    """
 
-    # variables = Enum("KinematicsVariables", "DISPLACEMENT, INITIAL_VELOCITY, FINAL_VELOCITY, TIME, ACCELERATION")
     POSSIBLE_VARIABLES = ("DISPLACEMENT", "INITIAL_VELOCITY", "FINAL_VELOCITY", "TIME", "ACCELERATION")
 
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        value = self.solve()
-        self.variables.append(Variable.fromStored(name=self.solveVariable, value=value, varID=uuid4()))
-        return
+        return super().__init__(*args, **kwargs)
 
     # TODO: restrict variables/add skips in solvers for variables that could /0, or where a sqrt could result in a negative answer but code outputs positive
-
-    def solve(self) -> float:
-        """Solve for the value of the solveVariable, based on the given variables."""
-        
-        # fetch the property that solves for the wanted value
-        return getattr(self, self.solveVariable)
+    # or, add documentation warning about the same
 
     @property
     def displacement(self) -> float:
