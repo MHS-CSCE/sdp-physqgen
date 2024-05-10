@@ -25,6 +25,12 @@ def qpage() -> str | Response:
     Renders question page, processes the question data and sends it to the front end.\n
     Returns an HTML template or a Response.
     """
+    # redirect to login if not logged in
+    try:
+        # also extracts session data for ease of use
+        sessionData: dict = session["session"]
+    except KeyError:
+        return redirect(url_for("auth.log_in"), code=302)
 
     if request.method == "POST":
         answer: str = request.get_data("answer", as_text=True)
@@ -32,7 +38,7 @@ def qpage() -> str | Response:
         # is currently formatted: "answer={actual value}&submit=Send"
         answer = answer[len("answer="):-1*len("&submit=Send")]
 
-        sessionObject = Session.recreateSession(DATABASEPATH, session["session"])
+        sessionObject = Session.recreateSession(DATABASEPATH, sessionData)
         try:
             activeQuestion = sessionObject.questions[sessionObject.active_question]
 
@@ -56,7 +62,6 @@ def qpage() -> str | Response:
         
         except ValueError:
             # don't count as a submission if the input is not a float value
-            # TODO: catch the error and notify user somehow
             pass
 
         # pass data back, so page updates and etc.
@@ -64,20 +69,15 @@ def qpage() -> str | Response:
 
         return redirect(url_for("views.qpage"), code=302)
 
-    # redirect to login if not logged in
-    try:
-        session["session"]
-    except KeyError:
-        return redirect(url_for("auth.log_in"), code=302)
-    
+    # GET request
+
     # redirect to exit page if have already completed all questions
-    if len(session["session"].questions) == session["session"].questions_correct:
+    if len(sessionData["questions"]) == sessionData["questions_correct"]:
         return redirect(url_for("views.exit"), code=302)
 
     # fetch image filename for active question
-    file = join(IMG_FOLDER_PATH, session["session"]["questions"][session["session"]["active_question"]]["imageName"])
+    file = join(IMG_FOLDER_PATH, sessionData["questions"][sessionData["active_question"]]["imageName"])
     
-    # get method is included in the no-if path
     return render_template("questionpage.html", image=file)
 
 @views.route('/exit', methods = ['GET', 'POST'])
