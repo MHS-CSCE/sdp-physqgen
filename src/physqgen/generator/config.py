@@ -1,19 +1,30 @@
 from dataclasses import dataclass
+from os import listdir
+from os.path import exists, join
+from shutil import copy as shcopy
 
 from physqgen import generator
-
-from shutil import copy as shcopy
-from os.path import join, exists
-from os import listdir
+from physqgen.generator.variables import Variable
 
 
 @dataclass(slots=True)
 class VariableConfig:
+    """
+    Configuration for a specific variable in a question. Can be used to generate random Variables.\n
+    Attributes:\n
+        range is a list containing the upper and lower bounds the value should be randomized within,\n
+        See Variable class for additional attributes\n
+            variableType is refered to as name in Variable
+    """
     variableType: str
     range: list[float | int]
     units: str
     displayName: str
     decimalPlaces: int = 3
+
+    def getRandomVariable(self) -> Variable:
+        """Generates a Variable with random value based on this configuration."""
+        return Variable(range=self.range, name=self.variableType, units=self.units, displayName=self.displayName, decimalPlaces=self.decimalPlaces)
 
 @dataclass(slots=True)
 class QuestionConfig:

@@ -56,7 +56,7 @@ class Question:
 
             self.variables = []
             for varConfig in config.variableConfigs:
-                self.variables.append(Variable(range=varConfig.range, name=varConfig.variableType, units=varConfig.units, displayName=varConfig.displayName, decimalPlaces=varConfig.decimalPlaces))
+                self.variables.append(varConfig.getRandomVariable())
 
         elif type(storedData) == dict:
             # overwrites generated data
