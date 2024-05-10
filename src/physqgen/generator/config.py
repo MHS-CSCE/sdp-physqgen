@@ -49,7 +49,7 @@ class QuestionConfig:
         """Generates a Question with random Variables based on this configuration."""
         # should change to use some kind of class ID instead of the name directly at some point, to prevent in-code class name changes from breaking old config files
         # creates the class coresponding with the questionType, with the values from the config, and passes the QuestionConfig on.
-        return getattr(generator, self.questionType)(config=self)
+        return getattr(generator, self.questionType).fromConfiguration(self)
 
 @dataclass(slots=True)
 class Config:
