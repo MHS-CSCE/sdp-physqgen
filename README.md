@@ -2,7 +2,7 @@
 
 This program is intended to allow a teacher to easily host a website to students on the same wifi network. This website gives the students a series of questions, which can be configured directly by the teacher, with different randomized values for each variable. This is intended to allow students to focus more on the question solving process than on the specific answers they get.
 
-The installation and running process is relatively simple. Configuration of questions is currently done by creating and editing `.json` format files, with a document below explaining process.
+The installation and running process is relatively simple. Configuration of questions is currently done by creating and editing `.json` format files, with a document below explaining the process.
 
 Information about what and how students complete questions is stored, and can be viewed easily using the Admin app.
 
