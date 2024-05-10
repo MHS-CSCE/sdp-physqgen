@@ -4,7 +4,6 @@ html {
 }
 
 body {
-    height: 125vh;
     margin-top: 60px;
     padding: 30px;
     background-size: cover;
@@ -53,7 +52,7 @@ hr.solid {
     margin-bottom:20px
   }
 
-/*add padding to question on quesiton page*/
+/*add padding to question on question page*/
 .questioncontainer{
     padding-left: 10%;
     padding-right: 10%;
