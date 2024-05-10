@@ -50,18 +50,14 @@ def qpage() -> str | Response:
             activeQuestion.correct = activeQuestion.check_answer(float(answer))
             
             # after assignment to only increment if is a valid float
-            activeQuestion.numberTries += 1
 
-            # increment to next active question and reload
-            if ((sessionObject.active_question + 1) < len(sessionObject.questions)) and activeQuestion.correct:
-                sessionObject.incrementActiveQuestionData()
-            else:
-                # update separately if it isn't handled by the increment
-                sessionObject.updateSessionDataInDatabase()
-                
-                # correct & last question
-                if activeQuestion.correct:
-                    return redirect(url_for("views.exit"), code=302)
+            # whether to increment to next active question
+            increment = ((sessionObject.active_question + 1) < len(sessionObject.questions)) and activeQuestion.correct
+            # reload stored data, also allows checking whether last submission was correct
+            sessionObject.updateActiveQuestionData(increment)
+            # correct & last question
+            if not increment and activeQuestion.correct:
+                return redirect(url_for("views.exit"), code=302)
         
             # pass data back, so any change are visible on page
             # doesn't need to happen if invalid answer was submitted

@@ -58,10 +58,15 @@ class Session:
 
         return obj
 
-    def incrementActiveQuestionData(self) -> None:
+    def updateActiveQuestionData(self, increment: bool = False) -> None:
         """Updates the question data stored in the active_question_data attribute to the current active_question. Also commits data to database."""
         self.updateSessionDataInDatabase()
-        self.active_question += 1
+        # update number of tries
+        self.questions[self.active_question].numberTries += 1
+        # if got correct, aka passed increment parameter, then update active question idnex
+        if increment:
+            self.active_question += 1
+        # update data either way
         self.active_question_data = self.questions[self.active_question].websiteDisplayData
         self.updateSessionDataInDatabase()
         return

@@ -93,6 +93,7 @@ The following soures are split into different categories depending on what they 
 |[stackoverflow](https://stackoverflow.com/questions/22259847/application-not-picking-up-css-file-flask-python)|Used to alter folder structure to allow Flask to find the CSS file|
 |[SENTRY](https://sentry.io/answers/redirect-to-a-url-in-flask/#:~:text=Redirection%20in%20Flask%20can%20be,same%20application%20and%20external%20websites)|Allowing for redirection from question page to exit page|
 |[stackoverflow](https://stackoverflow.com/questions/11903037/copy-all-jpg-file-in-a-directory-to-another-directory-in-python)|Learn of shutil module|
+|[launch_code education](https://education.launchcode.org/lchs/chapters/more-flask/template-conditionals.html)|Jinja3 template if blocks|
 
 ### Other
 
