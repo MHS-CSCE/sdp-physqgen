@@ -43,7 +43,7 @@ The `"solveVariable"` key maps to the name of the variable that the question is 
 
 The `"text"` key maps to text of the question displayed to the student.
 
-The `"imageName"` key must be the name of an image file in the image folder in the configs folder. You can add your own images there, and reference them here, and they will show up on the site.
+The `"imageName"` key must be the name of an image file in the image folder in the configs folder. You can add your own images there, and reference them here, and they will show up on the site. These images are stored permanently in `src/physqgen/app/static/images`, so if you want to reuse a name, you'll have to go to that folder and delete the previously copied image.
 
 The optional key `"correctRange"` maps to a float representing the allowed variance from the calculated answer for the students' submitted answers. It can be omitted, in which case the default value is 10%, or 0.1.
 
