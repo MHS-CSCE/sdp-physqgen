@@ -28,10 +28,6 @@ def qpage() -> str | Response:
         sessionData: dict = session["session"]
     except KeyError:
         return redirect(url_for("auth.log_in"), code=302)
-    # happens when a session that no longer exists tries to access page, as the data fetched from the database will be None and not behave correctly
-    # this should only happen if the database is cleared mid-session, but may as well redirect instead of showing error page
-    except TypeError:
-        return redirect(url_for("auth.log_in"), code=302)
 
     if request.method == "POST":
         answer: str = request.get_data("answer", as_text=True)
@@ -39,7 +35,13 @@ def qpage() -> str | Response:
         # is currently formatted: "answer={actual value}&submit=Send"
         answer = answer[len("answer="):-1*len("&submit=Send")]
 
-        sessionObject = Session.recreateSession(DATABASEPATH, sessionData)
+        try:
+            sessionObject = Session.recreateSession(DATABASEPATH, sessionData)
+        # happens when a session that no longer exists tries to access page, as the data fetched from the database will be None and not behave correctly
+        # this should only happen if the database is cleared mid-session, but may as well redirect instead of showing error page
+        except TypeError:
+            return redirect(url_for("auth.log_in"), code=302)
+    
         try:
             activeQuestion = sessionObject.questions[sessionObject.active_question]
 
@@ -90,14 +92,15 @@ def exit() -> str | Response:
         session["session"]
     except KeyError:
         return redirect(url_for("auth.log_in"), code=302)
+    
+    try:
+        # load session, updates the counter for number of questions correct
+        sessionObject = Session.recreateSession(DATABASEPATH, session["session"])
+        session["session"] = sessionObject
     # happens when a session that no longer exists tries to access page, as the data fetched from the database will be None and not behave correctly
     # this should only happen if the database is cleared mid-session, but may as well redirect instead of showing error page
     except TypeError:
         return redirect(url_for("auth.log_in"), code=302)
-    
-    # load session, updates the counter for number of questions correct
-    sessionObject = Session.recreateSession(DATABASEPATH, session["session"])
-    session["session"] = sessionObject
     
     # check if have gotten all questions correct, redirect to question page if not
     if sessionObject.questions_correct != len(sessionObject.questions):

@@ -2,7 +2,7 @@ from flask import (Blueprint, redirect, render_template, request, session,
                    url_for)
 
 from physqgen.app import DATABASEPATH
-from physqgen.app.register_config import appConfig
+from physqgen.generator.config import appConfig
 from physqgen.session import LoginInfo, Session
 
 #defining views for routes

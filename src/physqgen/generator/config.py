@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from json import load
 from os import listdir
 from os.path import exists, join
 from shutil import copy as shcopy
@@ -82,3 +83,13 @@ def copyQuestionImagesToServerFolder(imageFolderPath: str, movedImagesPath: str)
     for originalFileName in listdir(sourcePath := join(imageFolderPath)):
         if not exists(movedFilePath := join(movedImagesPath, originalFileName)):
             shcopy(join(sourcePath, originalFileName), movedFilePath)
+
+def registerConfig(configFolderPath: str) -> Config:
+    """Stores the current Config for duration of program run."""
+    # get config on run
+    global appConfig
+    with open(join(configFolderPath, "active_config.json")) as file:
+        with open(join(configFolderPath, load(file)["activeConfigName"])) as configFile:
+            appConfig = Config.fromFile(load(configFile))
+    return appConfig
+
