@@ -62,17 +62,20 @@ hr.solid {
 
 /*Background of question that shows image and description of question*/
 .question{
-    /* background: blue; */
     padding:2%;
     text-align:center;
     background:white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 /*Answer submit area*/
 .submit{
     background: white;
     padding: 2%;
-    padding-left:10%
+    padding-left:10%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 /*Button display area*/
