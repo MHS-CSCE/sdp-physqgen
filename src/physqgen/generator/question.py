@@ -37,7 +37,7 @@ class Question:
     uuid: UUID = field(default_factory=uuid4)
 
     # needs to be overriden in inheriting classes
-    questionType = str
+    questionType = ""
 
     @classmethod
     def fromConfig(cls, questionConfig):
@@ -61,7 +61,8 @@ class Question:
         question.variables.append(
             Variable(
                 variableName=questionConfig.answerVariableName,
-                value=getattr(questionClass, questionConfig.answerVariableName.lower())
+                # this is where all the properties added to subclasses are actually used to get answer
+                value=getattr(question, questionConfig.answerVariableName.lower())
             )
         )
 
@@ -161,6 +162,74 @@ class Question:
             "numberTries": self.numberTries,
             "imageFilename": self.imageFilename
         }
+    
+    def addToDatabase(self, databasePath: str, sessionUUID: str | UUID) -> None:
+        """Adds this Questions data to the databse, including contained Variables."""
+        sql = '''
+            INSERT INTO QUESTIONS (
+                QUESTION_UUID,
+                SESSION_UUID,
+                QUESTION_TYPE,
+                NUMBER_TRIES,
+                CORRECT,
+                ACTIVE,
+                TEXT,
+                ANSWER_VARIABLE_NAME,
+                IMAGE_FILENAME,
+                CORRECT_LEEWAY
+            ) VALUES (
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?
+            )
+        '''
+        replacements = (
+            str(self.uuid),
+            str(sessionUUID),
+            self.questionType,
+            self.numberTries,
+            self.correct,
+            self.active,
+            self.text,
+            self.answerVariableName,
+            self.imageFilename,
+            self.correctLeeway
+        )
+        executeOnDatabase(databasePath, sql, replacements)
+
+        for variable in self.variables:
+            variable.addToDatabase(databasePath, self.uuid)
+        
+        return
+        
+    def updateDatabase(self, databasePath: str) -> None:
+        """Updates Question data stored in database."""
+        sql = '''
+            UPDATE QUESTIONS
+            SET
+                NUMBER_TRIES=?,
+                CORRECT=?,
+                ACTIVE=?,
+            WHERE
+                QUESTION_UUID=?
+        '''
+        replacements = (
+            self.numberTries,
+            self.correct,
+            self.active,
+            self.uuid
+        )
+        executeOnDatabase(databasePath, sql, replacements)
+        
+        # nothing in Variables changes over the course of a sesssion, don't need to update
+        return
     
     
 @dataclass

@@ -25,6 +25,7 @@ def qpage() -> str | Response:
     # redirect to login if not logged in. this key is only added during the login process
     try:
         session["user"]
+        print(session["user"])
     except KeyError:
         return redirect(url_for("auth.log_in"), code=302)
 
@@ -48,7 +49,7 @@ def qpage() -> str | Response:
 
             # checks whether the submission is correct, and if so activates a new question if there is any that are not complete
             # TODO: should update number tries, check submission, increment if not last question, update data in database
-            sess.updateBasedOnSubmission(submission)
+            sess.update(submission)
             
             # update data visible on frontend
             # doesn't need to happen if invalid submission was submitted
@@ -74,17 +75,8 @@ def exit() -> str | Response:
     except KeyError:
         return redirect(url_for("auth.log_in"), code=302)
     
-    try:
-        # load session, updates the counter for number of questions correct
-        sess = Session.recreateSession(DATABASEPATH, session["user"])
-        session["user"] = sess
-    # happens when a session that no longer exists tries to access page, as the data fetched from the database will be None and not behave correctly
-    # this should only happen if the database is cleared mid-session, but may as well redirect instead of showing error page
-    except TypeError:
-        return redirect(url_for("auth.log_in"), code=302)
-    
     # check if have gotten all questions correct, redirect to question page if not
-    if not sess.allQuestionsCorrect():
+    if not session["user"]["sessionComplete"]:
         return redirect(url_for("views.qpage"), code=302)
 
     return render_template("exit.html")

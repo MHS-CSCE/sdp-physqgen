@@ -46,7 +46,7 @@ def createVariableTable(databasePath: str) -> None:
     sql = '''CREATE TABLE VARIABLES(
         VARIABLE_UUID CHAR NOT NULL PRIMARY KEY,
         QUESTION_UUID CHAR NOT NULL,
-        NAME CHAR NOT NULL,
+        VARIABLE_NAME CHAR NOT NULL,
         VALUE FLOAT NOT NULL,
         UNITS CHAR NOT NULL,
         DISPLAY_NAME CHAR NOT NULL,

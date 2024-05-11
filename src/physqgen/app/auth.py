@@ -16,8 +16,7 @@ def log_in() -> str:
     """
     #getting input from the form, passing it into the session class
     if request.method == "POST":
-
-        session["user"] = Session(
+        sess = Session(
             DATABASEPATH,
             LoginInfo(
                 #setting the form input as the login info
@@ -26,10 +25,15 @@ def log_in() -> str:
                 request.form["email-address"]
             ),
             questions=appConfig.generateQuestions()
-        ).frontendData
-        # creation of Session automatically enters data into database
+        )
+        
+
+        # add new session to the database
+        sess.addToDatabase()
 
         # https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap
+        session["user"] = sess.frontendData
+
         return redirect(url_for("views.qpage"), code=302)
     else:
         #rendering the site

@@ -50,17 +50,8 @@ class Session:
     databasePath: str
     loginInfo: LoginInfo
     questions: list[Question]
-    uuid: str = field(default_factory=uuid4)
+    uuid: UUID = field(default_factory=uuid4)
 
-    def __post_init__(self, initial: bool) -> None:
-        """Load in active question data wanted in cookies for website. initial should be set to True if this Session is not already stored in the database."""
-        # TODO: fix the initial session creation steps, maybe do a placeholder commit first and then just update everything
-        if initial:
-            self.commitSessionToDatabase()
-        else:
-            self.updateSessionDataInDatabase()
-        return
-    
     @property
     def frontendData(self) -> dict:
         """Returns a dict containing all relevant information for the website and for reconstructing the Session from the database."""
@@ -116,108 +107,70 @@ class Session:
             loginInfo=LoginInfo.fromDatabase(databasePath, sessionUUID),
             questions=Session.getAllQuestions(sessionUUID),
         )
+    
+    def setNewActiveQuestion(self) -> bool:
+        """Tries to find a Question in questions that is has not been completed to make the new activeQuestion. Returns whether or not this was successful."""
+        for question in self.questions:
+            if not question.correct:
+                question.active = True
+                return True
+        else:
+            return False
+    
+    def addToDatabase(self) -> None:
+        """Add this Session's data to the database, including contained Questions and Variables. Only works if is not already in database."""
+        # commit self
+        sql = '''
+            INSERT INTO SESSIONS (
+                SESSION_UUID,
+                FIRST_NAME,
+                LAST_NAME,
+                EMAIL
+            ) VALUES (
+                ?,
+                ?,
+                ?,
+                ?
+            )
+        '''
+        replacements = (
+            str(self.uuid),
+            self.loginInfo.firstName,
+            self.loginInfo.lastName,
+            self.loginInfo.email
+        )
+        executeOnDatabase(self.databasePath, sql, replacements)
 
-    def updateActiveQuestionData(self, increment: bool = False) -> None:
-        """
-        Updates the question data stored in the active_question_data attribute. Also commits any changes to the database.\n
-        If increment is true, it will increment the currently active question and update accordingly.
-        """
-        self.updateSessionDataInDatabase()
-        # if got correct, aka passed increment parameter, then update active question idnex
-        if increment:
-            self.active_question += 1
-        # update data either way for cookie
-        self.active_question_data = self.activeQuestion.websiteDisplayData
-        self.updateSessionDataInDatabase()
+        # commit questions. they will commit their own variables
+        for question in self.questions:
+            question.addToDatabase(self.databasePath, self.uuid)
+
         return
+
+    def update(self, submission: float) -> None:
+        """
+        Update Session and activeQuestion based on contents of submission.\n
+        Adds one to activeQuestion's numberTries.\n
+        Checks submission and updates activeQuestion as needed.\n
+        Updates database with new info before returning.
+        """
+        self.activeQuestion.numberTries += 1
+
+        self.activeQuestion.correct = self.activeQuestion.checkSubmission(submission)
+
+        if self.activeQuestion.correct:
+            self.activeQuestion.active = False
         
-    def commitSessionToDatabase(self) -> None:
-        """Creates rows in the appropriate database tables for the questions and variables for this Session."""
-        # TODO: update docstring with any weird behaviours after database is reformatted, like any possible errors
-        with connect(self.databasePath) as connection:
-            cursor = connection.cursor()
-            for question in self.questions:
+            # set new active question if possible
+            # if not possible, ignore, as that means all questions are complete
+            self.setNewActiveQuestion()
 
-                # TODO: prevent sql injection. doesn't allow setting table names from input, can only outsource last bit
-                sql = f"""
-                INSERT INTO {question.questionType} (
-                    QUESTION_UUID,
-                    FIRST_NAME,
-                    LAST_NAME,
-                    EMAIL,
-                    NUMBER_TRIES,
-                    CORRECT,
-                    SOLVE_VARIABLE,
-                    TEXT,
-                    IMAGE_PATH,
-                    CORRECT_RANGE,
-                    {",".join(question.varNames).upper()}
-                )
-                VALUES (
-                    "{question.id}",
-                    "{self.login_info.first_name}",
-                    "{self.login_info.last_name}",
-                    "{self.login_info.email}",
-                    {question.numberTries},
-                    "{question.correct}",
-                    "{question.solveVariable}",
-                    "{question.text}",
-                    "{question.imageName}",
-                    {question.correctRange},
-                    "{"\", \"".join((str(question.getValue(name, id=True)) for name in question.varNames))}"
-                )
-                """
-
-                cursor.execute(sql)
-            
-                # commit variables to separate table
-                for variable in question.variables:
-                    variableSQL = f'''
-                    INSERT INTO VARIABLES (
-                        VARIABLE_UUID,
-                        NAME,
-                        VALUE,
-                        UNITS,
-                        DISPLAY_NAME,
-                        DECIMAL_PLACES
-                    )
-                    VALUES (
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?
-                    )
-                    '''
-
-                    cursor.execute(
-                        variableSQL,
-                        [str(variable.varID), variable.name, variable.value, variable.units, variable.displayName, variable.decimalPlaces]
-                    )
-        
-        # just in case
-        connection.close()
-
+        self.updateDatabase()
         return
     
-    def updateSessionDataInDatabase(self) -> None:
-        """Updates rows in the appropriate database tables for the Session's active question."""
-        with connect(self.databasePath) as connection:
-            cursor = connection.cursor()
-            # TODO: prevent sql injection
-
-            sql = f"""
-            UPDATE {self.activeQuestion.questionType}
-            SET
-                NUMBER_TRIES="{self.activeQuestion.numberTries}",
-                CORRECT="{self.activeQuestion.correct}"
-            WHERE
-                QUESTION_UUID="{self.activeQuestion.id}"
-            """
-            cursor.execute(sql)
-            
-        # just in case
-        connection.close()
+    def updateDatabase(self) -> None:
+        """Updates Session data, including Questions, stored in database."""
+        for question in self.questions:
+            question.updateDatabase(self.databasePath)
 
         return

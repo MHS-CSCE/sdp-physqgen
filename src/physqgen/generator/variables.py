@@ -83,3 +83,37 @@ class Variable:
             displayName=variableConfig.displayName,
             decimalPlaces=variableConfig.decimalPlaces
         )
+    
+    def addToDatabase(self, databasePath: str, questionUUID: str | UUID) -> None:
+        """Add this Variables data to the database."""
+        sql = '''
+            INSERT INTO VARIABLES (
+                VARIABLE_UUID,
+                QUESTION_UUID,
+                VARIABLE_NAME,
+                VALUE,
+                UNITS,
+                DISPLAY_NAME,
+                DECIMAL_PLACES
+            ) VALUES (
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?
+            )
+        '''
+        replacements = (
+            str(self.uuid),
+            str(questionUUID),
+            self.variableName,
+            self.value,
+            self.units,
+            self.displayName,
+            self.decimalPlaces
+        )
+        executeOnDatabase(databasePath, sql, replacements)
+
+        return
