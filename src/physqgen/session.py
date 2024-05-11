@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from uuid import UUID, uuid4
-from typing import Literal
 
 from physqgen.database import executeOnDatabase
 from physqgen.generator.question import Question

@@ -4,8 +4,8 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
 
-from physqgen.admin.constants import DATABASEPATH
-from physqgen.admin.getAdminData import getRelevantQuestionData
+from physqgen.admin import DATABASEPATH
+from physqgen.admin.get_admin_data import getRelevantQuestionData
 from physqgen.database import createDatabase
 from physqgen.generator import Config
 

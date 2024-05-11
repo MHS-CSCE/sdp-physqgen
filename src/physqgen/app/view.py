@@ -1,9 +1,9 @@
 from os.path import join
 
-from flask import (Blueprint, redirect, render_template, request, session,
-                   url_for, Response)
+from flask import (Blueprint, Response, redirect, render_template, request,
+                   session, url_for)
 
-from physqgen.app.constants import DATABASEPATH, IMG_FOLDER_PATH
+from physqgen.app import DATABASEPATH, IMG_FOLDER_PATH
 from physqgen.session import Session
 
 views = Blueprint('views', __name__)

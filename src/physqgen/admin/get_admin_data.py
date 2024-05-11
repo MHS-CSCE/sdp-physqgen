@@ -1,6 +1,6 @@
 from sqlite3 import connect
 
-from physqgen.admin.constants import DATABASEPATH
+from physqgen.admin import DATABASEPATH
 
 
 def addStudentData(dict: dict, parsedRow: tuple) -> None:

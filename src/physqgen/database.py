@@ -1,6 +1,7 @@
 from sqlite3 import connect
 from typing import Iterator
 
+
 def executeOnDatabase(databasePath: str, sql: str, replacements: Iterator = ()) -> list:
     """Executes the given sql with the given replacements on the database and returns the results of cursor.fetchall(). This can be used for committing, updating, or fetching."""
     with connect(databasePath) as connection:
