@@ -4,7 +4,7 @@ from os import listdir
 from os.path import exists, join
 from shutil import copy as shcopy
 
-from physqgen import generator
+from physqgen.generator.question import QUESTION_CONSTRUCTORS
 from physqgen.generator.variables import Variable
 
 
@@ -16,17 +16,13 @@ class VariableConfig:
         range is a list containing the upper and lower bounds the value should be randomized within,\n
         See Variable class for additional attributes\n
             variableType is refered to as name in Variable\n
-            does not have a varID
+            does not have a uuid
     """
-    variableType: str
+    variableName: str
     range: list[float | int]
     units: str
     displayName: str
     decimalPlaces: int = 3
-
-    def getRandomVariable(self) -> Variable:
-        """Generates a Variable with random value based on this configuration."""
-        return Variable(range=self.range, name=self.variableType, units=self.units, displayName=self.displayName, decimalPlaces=self.decimalPlaces)
 
 @dataclass(slots=True)
 class QuestionConfig:
@@ -35,21 +31,20 @@ class QuestionConfig:
     Attributes:\n
         See Question for attributes, excluding class variables.
             variables is also replaced by variablesConfigs, which hold VariblesConfig objects instead of Variable objects\n
-            does not have an id
+            does not have a uuid
     """
     variableConfigs: list[VariableConfig]
-    solveVariable: str
+    answerVariableName: str
     questionType: str
     text: str
-    imageName: str
-    # correctRange default was agreed upon with client at 10%
-    correctRange: float = 0.1
+    imageFilename: str
+    # default was agreed upon with client at 10%
+    correctLeeway: float = 0.1
 
     def getRandomQuestion(self):
         """Generates a Question with random Variables based on this configuration."""
-        # should change to use some kind of class ID instead of the name directly at some point, to prevent in-code class name changes from breaking old config files
-        # creates the class coresponding with the questionType, with the values from the config, and passes the QuestionConfig on.
-        return getattr(generator, self.questionType).fromConfiguration(self)
+        # creates the class coresponding to questionType, with the values from the config
+        return QUESTION_CONSTRUCTORS[self.questionType].fromConfig(self)
 
 @dataclass(slots=True)
 class Config:

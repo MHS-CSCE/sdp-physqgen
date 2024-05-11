@@ -1,8 +1,8 @@
-from dataclasses import InitVar, dataclass, field
-from sqlite3 import connect
+from dataclasses import dataclass, field
 from uuid import UUID, uuid4
+from typing import Literal
 
-from physqgen import generator
+from physqgen.database import executeOnDatabase
 from physqgen.generator.question import Question
 
 
@@ -11,71 +11,107 @@ class LoginInfo:
     """
     Login information for a Session.\n
     Attributes:\n
-        first_name (str): student first name,\n
-        last_name (str): student last name,\n
+        firstName (str): student first name,\n
+        lastName (str): student last name,\n
         email (str): student email address
     """
-    first_name: str
-    last_name: str
+    firstName: str
+    lastName: str
     email: str
+
+    @classmethod
+    def fromDatabase(cls, databasePath: str, sessionUUID: str | UUID):
+        """Fetches the login info stored in the database for the given sessionUUID and returns an instance of cls populated with it."""
+        sql = '''SELECT (
+            FIRST_NAME,
+            LAST_NAME,
+            EMAIL
+        ) FROM SESSIONS WHERE SESSION_UUID=?'''
+        replacements = tuple(str(sessionUUID))
+        # TODO: check that returned valid result
+        # index 0 is the first (and only) row that met the criteria
+        results = executeOnDatabase(databasePath, sql, replacements)[0]
+
+        return cls(
+            firstName=results[0],
+            lastName=results[1],
+            email=results[2]
+        )
 
 @dataclass(slots=True)
 class Session:
     """
-    Student website session data. Tracks and updates student completion of questions. Is partially stored in session cookie, which is why its attributes use snake_case.\n
+    Student website session data. Tracks and updates student completion of questions. The property frontendData is used to retrieve data to be stored in session cookie.\n
     Attributes:\n
         databasePath (str): path to the database, relative to the calling script,\n
-        uuid (UUID): unique session id,\n
-        login_info (LoginInfo): student login info,\n
-        question (list): contains the question subclass objects that the student is answering,\n
-        active_question (int): default 0, the index in the questions attribute of the question that the student is currently working on,\n
-        active_question_data (dict): data to be used on the frontend, taken from the currently active question,\n
-        all_questions_correct (bool): whether or not all questions have been completed
+        loginInfo (LoginInfo): student login info,\n
+        questions (list[Questions]): contains the question subclass objects that the student is answering,\n
+        uuid (UUID): unique session id
     """
-    # TODO don't store the session itself, store the necessary data as a property and fetch as wanted, so will always be up to date
     databasePath: str
-    uuid: str = field(default_factory=uuid4, init=False) # TODO: actually use this
-    login_info: LoginInfo
+    loginInfo: LoginInfo
     questions: list[Question]
-    active_question: int = 0
-
-    active_question_data: dict = field(init=False)
-    all_questions_correct: bool = field(init=False, default=False)
-    initial: InitVar[bool] = False
+    uuid: str = field(default_factory=uuid4)
 
     def __post_init__(self, initial: bool) -> None:
         """Load in active question data wanted in cookies for website. initial should be set to True if this Session is not already stored in the database."""
-        # store so is passed in cookie
-        self.all_questions_correct = self.allQuestionsCorrect()
-        self.active_question_data = self.currentQuestion.websiteDisplayData
+        # TODO: fix the initial session creation steps, maybe do a placeholder commit first and then just update everything
         if initial:
             self.commitSessionToDatabase()
         else:
             self.updateSessionDataInDatabase()
         return
     
-    @classmethod
-    def recreateSession(cls, databasePath: str, data: dict):
-        """Creates a Session from the data stored in the Flask session cookie."""
-        obj = cls(
-            databasePath,
-            # TODO: store instead of resupplying
-            LoginInfo(
-                data["login_info"]["first_name"],
-                data["login_info"]["last_name"],
-                data["login_info"]["email"]
-            ),
-            questions=[
-                # TODO: keep a list of question constructors and names instead of using a getattr
-                getattr(generator, q["questionType"]).fromUUID(databasePath , q["questionType"], q["id"]) for q in data["questions"]
-            ],
-            # TODO: store instead of resupplying
-            active_question=data["active_question"]
-        )
-        # set session uuid
-        obj.uuid = UUID(data["uuid"])
+    @property
+    def frontendData(self) -> dict:
+        """Returns a dict containing all relevant information for the website and for reconstructing the Session from the database."""
+        return {
+            "sessionUUID": self.uuid,
+            "questionsCompleted": (numCorrect := self.questionsCorrect), # question number is derived from this by adding one, is only used for display
+            "sessionComplete": bool(numCorrect == len(self.questions)),
+            "activeQuestion": qData.questionFrontendData if (qData := self.activeQuestion) is not None else None
+        }
+    
+    @property
+    def questionsCorrect(self) -> int:
+        """The number of questions that have been completed."""
+        complete = 0
+        for question in self.questions:
+            if question.correct:
+                complete += 1
+        
+        return complete
+    
+    @property
+    def activeQuestion(self) -> Question | None:
+        """Returns the currently active Question subclass instance, or None if no question is active."""
+        for question in self.questions:
+            if question.active:
+                return question
+    
+    @staticmethod
+    def getAllQuestions(databasePath: str, sessionUUID: str) -> list[Question]:
+        """Constructs a list of all the Question subclass instances in the database which corespond to the passed sessionUUID."""
+        sql = '''SELECT QUESTION_UUID FROM QUESTIONS WHERE SESSION_UUID=?'''
+        replacements = tuple(sessionUUID)
+        results = executeOnDatabase(databasePath, sql, replacements)
+        # TODO: check result validity
 
-        return obj
+        questions = []
+        for (uuid) in results:
+            questions.append(Question.fromDatabase(databasePath, uuid))
+
+        return questions
+    
+    @classmethod
+    def fromDatabase(cls, databasePath: str, sessionUUID: str):
+        """Recreates an existing Session object."""
+        return cls(
+            databasePath=databasePath,
+            uuid=sessionUUID,
+            loginInfo=LoginInfo.fromDatabase(databasePath, sessionUUID),
+            questions=Session.getAllQuestions(sessionUUID),
+        )
 
     def updateActiveQuestionData(self, increment: bool = False) -> None:
         """
@@ -84,12 +120,12 @@ class Session:
         """
         self.updateSessionDataInDatabase()
         # update number of tries
-        self.currentQuestion.numberTries += 1
+        self.activeQuestion.numberTries += 1
         # if got correct, aka passed increment parameter, then update active question idnex
         if increment:
             self.active_question += 1
         # update data either way for cookie
-        self.active_question_data = self.currentQuestion.websiteDisplayData
+        self.active_question_data = self.activeQuestion.websiteDisplayData
         self.updateSessionDataInDatabase()
         return
         
@@ -170,12 +206,12 @@ class Session:
             # TODO: prevent sql injection
 
             sql = f"""
-            UPDATE {self.currentQuestion.questionType}
+            UPDATE {self.activeQuestion.questionType}
             SET
-                NUMBER_TRIES="{self.currentQuestion.numberTries}",
-                CORRECT="{self.currentQuestion.correct}"
+                NUMBER_TRIES="{self.activeQuestion.numberTries}",
+                CORRECT="{self.activeQuestion.correct}"
             WHERE
-                QUESTION_UUID="{self.currentQuestion.id}"
+                QUESTION_UUID="{self.activeQuestion.id}"
             """
             cursor.execute(sql)
             
@@ -183,12 +219,3 @@ class Session:
         connection.close()
 
         return
-    
-    @property
-    def currentQuestion(self):
-        """Returns the currently active Question subclass object."""
-        return self.questions[self.active_question] 
-    
-    def allQuestionsCorrect(self) -> bool:
-        """Whether or not the student has completed all questions in this Session."""
-        return bool((self.active_question + int(self.currentQuestion.correct)) == len(self.questions))

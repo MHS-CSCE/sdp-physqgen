@@ -5,8 +5,8 @@ from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
 
 from physqgen.admin.constants import DATABASEPATH
-from physqgen.admin.create_database import createDataBaseFromBlank
 from physqgen.admin.getAdminData import getRelevantQuestionData
+from physqgen.database import createDatabase
 from physqgen.generator import Config
 
 
@@ -106,7 +106,7 @@ class AdminView(QMainWindow):
         """Deletes any existing database and generates a new blank one."""
         # works, but only if some extra arbitrary closes are added in. They shouldn't be required because of the context managers, but they are.
         remove(DATABASEPATH)
-        createDataBaseFromBlank()
+        createDatabase()
         # reload view to show changes
         self.reload()
         return

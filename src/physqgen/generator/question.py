@@ -1,10 +1,9 @@
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 from math import sqrt
-from sqlite3 import connect
 from typing import Literal
 from uuid import UUID, uuid4  # uuid4 doesn't include private information
 
-from physqgen import generator
+from physqgen.database import executeOnDatabase
 from physqgen.generator.config import QuestionConfig
 from physqgen.generator.variables import Variable
 
@@ -13,220 +12,164 @@ from physqgen.generator.variables import Variable
 class Question:
     """
     Base class for all question implementations. Can be generated from a configution, which creates a question with random Variables, or from stored data.\n
-    Subclasses should implement snake case properties for each POSSIBLE_VARIABLE, which pull the value if it is set or solve for it if not. See KinematicsQuestion for an example.\n
+    Subclasses should implement snake case properties for each variable they involve, which pull the value if it is set or solve for it if not. See KinematicsQuestion for an example. Subclasses need to include valid variables in docs.\n
     Attributes:\n
-        solveVariable (str): value of the name property of the Variable to treat as the answer,\n
+        answerVariableName (str): value of the name property of the Variable to treat as the answer,\n
         variables (list[Variable]): relevant variables for the question, may not include Variables for every name in POSSIBLE_VARIABLES if they are not relevant,\n
-        questionType (str): class name of the question subclass, for ease of access,\n
-        correctRange (float): allowed factor variance from the calculated answer when determining whether a submission is correct,\n
-        imageName (str): filename of the image to display,\n
+        correctLeeway (float): allowed factor variance from the calculated answer when determining whether a submission is correct,\n
+        imageFilename (str): filename of the image to display,\n
         text (str): displayed text,\n
-        correct (bool): whether the question has been completed,\n
         numberTries (int): number of submissions checked,\n
-        id (UUID): question uuid,\n
-        POSSIBLE_VARIABLES (tuple): class variable containing the uppercase names of every possible variable for the question subclass. Needs to be overriden in inheriting classes.
+        correct (bool): whether the question has been completed,\n
+        active (bool): used in conjunction with correct for completion tracking,\n
+        uuid (UUID): unique question uuid,\n
+        questionType (str): identifier for question subclass, used as a key in the QUESTION_CONSTRUCTORS dict, needs to be overriden in subclasses and addes to said dict
     """
-    solveVariable: str
+    answerVariableName: str
     variables: list[Variable]
-    questionType: str
-    correctRange: float
+    correctLeeway: float
 
-    imageName: str
     text: str
-    correct: bool
-    numberTries: int
+    imageFilename: str
+    numberTries: int = 0
+    correct: bool = False
+    active: bool = False
 
-    id: UUID = field(default_factory=uuid4)
+    uuid: UUID = field(default_factory=uuid4)
 
     # needs to be overriden in inheriting classes
-    POSSIBLE_VARIABLES = tuple()
-
-    def __post_init__(self) -> None:
-        # use fromStored() to create a Variable with a predefined value, this is the answer
-        self.variables.append(Variable.fromStored(name=self.solveVariable, value=getattr(self, self.solveVariable), varID=uuid4()))
-        return
+    questionType = str
 
     @classmethod
-    def fromStoredData(cls, questionData: dict):
-        """Creates an instance of cls from the passed data."""
-        storedVars: list[Variable] = []
-        for varData in questionData["variableData"]:
-            storedVars.append(
-                Variable.fromStored(
-                    name=varData["NAME"],
-                    value=varData["VALUE"],
-                    units=varData["UNITS"],
-                    displayName=varData["DISPLAY_NAME"],
-                    varID=UUID(varData["VARIABLE_UUID"]),
-                    decimalPlaces=varData["DECIMAL_PLACES"]
-                )
-            )
-        
-        return cls(
-            solveVariable=questionData["SOLVE_VARIABLE"],
-            variables=storedVars,
-            questionType=questionData["questionType"],
-            correctRange=questionData["CORRECT_RANGE"],
-            imageName=questionData["IMAGE_PATH"],
-            text=questionData["TEXT"],
-            correct=questionData["CORRECT"],
-            numberTries=questionData["NUMBER_TRIES"],
-            id=UUID(questionData["QUESTION_UUID"])
+    def fromConfig(cls, questionConfig: QuestionConfig):
+        """Creates an randomized instance of cls from the passed configuration."""
+        variables: list[Variable] = []
+        for varConfig in questionConfig.variableConfigs:
+            variables.append(Variable.fromConfig(varConfig))
+
+        # get the subclass constructor
+        questionClass = QUESTION_CONSTRUCTORS[questionConfig.questionType]
+
+        question = questionClass(
+            answerVariableName=questionConfig.answerVariableName.lower(),
+            variables=variables,
+            correctLeeway=questionConfig.correctLeeway,
+            imageFilename=questionConfig.imageFilename,
+            text=questionConfig.text
         )
+
+        # add a variable for the answer to the question
+        question.variables.append(
+            Variable(
+                variableName=questionConfig.answerVariableName,
+                value=getattr(questionClass, questionConfig.answerVariableName.lower())
+            )
+        )
+
+        return question
     
     @classmethod
-    def fromConfiguration(cls, questionConfig: QuestionConfig):
-        """Creates an randomized instance of cls from the passed configuration."""
-        randomVars: list[Variable] = []
-        for varConfig in questionConfig.variableConfigs:
-            randomVars.append(varConfig.getRandomVariable())
+    def fromDatabase(_, databasePath: str, questionUUID: str | UUID):
+        """
+        Returns the appropriate Question subclass for data in the database coresponding to the given uuid.\n
+        Does not use the class it is called on directly. This is still marked as a classmethod because it fulfills the purpose of one, constructing an instance of the class, except it will search for the appropriate subclass instead.
+        """
+        sql = f'''SELECT (
+            QUESTION_TYPE,
+            ANSWER_VARIABLE_NAME,
+            CORRECT_LEEWAY,
+            TEXT,
+            IMAGE_FILENAME,
 
-        return cls(
-            solveVariable=questionConfig.solveVariable,
-            variables=randomVars,
-            questionType=questionConfig.questionType,
-            correctRange=questionConfig.correctRange,
-            imageName=questionConfig.imageName,
-            text=questionConfig.text,
-            correct=False,
-            numberTries=0
+            NUMBER_TRIES,
+            CORRECT,
+            ACTIVE
+        ) FROM QUESTIONS WHERE QUESTION_UUID=?'''
+        
+        # TODO: check result validity
+        # index 0 to get the unique question with the given uuid
+        results = executeOnDatabase(databasePath, sql, tuple(str(questionUUID)))[0]
+
+        # shadow the value of the index coresponding to CORRECT above with a boolean value, for some reason it gets connverted to str
+        results[6] = bool(results[6] == "True")
+
+        # get the constructor object for the appropriate question subclass object
+        questionClass = QUESTION_CONSTRUCTORS[results[0]]
+
+        return questionClass(
+            answerVariableName=results[1].lower(),
+            variables=Question.getAllVariables(questionUUID),
+            correctLeeway=results[2],
+            text=results[3],
+            imageFilename=results[4],
+            numberTries=results[5],
+            correct=results[6],
+            active=results[7],
+            uuid=questionUUID
         )
+    
+    @staticmethod
+    def getAllVariables(databasePath: str, questionUUID: str | UUID) -> list[Variable]:
+        """Constructs a list of all the Variables in the database which corespond to the passed questionUUID."""
+        sql = '''SELECT VARIABLE_UUID FROM VARIABLES WHERE QUESTION_UUID=?'''
+        replacements = tuple(questionUUID)
+        results = executeOnDatabase(databasePath, sql, replacements)
+        # TODO: check result validity
 
-    @classmethod
-    def fromUUID(cls, databasePath: str, qType: str, questionID: str):
-        """Creates an instance of cls from the question data in the database for the given question UUID."""
-        return cls.fromStoredData(Question.fetchQuestionData(databasePath, qType, questionID))
+        variables = []
+        for (uuid) in results:
+            variables.append(Variable.fromDatabase(databasePath, uuid))
+
+        return variables
 
     @property
     def answer(self) -> float:
         """Returns the answer to the question given the randomized variable values."""
-        # TODO: make sure solves correctly
         # if returns False, didn't get answer
-        ans = self.getValue(self.solveVariable)
+        ans = self.getValue(self.answerVariableName)
         if type(ans) == float:
             return ans
         raise RuntimeError(f"Fetching answer for question {self} failed.")
 
-    def check_answer(self, submitted: float) -> bool:
-        """Returns whether or not the submitted answer is within the correctRange factor variance (0.1=10%) from the question's calculated answer."""
-        firstBound = self.answer*(1-self.correctRange)
-        secondBound = self.answer*(1+self.correctRange)
+    def checkSubmission(self, submitted: float) -> bool:
+        """Returns whether or not the submitted answer is within the allowed variance (0.1=10%) from the question's calculated answer."""
+        firstBound = self.answer*(1-self.correctLeeway)
+        secondBound = self.answer*(1+self.correctLeeway)
         # needs two checks, one for if the answer is negative and one if positive
         if self.answer < 0:
             return bool(submitted < firstBound and submitted > secondBound)
         else:
             return bool(submitted > firstBound and submitted < secondBound)
     
-    def getValue(self, name: str, id: bool = False) -> float | Literal[False]:
-        """
-        Returns the value for passed variable name, or False if there is no set variable in the current question with that name.\n
-        If id is True, fetches the variable's UUID instead.
-        """
+    def getValue(self, name: str) -> float | Literal[False]:
+        """Returns the value for passed variable name, or False if there is no set variable in the current question with that name."""
         for var in self.variables:
-            if var.name == name:
-                if id:
-                    return var.varID
-                else:
-                    return var.value
+            if var.variableName == name:
+                return var.value
         return False
 
     @property
-    def websiteDisplayData(self) -> dict:
-        """Returns question data that needs to be accessible on website, that isn't stored directly. This allows it to be stored in Flask session."""
-        data = {}
-        # the check removes both the solve value and variables that are not defined for this specific question
-        data["values"] = ", ".join(
-            [str(var) for var in self.variables if var.name != self.solveVariable]
-        )
-        data["text"] = self.text
-        data["correctRange"] = self.correctRange
-        data["numberTries"] = self.numberTries
-        data["imageName"] = self.imageName
-        return data
-
-    @property
-    def varNames(self) -> list[str]:
-        """Returns a list of the names of the variables that are actually defined for the question."""
-        varNames = []
-        for var in self.variables:
-            varNames.append(var.name)
-        return varNames
-
-    @staticmethod
-    def fetchQuestionData(databasePath: str, qType: str, uuid: str) -> dict:
-        """
-        Returns a dictionary of stored data to be used to construct a question subclass object.
-        """
-        with connect(databasePath) as conn:
-            cursor = conn.cursor()
-
-            # TODO: reformat databases to protect against sql injection, have single Question table instead of multiple
-            sql = f'''SELECT * FROM {qType.upper()} WHERE QUESTION_UUID=?'''
-            cursor.execute(sql, [str(uuid)])
-            questionData = cursor.fetchone()
-            
-            # 10+ => variable UUIDs, in order of database, which is order in the class's POSSIBLE_VARIABLES tuple class variable
-            namedData = {
-                "QUESTION_UUID": questionData[0],
-                "FIRST_NAME": questionData[1],
-                "LAST_NAME": questionData[2],
-                "EMAIL": questionData[3],
-                "NUMBER_TRIES": questionData[4],
-                # for some reason this contains the string "False" or "True", not a bool, so it has to be converted
-                "CORRECT": bool(questionData[5] == "True"),
-                "SOLVE_VARIABLE": questionData[6],
-                "TEXT": questionData[7],
-                "IMAGE_PATH": questionData[8],
-                "CORRECT_RANGE": questionData[9],
-                # add variable extracted dicts
-                "variableData": [],
-                #add questionType
-                "questionType": qType
-            }
-
-            # get the constructor object for the appropriate question subclass object
-            questionClass = getattr(generator, qType)
-
-            for index in range(len(questionClass.POSSIBLE_VARIABLES)):
-                skip = False # whether fetching uuid returned False, which means that variable did not have a set value and should be skipped for construction
-                # fetch UUIDs, using index + number of previous indexes to start when the var columns start
-                varID = questionData[index + 10]
-                # check for None, if var is not defined for this question
-                if varID is None:
-                    skip = True
-
-                if not skip:
-                    # fetch variable data given uuid
-                    # TODO: sql injection isn't an issue, but may as well fix it
-                    varFetchSQL = f'''SELECT * FROM VARIABLES WHERE VARIABLE_UUID="{varID}"'''
-
-                    cursor.execute(varFetchSQL)
-                    variableData = cursor.fetchone()
-
-                    namedData["variableData"].append(
-                        {
-                            "VARIABLE_UUID": variableData[0],
-                            "NAME": variableData[1],
-                            "VALUE": variableData[2],
-                            "UNITS": variableData[3],
-                            "DISPLAY_NAME": variableData[4],
-                            "DECIMAL_PLACES": variableData[5]
-                        }
-                    )
-
-        # just in case
-        conn.close()
-        return namedData
-
+    def questionFrontendData(self) -> dict:
+        """Returns question data that needs to be accessible on website when this question is active."""
+        return {
+            "questionUUID": self.uuid,
+            # the check removes both the solve value and variables that are not defined for this specific question
+            "variables": ", ".join(
+                [str(var) for var in self.variables if var.variableName != self.answerVariableName]
+            ),
+            "text": self.text,
+            "imageFilename": self.imageFilename
+        }
+    
+    
 @dataclass
 class KinematicsQuestion(Question):
     """
     Kinematics questions with constant acceleration. Inherits all attributes from Question.\n
-    Implements properties for displacement, initial_velocity, final_velocity, time, and acceleration.\n
-    Overrides POSSIBLE_VARIABLES with uppercase variants of the above properties.
+    Implements properties for displacement, initial_velocity, final_velocity, time, and acceleration.
     """
 
-    POSSIBLE_VARIABLES = ("DISPLACEMENT", "INITIAL_VELOCITY", "FINAL_VELOCITY", "TIME", "ACCELERATION")
+    questionType = "KinematicsQuestion"
 
     def __init__(self, *args, **kwargs) -> None:
         return super().__init__(*args, **kwargs)
@@ -499,3 +442,8 @@ class KinematicsQuestion(Question):
 
                 # a from d, v1, v2 formula
                 return ((2*v2) / (t)) - ((2*d) / (t**2)) 
+
+# this is where new constructors/question types need to be added to function correctly
+QUESTION_CONSTRUCTORS = {
+    "KinematicsQuestion": KinematicsQuestion
+}

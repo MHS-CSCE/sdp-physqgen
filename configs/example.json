@@ -20,12 +20,12 @@
                     "displayName": "a"
                 }
             },
-            "solveVariable": "initial_velocity",
+            "answerVariableName": "initial_velocity",
             "text": "Test KinematicsQuestion solve for initial_velocity.",
-            "imageName": "example.png"
+            "imageFilename": "example.png"
         },
         {
-            "correctRange": 0.08,
+            "correctLeeway": 0.08,
             "questionType": "KinematicsQuestion",
             "variableConfig": {
                 "acceleration": {
@@ -46,9 +46,9 @@
                     "decimalPlaces": 1
                 }
             },
-            "solveVariable": "final_velocity",
+            "answerVariableName": "final_velocity",
             "text": "Test KinematicsQuestion solve for final_velocity.",
-            "imageName": "example.png"
+            "imageFilename": "example.png"
         }
     ]
 }

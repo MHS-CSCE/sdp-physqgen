@@ -1,9 +1,9 @@
 """
-Last Modified: May 8, 2024
+Last Modified: May 11, 2024
 """
+from os.path import join
 
-from physqgen.admin.create_database import createDataBaseFromBlank
+from physqgen.database import createDatabase
 
 if __name__ == "__main__":
-    # this can also be done using the admin app's clear data button
-    createDataBaseFromBlank()
+    createDatabase(join(".", "data", "data.db"))
