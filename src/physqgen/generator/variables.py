@@ -52,14 +52,16 @@ class Variable:
     @classmethod
     def fromDatabase(cls, databasePath: str, variableUUID: str | UUID):
         """Fetches the variable stored in the database with the given variableUUID and returns an instance of cls populated with it."""
-        sql = '''SELECT (
-            NAME,
-            VALUE,
-            UNITS,
-            DISPLAY_NAME,
-            DECIMAL_PLACES
-        ) FROM VARIABLES WHERE VARIABLE_UUID=?'''
-        replacements = tuple(str(variableUUID))
+        sql = '''
+            SELECT
+                VARIABLE_NAME,
+                VALUE,
+                UNITS,
+                DISPLAY_NAME,
+                DECIMAL_PLACES
+            FROM VARIABLES WHERE VARIABLE_UUID=?
+        '''
+        replacements = (str(variableUUID),)
         # TODO: check that returned valid result
         # index 0 is the first (and only) row that met the criteria
         results = executeOnDatabase(databasePath, sql, replacements)[0]

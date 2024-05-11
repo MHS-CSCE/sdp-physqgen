@@ -25,16 +25,14 @@ def qpage() -> str | Response:
     # redirect to login if not logged in. this key is only added during the login process
     try:
         session["user"]
-        print(session["user"])
     except KeyError:
         return redirect(url_for("auth.log_in"), code=302)
 
     if request.method == "POST":
-        # TODO: try request.form["submission"] instead
         submission: str = request.get_data("submission", as_text=True)
         # remove the extra characters
         # is currently formatted: "submission={actual value}&submit=Send"
-        submission = submission[len("submission="):-1*len("&submit=Send")]
+        submission = submission[len("answer="):-1*len("&submit=Send")]
 
         invalidAnswer = False
         try:
@@ -48,19 +46,24 @@ def qpage() -> str | Response:
             sess = Session.fromDatabase(DATABASEPATH, session["user"]["sessionUUID"])
 
             # checks whether the submission is correct, and if so activates a new question if there is any that are not complete
-            # TODO: should update number tries, check submission, increment if not last question, update data in database
-            sess.update(submission)
+            # if is not time to go to exit page
+            if session["user"]["activeQuestion"] is not None:
+                sess.update(submission)
             
             # update data visible on frontend
-            # doesn't need to happen if invalid submission was submitted
             session["user"] = sess.frontendData
-            # add imagePath, it needs the folder path, so is more convenient to deal with here
-            session["user"]["activeQuestion"]["imagePath"] = join(IMG_FOLDER_PATH, session["user"]["activeQuestion"]["imageFilename"])
+
+            # if is not time to go to exit page
+            if session["user"]["activeQuestion"] is not None:
+                # update imagePath, it needs the folder path, so is more convenient to deal with here
+                session["user"]["activeQuestion"]["imagePath"] = join(IMG_FOLDER_PATH, session["user"]["activeQuestion"]["imageFilename"])
 
     # all questions complete, applies to both GET and POST
     if session["user"]["sessionComplete"]:
         return redirect(url_for("views.exit"), code=302)
     
+    print(session["user"])
+
     return render_template("questionpage.html")
 
 @views.route('/exit', methods = ['GET'])

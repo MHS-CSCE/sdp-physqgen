@@ -21,12 +21,14 @@ class LoginInfo:
     @classmethod
     def fromDatabase(cls, databasePath: str, sessionUUID: str | UUID):
         """Fetches the login info stored in the database for the given sessionUUID and returns an instance of cls populated with it."""
-        sql = '''SELECT (
-            FIRST_NAME,
-            LAST_NAME,
-            EMAIL
-        ) FROM SESSIONS WHERE SESSION_UUID=?'''
-        replacements = tuple(str(sessionUUID))
+        sql = '''
+            SELECT 
+                FIRST_NAME,
+                LAST_NAME,
+                EMAIL
+            FROM SESSIONS WHERE SESSION_UUID=?
+        '''
+        replacements = (str(sessionUUID),)
         # TODO: check that returned valid result
         # index 0 is the first (and only) row that met the criteria
         results = executeOnDatabase(databasePath, sql, replacements)[0]
@@ -88,12 +90,14 @@ class Session:
     def getAllQuestions(databasePath: str, sessionUUID: str) -> list[Question]:
         """Constructs a list of all the Question subclass instances in the database which corespond to the passed sessionUUID."""
         sql = '''SELECT QUESTION_UUID FROM QUESTIONS WHERE SESSION_UUID=?'''
-        replacements = tuple(sessionUUID)
+        replacements = (sessionUUID,)
         results = executeOnDatabase(databasePath, sql, replacements)
         # TODO: check result validity
 
         questions = []
-        for (uuid) in results:
+        for uuid in results:
+            # return value is a tuple containing only the uuid
+            uuid = uuid[0]
             questions.append(Question.fromDatabase(databasePath, uuid))
 
         return questions
@@ -105,7 +109,7 @@ class Session:
             databasePath=databasePath,
             uuid=sessionUUID,
             loginInfo=LoginInfo.fromDatabase(databasePath, sessionUUID),
-            questions=Session.getAllQuestions(sessionUUID),
+            questions=Session.getAllQuestions(databasePath, sessionUUID),
         )
     
     def setNewActiveQuestion(self) -> bool:

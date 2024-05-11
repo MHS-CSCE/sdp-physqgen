@@ -40,7 +40,7 @@ class Question:
     questionType = ""
 
     @classmethod
-    def fromConfig(cls, questionConfig):
+    def fromConfig(_, questionConfig):
         """Creates an randomized instance of cls from the passed questionConfig (QuestionConfig)."""
         variables: list[Variable] = []
         for varConfig in questionConfig.variableConfigs:
@@ -74,31 +74,35 @@ class Question:
         Returns the appropriate Question subclass for data in the database coresponding to the given uuid.\n
         Does not use the class it is called on directly. This is still marked as a classmethod because it fulfills the purpose of one, constructing an instance of the class, except it will search for the appropriate subclass instead.
         """
-        sql = f'''SELECT (
-            QUESTION_TYPE,
-            ANSWER_VARIABLE_NAME,
-            CORRECT_LEEWAY,
-            TEXT,
-            IMAGE_FILENAME,
+        sql = '''
+            SELECT
+                QUESTION_TYPE,
+                ANSWER_VARIABLE_NAME,
+                CORRECT_LEEWAY,
+                TEXT,
+                IMAGE_FILENAME,
 
-            NUMBER_TRIES,
-            CORRECT,
-            ACTIVE
-        ) FROM QUESTIONS WHERE QUESTION_UUID=?'''
+                NUMBER_TRIES,
+                CORRECT,
+                ACTIVE
+            FROM QUESTIONS WHERE QUESTION_UUID=?
+        '''
+        replacements = (str(questionUUID),)
         
         # TODO: check result validity
         # index 0 to get the unique question with the given uuid
-        results = executeOnDatabase(databasePath, sql, tuple(str(questionUUID)))[0]
+        results = executeOnDatabase(databasePath, sql, replacements)[0]
 
         # shadow the value of the index coresponding to CORRECT above with a boolean value, for some reason it gets connverted to str
-        results[6] = bool(results[6] == "True")
+        # TODO: update for the different way it seems to be working now?
+        # results[6] = bool(results[6] == "True")
 
         # get the constructor object for the appropriate question subclass object
         questionClass = QUESTION_CONSTRUCTORS[results[0]]
 
         return questionClass(
             answerVariableName=results[1].lower(),
-            variables=Question.getAllVariables(questionUUID),
+            variables=Question.getAllVariables(databasePath, questionUUID),
             correctLeeway=results[2],
             text=results[3],
             imageFilename=results[4],
@@ -112,12 +116,14 @@ class Question:
     def getAllVariables(databasePath: str, questionUUID: str | UUID) -> list[Variable]:
         """Constructs a list of all the Variables in the database which corespond to the passed questionUUID."""
         sql = '''SELECT VARIABLE_UUID FROM VARIABLES WHERE QUESTION_UUID=?'''
-        replacements = tuple(questionUUID)
+        replacements = (questionUUID,)
         results = executeOnDatabase(databasePath, sql, replacements)
         # TODO: check result validity
 
         variables = []
-        for (uuid) in results:
+        for uuid in results:
+            # unpack the row tuples, each have a single element
+            uuid = uuid[0]
             variables.append(Variable.fromDatabase(databasePath, uuid))
 
         return variables
@@ -211,12 +217,13 @@ class Question:
         
     def updateDatabase(self, databasePath: str) -> None:
         """Updates Question data stored in database."""
+        # TODO: seems to be nulling updated values?
         sql = '''
             UPDATE QUESTIONS
             SET
                 NUMBER_TRIES=?,
                 CORRECT=?,
-                ACTIVE=?,
+                ACTIVE=?
             WHERE
                 QUESTION_UUID=?
         '''

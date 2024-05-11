@@ -1,7 +1,9 @@
+from os.path import join
+
 from flask import (Blueprint, redirect, render_template, request, session,
                    url_for)
 
-from physqgen.app import DATABASEPATH
+from physqgen.app import DATABASEPATH, IMG_FOLDER_PATH
 from physqgen.generator.config import appConfig
 from physqgen.session import LoginInfo, Session
 
@@ -26,13 +28,16 @@ def log_in() -> str:
             ),
             questions=appConfig.generateQuestions()
         )
-        
+        # immediately set an active question
+        sess.setNewActiveQuestion()
 
         # add new session to the database
         sess.addToDatabase()
 
         # https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap
         session["user"] = sess.frontendData
+        # add image path for initial display before any submissions
+        session["user"]["activeQuestion"]["imagePath"] = join(IMG_FOLDER_PATH, session["user"]["activeQuestion"]["imageFilename"])
 
         return redirect(url_for("views.qpage"), code=302)
     else:
