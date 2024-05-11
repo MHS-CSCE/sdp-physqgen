@@ -17,7 +17,7 @@ def log_in() -> str:
     #getting input from the form, passing it into the session class
     if request.method == "POST":
 
-        session["session"] = Session(
+        session["user"] = Session(
             DATABASEPATH,
             LoginInfo(
                 #setting the form input as the login info
@@ -25,9 +25,8 @@ def log_in() -> str:
                 request.form["last-name"],
                 request.form["email-address"]
             ),
-            questions=appConfig.generateQuestions(),
-            initial=True
-        )
+            questions=appConfig.generateQuestions()
+        ).frontendData
         # creation of Session automatically enters data into database
 
         # https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap

@@ -157,6 +157,8 @@ class Question:
                 [str(var) for var in self.variables if var.variableName != self.answerVariableName]
             ),
             "text": self.text,
+            # whether to show incorrect submission prompt
+            "numberTries": self.numberTries,
             "imageFilename": self.imageFilename
         }
     

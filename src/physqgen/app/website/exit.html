@@ -14,17 +14,22 @@
             </nav>
         </header>  
         <div class="loginform">
-            <label >You're done! Follow your teacher's directions.</label>
+            <label>You're done! Follow your teacher's directions.</label>
         </div>
 
         <div class="loginform">
             <label>Stats</label>
-            <p>Student: {{ session["session"].login_info["first_name"] }} {{ session["session"].login_info["last_name"] }} ({{ session["session"].login_info["email"] }})</p>
-            {% if session["session"].all_questions_correct %}
-                <p>Questions Completed: {{ session["session"].active_question + 1 }}</p>
+            <p>
+                Student: 
+                {{ session["user"]["loginInfo"]["firstName"] }} 
+                {{ session["user"]["loginInfo"]["lastName"] }} 
+                ({{ session["user"]["loginInfo"]["email"] }})
+            </p>
+            {% if session["user"]["sessionComplete"] %}
+                <p>Questions Completed: {{ session["user"]["questionsCompleted"] }}</p>
             <!--Should never be shown, just here to be clear of what has happened if a workaround to the redirect is found.-->
             {% else %}
-                <p>Not all questions are complete. Completed: {{ session["session"].active_question }}</p>
+                <p>Not all questions are complete. Completed: {{ session["user"]["questionsCompleted"] }}</p>
             {% endif %}
         </div>
     </body>

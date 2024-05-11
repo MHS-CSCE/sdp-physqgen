@@ -65,7 +65,12 @@ class Session:
     def frontendData(self) -> dict:
         """Returns a dict containing all relevant information for the website and for reconstructing the Session from the database."""
         return {
-            "sessionUUID": self.uuid,
+            "sessionUUID": str(self.uuid),
+            "loginInfo": {
+                "firstName": self.loginInfo.firstName,
+                "lastName": self.loginInfo.lastName,
+                "email": self.loginInfo.email
+            },
             "questionsCompleted": (numCorrect := self.questionsCorrect), # question number is derived from this by adding one, is only used for display
             "sessionComplete": bool(numCorrect == len(self.questions)),
             "activeQuestion": qData.questionFrontendData if (qData := self.activeQuestion) is not None else None
@@ -118,8 +123,6 @@ class Session:
         If increment is true, it will increment the currently active question and update accordingly.
         """
         self.updateSessionDataInDatabase()
-        # update number of tries
-        self.activeQuestion.numberTries += 1
         # if got correct, aka passed increment parameter, then update active question idnex
         if increment:
             self.active_question += 1
