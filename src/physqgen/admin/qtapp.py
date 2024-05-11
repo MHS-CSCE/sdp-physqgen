@@ -19,7 +19,7 @@ class AdminView(QMainWindow):
         """Initialize widgets with data."""
         super().__init__()
 
-        self.setWindowTitle("Question Completion")
+        self.setWindowTitle("Physqgen Administration App")
 
         self.widgets = {}
         
