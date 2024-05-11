@@ -63,7 +63,7 @@ def getRelevantQuestionData() -> dict[str, list[tuple]]:
                     SELECT
                         FIRST_NAME,
                         LAST_NAME,
-                        EMAIL_A,
+                        EMAIL,
                         NUMBER_TRIES,
                         CORRECT
                     FROM

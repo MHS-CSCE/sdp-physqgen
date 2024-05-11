@@ -170,9 +170,10 @@ class Question:
                 "QUESTION_UUID": questionData[0],
                 "FIRST_NAME": questionData[1],
                 "LAST_NAME": questionData[2],
-                "EMAIL_A": questionData[3],
+                "EMAIL": questionData[3],
                 "NUMBER_TRIES": questionData[4],
-                "CORRECT": questionData[5],
+                # for some reason this contains the string "False" or "True", not a bool, so it has to be converted
+                "CORRECT": bool(questionData[5] == "True"),
                 "SOLVE_VARIABLE": questionData[6],
                 "TEXT": questionData[7],
                 "IMAGE_PATH": questionData[8],

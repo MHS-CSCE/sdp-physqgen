@@ -99,7 +99,7 @@ def exit() -> str | Response:
         return redirect(url_for("auth.log_in"), code=302)
     
     # check if have gotten all questions correct, redirect to question page if not
-    if not sessionObject.allQuestionsCorrect:
+    if not sessionObject.allQuestionsCorrect():
         return redirect(url_for("views.qpage"), code=302)
 
     return render_template("exit.html")

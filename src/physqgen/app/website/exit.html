@@ -19,8 +19,13 @@
 
         <div class="loginform">
             <label>Stats</label>
-            <p >Student: {{ session["session"].login_info["first_name"] }} {{ session["session"].login_info["last_name"] }} ({{ session["session"].login_info["email_a"] }})</p>
-            <p >Questions Completed: {{ session["session"].questions_correct }}</p>
+            <p>Student: {{ session["session"].login_info["first_name"] }} {{ session["session"].login_info["last_name"] }} ({{ session["session"].login_info["email"] }})</p>
+            {% if session["session"].all_questions_correct %}
+                <p>Questions Completed: {{ session["session"].active_question + 1 }}</p>
+            <!--Should never be shown, just here to be clear of what has happened if a workaround to the redirect is found.-->
+            {% else %}
+                <p>Not all questions are complete. Completed: {{ session["session"].active_question }}</p>
+            {% endif %}
         </div>
     </body>
 </html>

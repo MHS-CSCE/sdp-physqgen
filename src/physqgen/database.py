@@ -13,7 +13,7 @@ def createQuestionDatabaseTable(databasePath: str, question_type_name: str, ques
             QUESTION_UUID CHAR NOT NULL PRIMARY KEY,
             FIRST_NAME CHAR NOT NULL,
             LAST_NAME CHAR NOT NULL,
-            EMAIL_A CHAR NOT NULL,
+            EMAIL CHAR NOT NULL,
             NUMBER_TRIES INT NOT NULL,
             CORRECT BOOL NOT NULL,
             SOLVE_VARIABLE CHAR NOT NULL,
