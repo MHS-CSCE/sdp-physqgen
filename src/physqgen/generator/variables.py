@@ -3,7 +3,6 @@ from random import random
 from uuid import UUID, uuid4
 
 from physqgen.database import executeOnDatabase
-from physqgen.generator.config import VariableConfig
 
 
 @dataclass(slots=True)
@@ -75,12 +74,12 @@ class Variable:
         )
     
     @classmethod
-    def fromConfig(cls, config: VariableConfig):
-        """Generates a Variable with random value based on the config."""
+    def fromConfig(cls, variableConfig):
+        """Generates a Variable with random value based on variableConfig (VariableConfig)."""
         return cls(
-            range=config.range,
-            name=config.variableName,
-            units=config.units,
-            displayName=config.displayName,
-            decimalPlaces=config.decimalPlaces
+            range=variableConfig.range,
+            variableName=variableConfig.variableName,
+            units=variableConfig.units,
+            displayName=variableConfig.displayName,
+            decimalPlaces=variableConfig.decimalPlaces
         )

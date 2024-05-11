@@ -5,7 +5,6 @@ from os.path import exists, join
 from shutil import copy as shcopy
 
 from physqgen.generator.question import QUESTION_CONSTRUCTORS
-from physqgen.generator.variables import Variable
 
 
 @dataclass(slots=True)

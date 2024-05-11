@@ -4,7 +4,6 @@ from typing import Literal
 from uuid import UUID, uuid4  # uuid4 doesn't include private information
 
 from physqgen.database import executeOnDatabase
-from physqgen.generator.config import QuestionConfig
 from physqgen.generator.variables import Variable
 
 
@@ -41,8 +40,8 @@ class Question:
     questionType = str
 
     @classmethod
-    def fromConfig(cls, questionConfig: QuestionConfig):
-        """Creates an randomized instance of cls from the passed configuration."""
+    def fromConfig(cls, questionConfig):
+        """Creates an randomized instance of cls from the passed questionConfig (QuestionConfig)."""
         variables: list[Variable] = []
         for varConfig in questionConfig.variableConfigs:
             variables.append(Variable.fromConfig(varConfig))
