@@ -76,8 +76,16 @@ class Variable:
         )
     
     @classmethod
-    def fromConfig(cls, variableConfig):
+    def fromConfig(cls, variableConfig, questionType: str):
         """Generates a Variable with random value based on variableConfig (VariableConfig)."""
+        # TODO: make sure this works
+        # verify any variables with verification set up
+        try:
+            if not VERIFICATION_METHODS[questionType][variableConfig.variableName](variableConfig.range):
+                raise ValueError(f"range supplied in config for variable {variableConfig.variableName} in {questionType} did not pass verification. See question types docs for valid states.")
+        except KeyError:
+            pass # not in verif methods
+        
         return cls(
             range=variableConfig.range,
             variableName=variableConfig.variableName,
@@ -119,3 +127,24 @@ class Variable:
         executeOnDatabase(databasePath, sql, replacements)
 
         return
+    
+    @staticmethod
+    def nonZero(range: list[float | int]) -> bool:
+        """Checks if the given range is allowed, disallowing it from including 0.0. Returns True if valid, False if not valid."""
+        # if the bounds are different signs, they will be below 0.0
+        # if both bounds are 0.0, they will equal 0.0
+        # if one bound is 0.0, the other checks will catch them assuming the first doesn't
+        return not any(
+            (
+                float(range[0] * range[1]) <= 0.0,
+                float(range[0]) == 0.0,
+                float(range[1]) == 0.0
+            )
+        )
+
+VERIFICATION_METHODS = {
+    "KinematicsQuestion": {
+        "time": Variable.nonZero,
+        "acceleration": Variable.nonZero
+    }
+}

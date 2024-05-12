@@ -42,7 +42,7 @@ On Windows, this can be done by clicking on the blank space next to the file pat
 
 ### Configuration
 
-See the [configuration file docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Configuration%20Files.md) for information on the structure of the configuration files.
+See the [configuration file docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Configuration%20Files.md) for information on the structure of the configuration files. See the [question type docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Question&20Types.md) for more information on available question(s).
 
 ## Development
 
@@ -65,7 +65,6 @@ The following soures are split into different categories depending on what they 
 |[stackoverflow](https://stackoverflow.com/questions/5411538/how-to-redirect-one-html-page-to-another-on-load), [HubSpot](https://blog.hubspot.com/website/html-redirect)|Learn how to make HTML page redirect to another page|
 |[flexbox.help](https://flexbox.help/)|Visually understanding how flexbox for CSS works|
 |[stackoverflow](https://stackoverflow.com/questions/15685666/changing-image-sizes-proportionally-using-css)|Changing image sizes proportionally using CSS|
-|[stackoverflow](https://stackoverflow.com/questions/54151849/font-family-poppins-not-working-properly-on-my-website-when-it-loads)|Poppins family bold|
 |[Josh W Comeau](https://www.joshwcomeau.com/css/designing-shadows/), [W3schools](https://www.w3schools.com/css/css3_shadows.asp), [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/drop-shadow), [shadows.brumm.af](https://shadows.brumm.af/), [Josh W Comeau](https://www.joshwcomeau.com/shadow-palette/)|Learn how to make a shadow|
 |[stackoverflow](https://stackoverflow.com/questions/2125509/how-do-i-set-the-size-of-an-html-text-box), [W3schools](https://www.w3schools.com/tags/att_input_size.asp), [stackoverflow](https://stackoverflow.com/questions/28127184/font-size-of-html-form-submit-button-cannot-be-changed)|Learn how to edit size of input text box|
 |[W3Schools](https://www.w3schools.com/css/css_border.asp)|Learn how to make a border in css|
@@ -94,6 +93,7 @@ The following soures are split into different categories depending on what they 
 |[SENTRY](https://sentry.io/answers/redirect-to-a-url-in-flask/#:~:text=Redirection%20in%20Flask%20can%20be,same%20application%20and%20external%20websites)|Allowing for redirection from question page to exit page|
 |[stackoverflow](https://stackoverflow.com/questions/11903037/copy-all-jpg-file-in-a-directory-to-another-directory-in-python)|Learn of shutil module|
 |[launch_code education](https://education.launchcode.org/lchs/chapters/more-flask/template-conditionals.html)|Jinja3 template if blocks|
+|[stackoverflow](https://stackoverflow.com/questions/54151849/font-family-poppins-not-working-properly-on-my-website-when-it-loads)|Poppins family bold|
 
 ### Other
 

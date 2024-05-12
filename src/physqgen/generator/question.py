@@ -44,7 +44,7 @@ class Question:
         """Creates an randomized instance of cls from the passed questionConfig (QuestionConfig)."""
         variables: list[Variable] = []
         for varConfig in questionConfig.variableConfigs:
-            variables.append(Variable.fromConfig(varConfig))
+            variables.append(Variable.fromConfig(varConfig, questionConfig.questionType))
 
         # get the subclass constructor
         questionClass = QUESTION_CONSTRUCTORS[questionConfig.questionType]
@@ -217,7 +217,6 @@ class Question:
         
     def updateDatabase(self, databasePath: str) -> None:
         """Updates Question data stored in database."""
-        # TODO: seems to be nulling updated values?
         sql = '''
             UPDATE QUESTIONS
             SET
@@ -250,9 +249,6 @@ class KinematicsQuestion(Question):
 
     def __init__(self, *args, **kwargs) -> None:
         return super().__init__(*args, **kwargs)
-
-    # TODO: restrict variables/add skips in solvers for variables that could /0, or where a sqrt could result in a negative answer but code outputs positive
-    # or, add documentation warning about the same
 
     @property
     def displacement(self) -> float:
@@ -347,7 +343,6 @@ class KinematicsQuestion(Question):
                 a = self.getValue("acceleration")
 
                 # v1 from d, v2, a
-                # TODO: make sure sqrt doesn't cause problems
                 return sqrt(v2**2 - 2*a*d)
 
             else: # not aDefined
@@ -401,7 +396,6 @@ class KinematicsQuestion(Question):
                 a = self.getValue("acceleration")
 
                 # v2 from d, v1, a
-                # TODO: make sure sqrt doesn't cause problems
                 return sqrt(v1**2 + 2*a*d)
 
             else: # not aDefined
@@ -448,7 +442,7 @@ class KinematicsQuestion(Question):
                 a = self.getValue("acceleration")
 
                 # t from d, v2, a
-                # TODO: for now, always returns highest answer even if there are two correct values. figure out how to make this more accurate
+                # omit one answer
                 return (v2/a) + (sqrt(v2**2 - 2*a*d)/a) # would be subtraction in the middle to get the other answer
 
             elif not v2Defined:
@@ -457,6 +451,7 @@ class KinematicsQuestion(Question):
                 a = self.getValue("acceleration")
 
                 # t from d, v1, a
+                # omit one answer
                 return (-v1/a) + (sqrt(v1**2 - 2*a*d)/a)
 
             else: # not aDefined
@@ -494,7 +489,7 @@ class KinematicsQuestion(Question):
                 t = self.getValue("time")
                 
                 # a from v1, v2, t
-                return 
+                return ((v2 - v1)/t)
             
             elif not v1Defined:
                 d = self.getValue("displacement")
@@ -502,7 +497,7 @@ class KinematicsQuestion(Question):
                 t = self.getValue("time")
 
                 # a from d, v2, t
-                return # TODO
+                return ((2*d - 2*v2) / (t**2))
 
             elif not v2Defined:
                 d = self.getValue("displacement")

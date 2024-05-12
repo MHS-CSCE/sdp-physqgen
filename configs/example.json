@@ -15,7 +15,7 @@
                     "displayName": "t"
                 },
                 "acceleration": {
-                    "range": [-0.5, 10],
+                    "range": [0.5, 10],
                     "units": "m/s^2",
                     "displayName": "a"
                 }
