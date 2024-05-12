@@ -17,7 +17,7 @@ Information about what and how students complete questions is stored, and can be
 6. Create a python virtual environment in the folder. This can be done with the following command: `python -m venv .venv`
 7. Initialize the virtual environment with: `.venv\\Scripts\\activate`.
     - IMPORTANT: This also has to be done whenever you run the server or admin app.
-8. Install the project dependencies with: `pip install .`. The virtual environment should still be active.
+8. Install the project dependencies with: `pip install -e .`. The virtual environment should still be active.
 
 ## Running and Accessing the Website and Admin app
 
