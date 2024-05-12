@@ -251,9 +251,6 @@ class KinematicsQuestion(Question):
 
     questionType = "KinematicsQuestion"
 
-    def __init__(self, *args, **kwargs) -> None:
-        return super().__init__(*args, **kwargs)
-
     @property
     def displacement(self) -> float:
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
