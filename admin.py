@@ -1,12 +1,11 @@
 """
-Last Modified: May 9, 2024
+Last Modified: May 11, 2024
 """
 
 from os.path import join
 
 from qtpy.QtWidgets import QApplication
 
-# registers the config on import
 from physqgen.admin import AdminView
 from physqgen.generator.config import registerConfig
 
