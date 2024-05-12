@@ -5,7 +5,7 @@ from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
 
 from physqgen.admin import DATABASEPATH
-from physqgen.admin.get_admin_data import getRelevantQuestionData
+from physqgen.admin.student_data import getStudentData
 from physqgen.database import createDatabase
 from physqgen.generator import Config
 
@@ -65,10 +65,13 @@ class AdminView(QMainWindow):
             # counter for where to start removing items
             self.takeAtLocation += 1
 
-            questionType = question.questionType
+            # having these titles be correct relies on the questions being created in the same order
+            questionType = f"{question.questionType}:"
+            answerVariableName = question.answerVariableName
             central = self.widgets["central"]
 
             central.layout().addWidget(QLabel(questionType), 0, (2 * index) + 1, alignment=Qt.AlignmentFlag.AlignTop)
+            central.layout().addWidget(QLabel(answerVariableName), 0, (2 * index) + 2, alignment=Qt.AlignmentFlag.AlignTop)
             # add number of tries and completed headers
             central.layout().addWidget(QLabel("Submissions"), 1, (2 * index) + 1, alignment=Qt.AlignmentFlag.AlignTop)
             central.layout().addWidget(QLabel("Completed"), 1, (2 * index) + 2, alignment=Qt.AlignmentFlag.AlignTop)
@@ -80,12 +83,12 @@ class AdminView(QMainWindow):
     def reload(self) -> None:
         """Reloads the visible data."""
         # clear layouts
-        # 0 is student label, every group of three after is from a question in config. takeAt (0) + len(questions) * 3 + 1 (so am taking next one)
-        while (layoutItem := self.widgets["central"].layout().takeAt(self.takeAtLocation * 3 + 1)) != None:
+        # 0 is student label, every group of four after is from a question in config. takeAt (0) + len(questions) * 4 + 1 (so am taking next one)
+        while (layoutItem := self.widgets["central"].layout().takeAt(self.takeAtLocation * 4 + 1)) != None:
             layoutItem.widget().deleteLater()
 
         # fetch all data
-        dynamicData = getRelevantQuestionData()
+        dynamicData = getStudentData()
 
         for index, data in enumerate(dynamicData.items()):
             name = data[0]
@@ -106,7 +109,7 @@ class AdminView(QMainWindow):
         """Deletes any existing database and generates a new blank one."""
         # works, but only if some extra arbitrary closes are added in. They shouldn't be required because of the context managers, but they are.
         remove(DATABASEPATH)
-        createDatabase()
+        createDatabase(DATABASEPATH)
         # reload view to show changes
         self.reload()
         return

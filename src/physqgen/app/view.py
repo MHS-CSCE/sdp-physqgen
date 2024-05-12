@@ -62,8 +62,6 @@ def qpage() -> str | Response:
     if session["user"]["sessionComplete"]:
         return redirect(url_for("views.exit"), code=302)
     
-    print(session["user"])
-
     return render_template("questionpage.html")
 
 @views.route('/exit', methods = ['GET'])
