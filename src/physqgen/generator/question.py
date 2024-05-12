@@ -7,7 +7,7 @@ from physqgen.database import executeOnDatabase
 from physqgen.generator.variable import Variable
 
 
-@dataclass
+@dataclass(slots=True)
 class Question:
     """
     Base class for all question types. Can be generated from a configuration, which creates a question with random Variables, or from stored data.\n
@@ -242,7 +242,7 @@ class Question:
         return
     
     
-@dataclass
+@dataclass(slots=True)
 class KinematicsQuestion(Question):
     """
     Kinematics questions with constant acceleration. Inherits all attributes from Question.\n
