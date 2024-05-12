@@ -240,8 +240,8 @@ class Question:
         
         # nothing in Variables changes over the course of a sesssion, don't need to update
         return
-    
-    
+
+
 @dataclass(slots=True)
 class KinematicsQuestion(Question):
     """
