@@ -34,8 +34,6 @@ class AdminView(QMainWindow):
         toolbar.setAllowedAreas(Qt.ToolBarArea.TopToolBarArea)
         toolbar.setMovable(False)
 
-        # TODO: button to open dropdown to select active config?
-        
         self.widgets["toolbar"] = toolbar
 
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)

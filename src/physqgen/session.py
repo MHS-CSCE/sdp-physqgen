@@ -20,7 +20,7 @@ class LoginInfo:
 
     @classmethod
     def fromDatabase(cls, databasePath: str, sessionUUID: str | UUID):
-        """Fetches the login info stored in the database for the given sessionUUID and returns an instance of cls populated with it."""
+        """Fetches the login info stored in the database for the given sessionUUID and returns an instance of cls populated with it. Will raise an IndexError if the database has been cleared since the session was created."""
         sql = '''
             SELECT 
                 FIRST_NAME,
@@ -29,8 +29,9 @@ class LoginInfo:
             FROM SESSIONS WHERE SESSION_UUID=?
         '''
         replacements = (str(sessionUUID),)
-        # TODO: check that returned valid result
         # index 0 is the first (and only) row that met the criteria
+        # will error if the database has been cleared since the session was created
+        # let it error to prevent other issues
         results = executeOnDatabase(databasePath, sql, replacements)[0]
 
         return cls(
@@ -92,7 +93,11 @@ class Session:
         sql = '''SELECT QUESTION_UUID FROM QUESTIONS WHERE SESSION_UUID=?'''
         replacements = (sessionUUID,)
         results = executeOnDatabase(databasePath, sql, replacements)
-        # TODO: check result validity
+        if len(results) == 0:
+            # could happen if the database has been cleared since creation
+            # should error on other things first, but check just in case
+            # because this should never run, don't include it in docstring
+            raise RuntimeError("Session has been cleared. Cannot load data.")
 
         questions = []
         for uuid in results:
@@ -104,7 +109,7 @@ class Session:
     
     @classmethod
     def fromDatabase(cls, databasePath: str, sessionUUID: str):
-        """Recreates an existing Session object."""
+        """Recreates an existing Session object. Will raise an IndexError if session data has been cleared."""
         return cls(
             databasePath=databasePath,
             uuid=sessionUUID,

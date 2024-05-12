@@ -62,8 +62,10 @@ class Variable:
             FROM VARIABLES WHERE VARIABLE_UUID=?
         '''
         replacements = (str(variableUUID),)
-        # TODO: check that returned valid result
         # index 0 is the first (and only) row that met the criteria
+        # will error if the database has been cleared since the session was created
+        # let it error to prevent other issues
+        # should never error, given other things should error first, so don't include it in docstring
         results = executeOnDatabase(databasePath, sql, replacements)[0]
 
         return cls(
@@ -78,7 +80,6 @@ class Variable:
     @classmethod
     def fromConfig(cls, variableConfig, questionType: str):
         """Generates a Variable with random value based on variableConfig (VariableConfig)."""
-        # TODO: make sure this works
         # verify any variables with verification set up
         try:
             if not VERIFICATION_METHODS[questionType][variableConfig.variableName](variableConfig.range):

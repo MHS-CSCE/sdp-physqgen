@@ -43,7 +43,12 @@ def qpage() -> str | Response:
             invalidAnswer = True
 
         if not invalidAnswer:
-            sess = Session.fromDatabase(DATABASEPATH, session["user"]["sessionUUID"])
+            try:
+                sess = Session.fromDatabase(DATABASEPATH, session["user"]["sessionUUID"])
+            except IndexError:
+                # will error this way if the database has been cleared since session creation
+                # redirect to login
+                return redirect(url_for("auth.log_in"), code=302)
 
             # checks whether the submission is correct, and if so activates a new question if there is any that are not complete
             # if is not time to go to exit page

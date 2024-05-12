@@ -89,13 +89,11 @@ class Question:
         '''
         replacements = (str(questionUUID),)
         
-        # TODO: check result validity
         # index 0 to get the unique question with the given uuid
+        # will error if the database has been cleared since the session was created
+        # let it error to prevent other issues
+        # should never error, given other things should error first, so don't include it in docstring
         results = executeOnDatabase(databasePath, sql, replacements)[0]
-
-        # shadow the value of the index coresponding to CORRECT above with a boolean value, for some reason it gets connverted to str
-        # TODO: update for the different way it seems to be working now?
-        # results[6] = bool(results[6] == "True")
 
         # get the constructor object for the appropriate question subclass object
         questionClass = QUESTION_CONSTRUCTORS[results[0]]
@@ -118,7 +116,11 @@ class Question:
         sql = '''SELECT VARIABLE_UUID FROM VARIABLES WHERE QUESTION_UUID=?'''
         replacements = (questionUUID,)
         results = executeOnDatabase(databasePath, sql, replacements)
-        # TODO: check result validity
+        if len(results) == 0:
+            # could happen if the database has been cleared since creation
+            # should error on other things first, but check just in case
+            # because this should never run, don't include it in docstring
+            raise RuntimeError("Session has been cleared. Cannot load data.")
 
         variables = []
         for uuid in results:
