@@ -4,7 +4,7 @@ from typing import Literal
 from uuid import UUID, uuid4  # uuid4 doesn't include private information
 
 from physqgen.database import executeOnDatabase
-from physqgen.generator.variables import Variable
+from physqgen.generator.variable import Variable
 
 
 @dataclass
