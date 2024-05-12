@@ -2,7 +2,7 @@
 
 A question config file is a JSON file containing the configuration data for a set of questions. The default included `example.json` configuration file contains an empty array called `"questions"`. Each object in the array has a few key value pairs representing a question's data.
 
-The `"questionType"` key is the case sensitive name for the type of question. (Ex: `"KinematicsQuestion"`. See the [question type docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Question&20Types.md) for more.)
+The `"questionType"` key is the case sensitive name for the type of question. (Ex: `"KinematicsQuestion"`. See the [question type docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Question%20Types.md) for more.)
 
 The `"variableConfig"` key (the name of the section) contains another section. This section contains key-value pairs for each variable that should be randomized for the question. The valid keys will be different depending on the above `questionType`, see the question type docs. The value in those pairs is also a structure, with a few keys.
 

@@ -42,7 +42,7 @@ On Windows, this can be done by clicking on the blank space next to the file pat
 
 ### Configuration
 
-See the [configuration file docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Configuration%20Files.md) for information on the structure of the configuration files. See the [question type docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Question&20Types.md) for more information on available question(s).
+See the [configuration file docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Configuration%20Files.md) for information on the structure of the configuration files. See the [question type docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Question%20Types.md) for more information on available question(s).
 
 ## Development
 
