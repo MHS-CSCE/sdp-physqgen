@@ -21,14 +21,14 @@ def log_in() -> str:
         sess = Session(
             DATABASEPATH,
             LoginInfo(
-                #setting the form input as the login info
+                # user input
                 request.form["name"],
                 request.form["last-name"],
                 request.form["email-address"]
             ),
             questions=appConfig.generateQuestions()
         )
-        # immediately set an active question
+        # set an active question
         sess.setNewActiveQuestion()
 
         # add new session to the database

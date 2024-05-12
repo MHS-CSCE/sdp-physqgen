@@ -12,11 +12,11 @@ from physqgen.generator import Config
 
 class AdminView(QMainWindow):
     """
-    Quick and dirty window that contains a view of the data currently stored in the database. Has a reload button to refresh data.\n
+    Simple window that displays data currently stored in the database.\n
     Inherits attributes from QMainWindow.
     """
     def __init__(self, config: Config) -> None:
-        """Initialize widgets with data."""
+        """Initialize widgets and layout, loading initial data into them."""
         super().__init__()
 
         self.setWindowTitle("Physqgen Administration App")

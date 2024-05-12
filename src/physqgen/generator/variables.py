@@ -11,11 +11,11 @@ class Variable:
     A Variable relevant to a Question subclass. Contains display information. Randomizes value on creation and generates a unique uuid.\n
     Attributes:\n
         variableName (str): which variable in the specific question this refers to. this is the internal name of the variable,\n
+        value (float): the value of the variable,\n
         units (str): appended to the end of the variable when converted to str,\n
         displayName (str): character(s) used to refer to the variable in the question text, and so the name it will be given when converted to str,\n
         decimalPlaces (int): decimal places of precision to round to when converting to str,\n
-        value (float): the value of the variable,\n
-        varID (UUID): unique uuid for this variable, used when storing it in database
+        uuid (UUID): unique uuid for this variable, used when storing it in database
     """
     variableName: str
 
@@ -143,6 +143,7 @@ class Variable:
             )
         )
 
+# the methods to use on each type of variable to determine whether they are valid
 VERIFICATION_METHODS = {
     "KinematicsQuestion": {
         "time": Variable.nonZero,

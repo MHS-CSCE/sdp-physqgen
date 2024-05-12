@@ -19,7 +19,7 @@ def redirectpage() -> str:
 @views.route('/qpage', methods=['GET', 'POST'])
 def qpage() -> str | Response:
     """
-    Renders question page, processes the question data and sends it to the front end.\n
+    Renders question page, processes the question data and updates frontend, redirecting to exit page if all questions are complete.\n
     Returns an HTML template or a Response.
     """
     # redirect to login if not logged in. this key is only added during the login process
@@ -30,8 +30,8 @@ def qpage() -> str | Response:
 
     if request.method == "POST":
         submission: str = request.get_data("submission", as_text=True)
-        # remove the extra characters
-        # is currently formatted: "submission={actual value}&submit=Send"
+        # remove extra characters
+        # is currently formatted "answer={actual value}&submit=Send"
         submission = submission[len("answer="):-1*len("&submit=Send")]
 
         invalidAnswer = False
@@ -55,12 +55,13 @@ def qpage() -> str | Response:
             if session["user"]["activeQuestion"] is not None:
                 sess.update(submission)
             
-            # update data visible on frontend
+            # update data visible on frontend after updating sess
             session["user"] = sess.frontendData
 
             # if is not time to go to exit page
             if session["user"]["activeQuestion"] is not None:
                 # update imagePath, it needs the folder path, so is more convenient to deal with here
+                # has to go after the replace above so it is not overwritten, and so it does not cause issues when activeQuestion becomes None
                 session["user"]["activeQuestion"]["imagePath"] = join(IMG_FOLDER_PATH, session["user"]["activeQuestion"]["imageFilename"])
 
     # all questions complete, applies to both GET and POST

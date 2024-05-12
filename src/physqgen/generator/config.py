@@ -10,11 +10,10 @@ from physqgen.generator.question import QUESTION_CONSTRUCTORS
 @dataclass(slots=True)
 class VariableConfig:
     """
-    Configuration for a specific variable in a question. Can be used to generate random Variables.\n
+    Configuration for a specific variable in a Question. Can be used to generate random Variables.\n
     Attributes:\n
         range is a list containing the upper and lower bounds the value should be randomized within,\n
-        See Variable class for additional attributes\n
-            variableType is refered to as name in Variable\n
+        See Variable class for remaining attributes\n
             does not have a uuid
     """
     variableName: str
@@ -26,9 +25,9 @@ class VariableConfig:
 @dataclass(slots=True)
 class QuestionConfig:
     """
-    Configuration for a specific question in a configuration. Can be used to generate a question with randomized variables.\n
+    Configuration for a specific question in a configuration. Can be used to generate a Question with randomized Variables.\n
     Attributes:\n
-        See Question for attributes, excluding class variables.
+        See Question for attributes, excluding class variable, which is instead stored in the questionType instance variable\n
             variables is also replaced by variablesConfigs, which hold VariblesConfig objects instead of Variable objects\n
             does not have a uuid
     """

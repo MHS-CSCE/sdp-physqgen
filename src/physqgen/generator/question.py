@@ -10,19 +10,21 @@ from physqgen.generator.variables import Variable
 @dataclass
 class Question:
     """
-    Base class for all question implementations. Can be generated from a configution, which creates a question with random Variables, or from stored data.\n
-    Subclasses should implement snake case properties for each variable they involve, which pull the value if it is set or solve for it if not. See KinematicsQuestion for an example. Subclasses need to include valid variables in docs.\n
+    Base class for all question types. Can be generated from a configuration, which creates a question with random Variables, or from stored data.\n
+    Subclasses should implement snake case properties for each variable they involve, which pull the value if it is set or solve for it if not. See KinematicsQuestion for an example.\n
+    Subclasses need to include valid variables in docs.\n
+    Subclasses can also have verification, handled separately, see VERIFICATION_METHODS in variables.py.\n
     Attributes:\n
         answerVariableName (str): value of the name property of the Variable to treat as the answer,\n
         variables (list[Variable]): relevant variables for the question, may not include Variables for every name in POSSIBLE_VARIABLES if they are not relevant,\n
         correctLeeway (float): allowed factor variance from the calculated answer when determining whether a submission is correct,\n
-        imageFilename (str): filename of the image to display,\n
         text (str): displayed text,\n
+        imageFilename (str): filename of the image to display,\n
         numberTries (int): number of submissions checked,\n
         correct (bool): whether the question has been completed,\n
         active (bool): used in conjunction with correct for completion tracking,\n
         uuid (UUID): unique question uuid,\n
-        questionType (str): identifier for question subclass, used as a key in the QUESTION_CONSTRUCTORS dict, needs to be overriden in subclasses and addes to said dict
+        questionType (str): identifier for question subclass, used as a key in the QUESTION_CONSTRUCTORS dict, needs to be overriden in subclasses and added to said dict
     """
     answerVariableName: str
     variables: list[Variable]
