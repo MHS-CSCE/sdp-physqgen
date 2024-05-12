@@ -1,9 +1,8 @@
 from os import remove
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import (QAction, QFrame, QGridLayout, QLabel, QMainWindow,
                             QToolBar, QVBoxLayout, QWidget)
-from qtpy.QtCore import QTimer
 
 from physqgen.admin import DATABASEPATH
 from physqgen.admin.student_data import getStudentData
