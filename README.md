@@ -28,7 +28,7 @@ On Windows, this can be done by clicking on the blank space next to the file pat
 ### Website
 
 - Run `python main.py` in order to start the server.
-- This will output two urls into the terminal, which will be mostly composed of digits, as well as some information lines. Students should enter the url that is NOT `http://127.0.0.1:8080` into the search bar of their browsers, which will allow them to access the site as long as they are on the same wifi network.
+- This will output two urls into the terminal, which will be mostly composed of digits, as well as some information lines. Students should enter the url that is NOT `http://127.0.0.1:8080` into the search bar of their browsers, which will allow them to access the site as long as they are on the same wifi network. The url can be copied with `ctrl+shift+c` and posted somewhere the students can access it.
 - This will monopolize the command prompt, you cannot use the same window to run the admin app.
 - The additional information includes a warning that can be ignored, as well as the shortcut for closing the server, `ctrl+c`.
 - Students will only be able to access the site if they are on the same wifi network.
