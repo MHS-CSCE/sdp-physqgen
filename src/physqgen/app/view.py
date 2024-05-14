@@ -65,6 +65,9 @@ def qpage() -> str | Response:
                 session["user"]["activeQuestion"]["imagePath"] = join(IMG_FOLDER_PATH, session["user"]["activeQuestion"]["imageFilename"])
 
     # all questions complete, applies to both GET and POST
+    # this will continue to redirect the user even if the database is cleared because the cookie is still present
+    # could be changed to reconstruct the session object, fail, and send to login, if that is preferred
+    # ideally that would be by moving the above .fromDatabase call out of the POST section
     if session["user"]["sessionComplete"]:
         return redirect(url_for("views.exit"), code=302)
     
@@ -83,6 +86,7 @@ def exit() -> str | Response:
         return redirect(url_for("auth.log_in"), code=302)
     
     # check if have gotten all questions correct, redirect to question page if not
+    # if the session has been cleared, this will redirect to qpage, and on the first valid submission redirect to login, because of leftover cookies
     if not session["user"]["sessionComplete"]:
         return redirect(url_for("views.qpage"), code=302)
 
