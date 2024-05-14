@@ -251,6 +251,9 @@ class KinematicsQuestion(Question):
 
     questionType = "KinematicsQuestion"
 
+    # TODO: add source to readme
+    # derivations verified with: https://calculator-online.net/kinematics-calculator/
+
     @property
     def displacement(self) -> float:
         """Fetches or calculates the displacement variable, depending on if it is set or not."""
@@ -264,40 +267,26 @@ class KinematicsQuestion(Question):
         # otherwise use equations
         else:
             # check if each needed var is defined
-            v1Defined = self.getValue("initial_velocity")
-            v2Defined = self.getValue("final_velocity")
-            tDefined = self.getValue("time")
+            # will be False if not defined
+            v1 = self.getValue("initial_velocity")
+            v2 = self.getValue("final_velocity")
+            t = self.getValue("time")
+            a = self.getValue("acceleration")
 
             # assume that enough variables are defined, find the one that isn't
-            if not v1Defined:
-                v2 = self.getValue("final_velocity")
-                t = self.getValue("time")
-                a = self.getValue("acceleration")
-                
+            if v1 is False:
                 # d from v2, t, a
-                return (v2 * t) - ((0.5 * a)* (t**2))
+                return (v2 * t) - ((0.5 * a) * (t**2))
             
-            elif not v2Defined:
-                v1 = self.getValue("initial_velocity")
-                t = self.getValue("time")
-                a = self.getValue("acceleration")
-
+            elif v2 is False:
                 # d from v1, t, a
                 return (v1 * t) + ((0.5 * a) * (t**2))
 
-            elif not tDefined:
-                v1 = self.getValue("initial_velocity")
-                v2 = self.getValue("final_velocity")
-                a = self.getValue("acceleration")
-
+            elif t is False:
                 # d from v1, v2, a
                 return ((v2**2) - (v1**2)) / (2 * a)
             
-            else: # not aDefined
-                v1 = self.getValue("initial_velocity")
-                v2 = self.getValue("final_velocity")
-                t = self.getValue("time")
-
+            else: # a is False
                 # d from v1, v2, t formula
                 return ((v1 + v2) / 2) * t                                       
     
@@ -314,43 +303,26 @@ class KinematicsQuestion(Question):
         # otherwise use equations
         else:
             # check if each var is defined
-            dDefined = self.getValue("displacement")
-            v2Defined = self.getValue("final_velocity")
-            tDefined = self.getValue("time")
-
-            # not needed
-            # aDefined = self.getValue("acceleration")
+            # will be False if not defined
+            d = self.getValue("displacement")
+            v2 = self.getValue("final_velocity")
+            t = self.getValue("time")
+            a = self.getValue("acceleration")
 
             # assume that enough variables are defined, find the one that isn't
-            if not dDefined:
-                v2 = self.getValue("final_velocity")
-                t = self.getValue("time")
-                a = self.getValue("acceleration")
-                
+            if d is False:
                 # v1 from v2, t, a
                 return v2 - (a*t)
             
-            elif not v2Defined:
-                d = self.getValue("displacement")
-                t = self.getValue("time")
-                a = self.getValue("acceleration")
-
+            elif v2 is False:
                 # v1 from d, t, a
-                return (d / t) - (0.5 * a * t)
+                return (d / t) - ((a * t) / 2)
 
-            elif not tDefined:
-                d = self.getValue("displacement")
-                v2 = self.getValue("final_velocity")
-                a = self.getValue("acceleration")
-
+            elif t is False:
                 # v1 from d, v2, a
                 return sqrt(v2**2 - 2*a*d)
 
-            else: # not aDefined
-                d = self.getValue("displacement")
-                v2 = self.getValue("final_velocity")
-                t = self.getValue("time")
-
+            else: # a is False 
                 # v1 from d, v2, t formula
                 return ((d*2) / t) - v2
     
@@ -367,43 +339,26 @@ class KinematicsQuestion(Question):
         # otherwise use equations
         else:
             # check if each var is defined
-            dDefined = self.getValue("displacement")
-            v1Defined = self.getValue("initial_velocity")
-            tDefined = self.getValue("time")
-
-            # not needed
-            # aDefined = self.getValue("acceleration")
+            # will be False if not defined
+            d = self.getValue("displacement")
+            v1 = self.getValue("initial_velocity")
+            t = self.getValue("time")
+            a = self.getValue("acceleration")
 
             # assume that enough variables are defined, find the one that isn't
-            if not dDefined:
-                v1 = self.getValue("initial_velocity")
-                t = self.getValue("time")
-                a = self.getValue("acceleration")
-                
+            if d is False:
                 # v2 from v1, t, a
                 return (a*t) + v1
             
-            elif not v1Defined:
-                d = self.getValue("displacement")
-                t = self.getValue("time")
-                a = self.getValue("acceleration")
-
+            elif v1 is False:
                 # v2 from d, t, a
                 return (d / t) + (0.5 * a * t)
 
-            elif not tDefined:
-                d = self.getValue("displacement")
-                v1 = self.getValue("initial_velocity")
-                a = self.getValue("acceleration")
-
+            elif t is False:
                 # v2 from d, v1, a
                 return sqrt(v1**2 + 2*a*d)
 
-            else: # not aDefined
-                d = self.getValue("displacement")
-                v1 = self.getValue("initial_velocity")
-                t = self.getValue("time")
-
+            else: # a is False
                 # v2 from d, v1, t formula
                 return ((d*2) / t) - v1
     
@@ -419,49 +374,24 @@ class KinematicsQuestion(Question):
         
         # otherwise use equations
         else:
+            # time relies on the other solvers instead of its own, is fine so long as the others implement all formulas
+
             # check if each var is defined
-            dDefined = self.getValue("displacement")
-            v1Defined = self.getValue("initial_velocity")
-            v2Defined = self.getValue("final_velocity")
+            # will be set to False if not yet defined
+            v1 = self.getValue("initial_velocity")
+            v2 = self.getValue("final_velocity")
+            a = self.getValue("acceleration")
 
-            # not needed
-            # aDefined = self.getValue("acceleration")
-
-            # assume that enough variables are defined, find the one that isn't
-            # also check that acceleration isn't 0. if so, cannot find time from just acceleration and velocity values, so move on to following ones
-            if not dDefined and not all((v1 == v2), (a == 0)):
-                v1 = self.getValue("initial_velocity")
-                v2 = self.getValue("final_velocity")
-                a = self.getValue("acceleration")
-                
-                # t from v1, v2, a
-                return (v2 - v1) / a
-            
-            elif not v1Defined:
-                d = self.getValue("displacement")
-                v2 = self.getValue("final_velocity")
-                a = self.getValue("acceleration")
-
-                # t from d, v2, a
-                # omit one answer
-                return (v2/a) + (sqrt(v2**2 - 2*a*d)/a) # would be subtraction in the middle to get the other answer
-
-            elif not v2Defined:
-                d = self.getValue("displacement")
-                v1 = self.getValue("initial_velocity")
-                a = self.getValue("acceleration")
-
-                # t from d, v1, a
-                # omit one answer
-                return (-v1/a) + (sqrt(v1**2 - 2*a*d)/a)
-
-            else: # not aDefined
-                d = self.getValue("displacement")
-                v1 = self.getValue("initial_velocity")
-                v2 = self.getValue("final_velocity")
-
-                # t from d, v1, v2 formula
-                return (d*2)/(v1 + v2)
+            # identity so float 0.0 isn't interpreted as False
+            if v1 is False:
+                v1 = self.initial_velocity
+            elif v2 is False:
+                v2 = self.final_velocity
+            elif a is False:
+                a = self.acceleration
+           
+            # t from v1, v2, a, simpler formula to deal with
+            return ((v2 - v1) / a)
     
     @property
     def acceleration(self) -> float:
@@ -476,45 +406,28 @@ class KinematicsQuestion(Question):
         # otherwise use equations
         else:
             # check if each var is defined
-            dDefined = self.getValue("displacement")
-            v1Defined = self.getValue("initial_velocity")
-            v2Defined = self.getValue("final_velocity")
-
-            # not needed
-            # tDefined = self.getValue("time")
+            # will be False if not defined
+            d = self.getValue("displacement")
+            v1 = self.getValue("initial_velocity")
+            v2 = self.getValue("final_velocity")
+            t = self.getValue("time")
 
             # assume that enough variables are defined, find the one that isn't
-            if not dDefined:
-                v1 = self.getValue("initial_velocity")
-                v2 = self.getValue("final_velocity")
-                t = self.getValue("time")
-                
+            if d is False:
                 # a from v1, v2, t
                 return ((v2 - v1)/t)
             
-            elif not v1Defined:
-                d = self.getValue("displacement")
-                v2 = self.getValue("final_velocity")
-                t = self.getValue("time")
-
+            elif v1 is False:
                 # a from d, v2, t
-                return ((2*d - 2*v2) / (t**2))
+                return ((2 * v2) / t) - ((2 * d) / (t**2))
 
-            elif not v2Defined:
-                d = self.getValue("displacement")
-                v1 = self.getValue("initial_velocity")
-                t = self.getValue("time")
-
+            elif v2 is False:
                 # a from d, v1, t
-                return ((2*d) / (t**2)) - ((2*v1) / (t))
+                return ((2*d) / (t**2)) - ((2*v1) / t)
 
-            else: # not tDefined
-                d = self.getValue("displacement")
-                v1 = self.getValue("initial_velocity")
-                v2 = self.getValue("final_velocity")
-
+            else: # t is False
                 # a from d, v1, v2 formula
-                return ((2*v2) / (t)) - ((2*d) / (t**2)) 
+                return ((v2**2 - v1**2) / (2 * d))
 
 # this is where new constructors/question types need to be added to function correctly
 QUESTION_CONSTRUCTORS = {

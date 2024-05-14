@@ -142,6 +142,8 @@ class Variable:
                 float(range[1]) == 0.0
             )
         )
+    
+    # TODO: make sure final and initial velocity ranges don't overlap, so that acceleration isn't forced to be 0
 
 # the methods to use on each type of variable to determine whether they are valid
 VERIFICATION_METHODS = {

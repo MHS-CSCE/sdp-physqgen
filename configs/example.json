@@ -34,7 +34,7 @@
                     "displayName": "g"
                 },
                 "initial_velocity": {
-                    "range": [0.1, 97.3],
+                    "range": [1.4, 97.3],
                     "units": "m/s",
                     "displayName": "s",
                     "decimalPlaces": 2

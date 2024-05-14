@@ -73,6 +73,7 @@ The following soures are split into different categories depending on what they 
 |[DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3)|Learn about HTML blueprints and how to utilise them|
 |[pymbook.readthedocs.io](https://pymbook.readthedocs.io/en/latest/flask.html#:~:text=Flask%20is%20a%20web%20framework,application%20or%20a%20commercial%20website.)|Understanding Flask and how it functions|
 |[DEV](https://dev.to/sachingeek/session-in-flask-store-user-specific-data-on-server-28ap)|Learn about Flask sessions|
+|[Calculator Online](https://calculator-online.net/kinematics-calculator/)|Verifying formula derivations|
 
 ### Code Use
 
