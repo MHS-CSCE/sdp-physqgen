@@ -375,20 +375,9 @@ class KinematicsQuestion(Question):
         # otherwise use equations
         else:
             # time relies on the other solvers instead of its own, is fine so long as the others implement all formulas
-
-            # check if each var is defined
-            # will be set to False if not yet defined
-            v1 = self.getValue("initial_velocity")
-            v2 = self.getValue("final_velocity")
-            a = self.getValue("acceleration")
-
-            # identity so float 0.0 isn't interpreted as False
-            if v1 is False:
-                v1 = self.initial_velocity
-            elif v2 is False:
-                v2 = self.final_velocity
-            elif a is False:
-                a = self.acceleration
+            v1 = self.initial_velocity
+            v2 = self.final_velocity
+            a = self.acceleration
            
             # t from v1, v2, a, simpler formula to deal with
             return ((v2 - v1) / a)
