@@ -12,7 +12,7 @@ class QuestionConfig:
             variables is also replaced by variablesConfigs, which hold VariblesConfig objects instead of Variable objects\n
             does not have a uuid
     """
-    variableConfigs: list
+    variableConfigs: list # list[VariableConfig], can't annotate because of circular references
     answerVariableName: str
     questionType: str
     text: str
