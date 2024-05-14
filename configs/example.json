@@ -21,7 +21,7 @@
                 }
             },
             "answerVariableName": "initial_velocity",
-            "text": "Test KinematicsQuestion solve for initial_velocity.",
+            "text": "What is the initial velocity of a box if it has an acceleration of a and a displacement of d at time t?",
             "imageFilename": "example.png"
         },
         {
@@ -47,7 +47,7 @@
                 }
             },
             "answerVariableName": "final_velocity",
-            "text": "Test KinematicsQuestion solve for final_velocity.",
+            "text": "What velocity will an object on another planet have when it hits the ground if at some point in time t seconds before it hits the ground it has a downwards speed s?",
             "imageFilename": "example.png"
         }
     ]
