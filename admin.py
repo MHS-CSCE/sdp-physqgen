@@ -1,5 +1,5 @@
 """
-Last Modified: May 11, 2024
+Last Modified: May 14, 2024
 """
 
 from os.path import join
@@ -13,7 +13,7 @@ from physqgen.generator.config import registerConfig
 def runAdminApp() -> None:
     registerConfig(join(".", "configs"))
     # import config after creating it
-    from physqgen.generator.config import appConfig
+    from physqgen.generator.config.session import appConfig
 
     adminapp = QApplication()
 

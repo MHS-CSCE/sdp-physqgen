@@ -4,7 +4,7 @@ from flask import (Blueprint, redirect, render_template, request, session,
                    url_for)
 
 from physqgen.app import DATABASEPATH, IMG_FOLDER_PATH
-from physqgen.generator.config import appConfig
+from physqgen.generator.config.session import appConfig
 from physqgen.session import LoginInfo, Session
 
 #defining views for routes

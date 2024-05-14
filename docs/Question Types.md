@@ -15,6 +15,7 @@ In the `variableConfigs` for this block, include three of the following as keys:
 - `"acceleration"`
   - An acceleration of 0 may have unintended affects, so it is dissallowed.
 - `"initial_velocity"`
+  - A value for initial velocity that is equal to final velocity will result in an acceleration of 0, causing the same effects as above. To avoid this, the ranges supplied to initial and final velocity, if they are both defined, must not overlap.
 - `"final_velocity"`
 - `"displacement"`
 - `"time"`

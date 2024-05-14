@@ -46,7 +46,7 @@ class Question:
         """Creates an randomized instance of cls from the passed questionConfig (QuestionConfig)."""
         variables: list[Variable] = []
         for varConfig in questionConfig.variableConfigs:
-            variables.append(Variable.fromConfig(varConfig, questionConfig.questionType))
+            variables.append(Variable.fromConfig(varConfig, questionConfig))
 
         # get the subclass constructor
         questionClass = QUESTION_CONSTRUCTORS[questionConfig.questionType]

@@ -3,6 +3,25 @@ from random import random
 from uuid import UUID, uuid4
 
 from physqgen.database import executeOnDatabase
+from physqgen.generator.config.variable import VariableConfig
+
+# the methods to use on each type of variable to determine whether they are valid
+VERIFICATION_METHODS = {
+    "KinematicsQuestion": {
+        "time": VariableConfig.nonZero,
+        "acceleration": VariableConfig.nonZero
+    }
+}
+
+# methods used to check variables in their current context to see if they are valid
+# supports checking more than two variables, just add more names to the tuple
+# however, they need to be paired with a function that can handle the number of values
+RELATIVE_VERIFICATION_METHODS = {
+    "KinematicsQuestion": {
+        # the ranges for these two cannot overlap or they may be equal, meaning 0 acceleration, etc.
+        ("initial_velocity", "final_velocity"): VariableConfig.nonOverlapping
+    }
+}
 
 
 @dataclass(slots=True)
@@ -78,14 +97,46 @@ class Variable:
         )
     
     @classmethod
-    def fromConfig(cls, variableConfig, questionType: str):
-        """Generates a Variable with random value based on variableConfig (VariableConfig)."""
+    def fromConfig(cls, variableConfig: VariableConfig, questionConfig):
+        """Generates a Variable with random value based on the passed VariableConfig, using questionConfig (a QuestionConfig) for more context for some verification."""
         # verify any variables with verification set up
         try:
-            if not VERIFICATION_METHODS[questionType][variableConfig.variableName](variableConfig.range):
-                raise ValueError(f"range supplied in config for variable {variableConfig.variableName} in {questionType} did not pass verification. See question types docs for valid states.")
+            if not VERIFICATION_METHODS[questionConfig.questionType][variableConfig.variableName](variableConfig):
+                raise ValueError(f"Configuration for variable {variableConfig.variableName} ({variableConfig}) did not pass verification (most likely an issue with supplied range). See question types docs for valid states.")
         except KeyError:
             pass # not in verif methods
+
+        # context-dependent verification, for if what is allowed for a variable depends on the value of another
+        skipRelative = False
+        try:
+            relativeVerificationsForThisQType = RELATIVE_VERIFICATION_METHODS[questionConfig.questionType]
+        except KeyError:
+            # will be triggered if question type has no relative verifications methods
+            # won't be triggered if the dict containing the actual verification info is empty, but that is irrelevant because of the for loop immediately after the check below
+            skipRelative = True
+
+        if not skipRelative:
+            for variableSet, func in relativeVerificationsForThisQType.items():
+                # if the current variable is the first one in the variableSet, then run the verification
+                # this is so it only runs once per set
+                if variableSet[0] == variableConfig.variableName:
+                    # the other configs needed to check contextually
+                    contextVarConfigs = []
+                    # fetch other VariableConfig(s) needed
+                    for remainingVarName in variableSet[1:]:
+                        # pull the needed varconfigs from current question
+                        for otherConfig in questionConfig.variableConfigs:
+                            if otherConfig.variableName == remainingVarName:
+                                contextVarConfigs.append(otherConfig)
+                        
+                    # if context is not long enough, then the vars that are restricted are not defined in config
+                    # so, skip. any automatic solving should only return valid values
+                    if len(contextVarConfigs) + 1 != len(variableSet):
+                        continue
+                        
+                    # use the assembed context
+                    if not func(variableConfig, *contextVarConfigs):
+                        raise ValueError(f"Configuration for {variableConfig.variableName} ({variableConfig}) did not pass contextual verification. That means that in context of the other supplied configurations, it is invalid. See question type docs for valid states.")
         
         return cls(
             range=variableConfig.range,
@@ -128,27 +179,4 @@ class Variable:
         executeOnDatabase(databasePath, sql, replacements)
 
         return
-    
-    @staticmethod
-    def nonZero(range: list[float | int]) -> bool:
-        """Checks if the given range is allowed, disallowing it from including 0.0. Returns True if valid, False if not valid."""
-        # if the bounds are different signs, they will be below 0.0
-        # if both bounds are 0.0, they will equal 0.0
-        # if one bound is 0.0, the other checks will catch them assuming the first doesn't
-        return not any(
-            (
-                float(range[0] * range[1]) <= 0.0,
-                float(range[0]) == 0.0,
-                float(range[1]) == 0.0
-            )
-        )
-    
-    # TODO: make sure final and initial velocity ranges don't overlap, so that acceleration isn't forced to be 0
-
-# the methods to use on each type of variable to determine whether they are valid
-VERIFICATION_METHODS = {
-    "KinematicsQuestion": {
-        "time": Variable.nonZero,
-        "acceleration": Variable.nonZero
-    }
-}
+ 

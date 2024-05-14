@@ -49,6 +49,32 @@
             "answerVariableName": "final_velocity",
             "text": "What velocity will an object on another planet have when it hits the ground if at some point in time t seconds before it hits the ground it has a downwards speed s?",
             "imageFilename": "example.png"
+        },
+        {
+            "correctLeeway": 0.2,
+            "questionType": "KinematicsQuestion",
+            "variableConfig": {
+                "final_velocity": {
+                    "range": [-13.1, 9.81],
+                    "units": "m/s",
+                    "displayName": "v2"
+                },
+                "initial_velocity": {
+                    "range": [12, 10234],
+                    "units": "m/s",
+                    "displayName": "v1",
+                    "decimalPlaces": 2
+                },
+                "displacement": {
+                    "range": [1304, 10000],
+                    "units": "m",
+                    "displayName": "d",
+                    "decimalPlaces": 1
+                }
+            },
+            "answerVariableName": "time",
+            "text": "Given the initial and final velocities below, and assuming the distance below is traveled in one direction, how long did the car travel, in seconds?",
+            "imageFilename": "example.png"
         }
     ]
 }
