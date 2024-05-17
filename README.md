@@ -98,6 +98,7 @@ The following soures are split into different categories depending on what they 
 
 ### Other
 
+TODO: Update once replacement with equations is found
 - [Example Configuration Image: blueprint](https://blog.blueprintprep.com/mcat/free-mcat-practice-question-physics/)
 - Fonts are sourced from `fonts.googleapis.com`
 

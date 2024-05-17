@@ -22,7 +22,7 @@
             },
             "answerVariableName": "initial_velocity",
             "text": "What is the initial velocity of a box if it has an acceleration of a and a displacement of d at time t?",
-            "imageFilename": "example.png"
+            "imageFilename": "kinematics.png"
         },
         {
             "correctLeeway": 0.08,
@@ -48,7 +48,7 @@
             },
             "answerVariableName": "final_velocity",
             "text": "What velocity will an object on another planet have when it hits the ground if at some point in time t seconds before it hits the ground it has a downwards speed s?",
-            "imageFilename": "example.png"
+            "imageFilename": "kinematics.png"
         },
         {
             "correctLeeway": 0.2,
@@ -74,7 +74,7 @@
             },
             "answerVariableName": "time",
             "text": "Given the initial and final velocities below, and assuming the distance below is traveled in one direction, how long did the car travel, in seconds?",
-            "imageFilename": "example.png"
+            "imageFilename": "kinematics.png"
         }
     ]
 }

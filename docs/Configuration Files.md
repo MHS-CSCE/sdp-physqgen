@@ -1,6 +1,6 @@
 # Configuration
 
-A question config file is a JSON file containing the configuration data for a set of questions. The default included `example.json` configuration file contains an empty array called `"questions"`. Each object in the array has a few key value pairs representing a question's data.
+A question config file is a JSON file containing the configuration data for a set of questions. As all configurations must, the default included `kinematics.json` configuration file contains an empty array called `"questions"`. Each object in the array has a few key value pairs representing a question's data.
 
 The `"questionType"` key is the case sensitive name for the type of question. (Ex: `"KinematicsQuestion"`. See the [question type docs](https://github.com/MHS-CSCE/sdp-physqgen/blob/main/docs/Question%20Types.md) for more.)
 
@@ -8,7 +8,7 @@ The `"variableConfig"` key (the name of the section) contains another section. T
 
 - `"range"` contains the minimum and maximum value the variable can take on, both numbers (whether with decimals or not).
 - `"units"` are appended to the end of the displayed value for the variable.
-- `"displayName"` is the name the value will be paired with when displayed. This is meant to help it match the text you included for the question. See the example configuration for an example.
+- `"displayName"` is the name the value will be paired with when displayed. This is meant to help it match the text you included for the question. See the default kinematics configuration for an example.
 - `"decimalPlaces"` is the numbe of decimal places to include when displaying the value of each variable to a student. Can be omitted, in which case the default is 3.
 
 For example:
@@ -59,7 +59,7 @@ The optional key `"correctLeeway"` maps to a float representing the allowed vari
             },
             "answerVariableName": "final_velocity",
             "text": "question text, reference variables with display names",
-            "imageFilename": "example.png"
+            "imageFilename": "kinematics.png"
         }
     ]
 }
