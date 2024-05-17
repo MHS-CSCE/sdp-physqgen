@@ -66,7 +66,7 @@ class Variable:
 
     def __str__(self) -> str:
         """Assembles the variable as it should be displayed to a student, with its value to the correct decimal places, units, and correct display variable name."""
-        return f"{self.displayName} = {self.value:.{self.decimalPlaces}f}{self.units}"
+        return f"{self.displayName} = {self.value:.{self.decimalPlaces}f} {self.units}"
     
     @classmethod
     def fromDatabase(cls, databasePath: str, variableUUID: str | UUID):
