@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "physqgen"
-version = "2.1.0"
+version = "2.1.1"
 authors = [
     {name="Amelia", email="asing1@ocdsb.ca"},
     {name="Isabelle", email="inich3@ocdsb.ca"},
